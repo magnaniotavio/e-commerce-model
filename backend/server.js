@@ -117,7 +117,7 @@ userRoutes.route("/register").post((req, response) => {
         username: req.body.username,
         email: req.body.email,
         password: hashedPassword,
-        description: req.body.description,
+    /*    description: req.body.description,
         profile_picture: req.body.profile_picture,
         language_preferences: req.body.language_preferences,
         timezone: req.body.timezone,
@@ -134,7 +134,7 @@ userRoutes.route("/register").post((req, response) => {
         phone_number:  req.body.phone_number,
         order_history:  req.body.order_history,
         product_reviews: req.body.product_reviews,
-        user_role: req.body.user_role,
+        user_role: req.body.user_role, */
       });
       user
         .save()
@@ -195,7 +195,7 @@ userRoutes.route("/login").post((request, response) => {
               verified: user.verified,
               created_at: user.created_at,
               last_login: user.last_login,
-              user_role:  user.user_role,
+              user_role:  user.user_role, 
             },
             "RANDOM-TOKEN",
             { expiresIn: registrationTokenExpiration }

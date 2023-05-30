@@ -43,6 +43,7 @@ import { MakeFilteredSearch } from './searchComponents/FilteredSearch';
 import SearchBar from './searchComponents/SearchBar';
 import { WebsiteTitle, NavBarMenu, AdminNavBar, UserNavBar } from './basicComponents/NavbarMenus';
 
+// This stripe promise is necessary for the mock payments offereded by Stripe
 const stripePromise = loadStripe('pk_test_51N6tO8EFMUty2Z9O0hadXLSAFUfCFaIWnTNZACAAS1XQTXZBrkGU9bHyHCj3jcMxUbobDet4S0lVtziZWsTQYUge00s53cZ5Eu');
 
 export default function App() {
@@ -59,25 +60,29 @@ export default function App() {
  const handleToggleExpand = () => {
    setIsExpanded(!isExpanded);
  };
-
  const location = useLocation();
  const pathParams = location.pathname.split('/');
  const { selectedFilters, handleFilterChange, handleArrayFilterChange, HandleSearch} = NavbarFilterFunctions();
 
  function handleSearch(searchText, classification) {
+  // Resets the search results no none, so that they will not show up one on top of each other
   setSearchResults([])
   setSearchTerm(searchText)
+  // Navigates to the search page
   navigate(`/search/${classification}/${searchText}/page/1`);
   const specialChars = /[^\w\s]/g;
   axios.get('http://localhost:4000/products/')
     .then(response => {
+      // First filter: products that correspond to the classification (i.e. 'masculine trousers' or 'feminine shirts')
        if (classification !== "undefined") {
         const foundCategory = response.data.filter(post => post.classification === classification);
+        // Second filter: products whose name includes the search term
         if (foundCategory) {
           const foundPosts = foundCategory.filter(post => post.name.toLowerCase().replace(specialChars, '').includes(searchText.toLowerCase().replace(specialChars, '')));
           setSearchResults(foundPosts);  
         }
       }
+      // General, unfiltered search
       else {
         const foundPosts = response.data.filter(post => post.name.toLowerCase().replace(specialChars, '').includes(searchText.toLowerCase().replace(specialChars, '')));
         setSearchResults(foundPosts);
@@ -88,13 +93,17 @@ export default function App() {
     });
 };
 
+// This function allows us to make a search by simply copying and pasting the search URL onto the browser
 useEffect(() => {
   if (pathParams[1] === 'search' && pathParams.length === 6) {
+    // Resets search results to none
     setSearchResults([])
     const searchTerm = pathParams[3];
+    // Applies the handleSearch() to the search term and search classification found by useParams()
     handleSearch(pathParams[3], pathParams[2])
 }}, []);
 
+// Navigates to the route according to the selected value in the navbar
 const routeChange = (value) =>{ 
   let path = '/' + value; 
   navigate(path);
@@ -110,8 +119,10 @@ useEffect(() => {
 
  return (
     <Elements stripe={stripePromise}>
-    <Container class="body">
+    <Container className="body">
+        {/* Routes available only to the Admin */}
         <AdminNavBar userRole={userRole} />
+        {/* Navbar with search and login/logout functionalities */}
         <Navbar bg="dark" expand="lg" style={{ color: 'white', paddingLeft: '1%', paddingRight: '1%', height: '160px'}}>
            <WebsiteTitle />
            <Row className="w-100">
@@ -119,10 +130,12 @@ useEffect(() => {
              <UserNavBar isLoggedIn={isLoggedIn} userName={userName} routeChange={routeChange} userId={userId} />
            </Row>
        </Navbar> 
+       {/* Menu containing all the different routes and advanced search filters */}
        <NavBarMenu routeChange={routeChange} handleFilterChange={handleFilterChange} handleArrayFilterChange={handleArrayFilterChange}
        handleToggleExpand={handleToggleExpand} isExpanded={isExpanded} HandleSearch={HandleSearch} />
     <br></br>
-    <Routes style={{ color: 'black', paddingLeft: '1%', paddingRight: '1%'}}>
+    <Container className="d-flex flex-column" style={{ flexGrow: 1, minHeight: '50vh'}}>
+    <Routes className="flex-grow-1" style={{ color: 'black', paddingLeft: '1%', paddingRight: '1%'}}>
        <Route path="/homepage" element={<Homepage />} />
        <Route path="/contact" element={<loremIpsum />} />
        <Route path="/users/wishlist/:id" element={<Wishlist />} />
@@ -161,289 +174,9 @@ useEffect(() => {
        <Route path="/kids/shoes" element={<KidsShoesRoute />} />
       <Route path="/products/*" element={<MakeFilteredSearch selectedFilters={selectedFilters} />} />
     </Routes>
+    </Container>
     <Footer/>
     </Container>
     </ Elements>
   );
 }
-
-
-
-/*     
-
-        <Container fluid>
-             <Navbar.Brand><Link to="/homepage">Clothes Store</Link></Navbar.Brand>
-         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-             <Navbar.Collapse id="basic-navbar-nav">
-       </Navbar.Collapse>
-       </Container>
-
-          {userRole === "Administrator" && (
-            <>
-                  <Link to="/create" className="nav-link">Create Post</Link>
-                  <Link to="/edit" className="nav-link">Edit Post</Link>
-                  <Link to="/postlist" className="nav-link">Posts</Link>
-                  <Link to="/userlist" className="nav-link">Users</Link>
-            </>
-        )}
-         {userRole === "Administrator" || userRole === "Employee" || userRole === "Supplier" ? (
-          <>
-                 <Link to="/create_product" className="nav-link">Create Product</Link>
-                 <Link to="/edit_product" className="nav-link">Edit Product</Link>
-                 <Link to="/product_list" className="nav-link">Products</Link>
-          </>
-         ) : null }
-
-
-
-
-
-               <Col>
-      {isLoggedIn ? (
-        <Dropdown>
-        <Dropdown.Toggle variant="dark" id="dropdown-basic">
-        Wellcome Back, {userName}!
-        Your account
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-        <Dropdown.Item value="profile" onClick={() => routeChange("profile/" + userId)}>Your Profile</Dropdown.Item>
-        <Dropdown.Item value="profile" onClick={() => routeChange("users/shopping_cart/" + userId)}>Your Cart</Dropdown.Item>
-        <Dropdown.Item value="profile" onClick={() => routeChange("users/wishlist/" + userId)}>Your Wishlist</Dropdown.Item>
-        <Dropdown.Item><Logout /></Dropdown.Item> 
-        </Dropdown.Menu>
-      </Dropdown>
-      ) : (
-        <Dropdown>
-        <Dropdown.Toggle variant="dark" id="dropdown-basic">
-        Sign in
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-         <Dropdown.Item value="login" onClick={() => routeChange("login")}>Click here to login!</Dropdown.Item> 
-         <Dropdown.Item value="registration" onClick={() => routeChange("registration")}>Not a member? Click here to Register!</Dropdown.Item> 
-        </Dropdown.Menu>
-      </Dropdown>
-)}
-      </Col>
-
-
-
-
-
-
-
-
-      <Container>
-    <Navbar bg="light" expand="lg">
-      <Navbar.Toggle aria-controls="navbar-filter" />
-      <Navbar.Collapse id="navbar-filter">
-        <Nav className="mr-auto">
-        </Nav>
-      </Navbar.Collapse>
-    </Navbar>
-    </Container>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<Row>
-                 <Col>
-                   <Dropdown>
-                     <Dropdown.Toggle variant="dark" id="dropdown-basic">
-                       Masculine
-                     </Dropdown.Toggle>
-                     <Dropdown.Menu>
-                       <Dropdown.Item value="Route1/page/1" onClick={() => routeChange("Route1/page/1")}>Route 1</Dropdown.Item>
-                       <Dropdown.Item value="Shirt" onClick={() => routeChange("masculine/shirts")} >Shirts</Dropdown.Item>
-                       <Dropdown.Item value="Trouser" onClick={() => routeChange("masculine/trousers")} >Trousers</Dropdown.Item>
-                       <Dropdown.Item value="Shoe" onClick={() => routeChange("masculine/shoes")} >Shoes</Dropdown.Item>
-                     </Dropdown.Menu>
-                   </Dropdown>
-                 </Col>
-                 <Col>
-                   <Dropdown>
-                     <Dropdown.Toggle variant="dark" id="dropdown-basic">
-                       Feminine
-                     </Dropdown.Toggle>
-                     <Dropdown.Menu>
-                     <Dropdown.Item value="Shirt (Feminine)" onClick={() => routeChange("feminine/shirts")} >Shirts</Dropdown.Item>
-                       <Dropdown.Item value="Trouser (Feminine)" onClick={() => routeChange("feminine/trousers")} >Trousers</Dropdown.Item>
-                       <Dropdown.Item value="Shoe (Feminine)" onClick={() => routeChange("feminine/shoes")} >Shoes</Dropdown.Item>
-                     </Dropdown.Menu>
-                   </Dropdown>
-                 </Col>
-                 <Col>
-                   <Dropdown>
-                     <Dropdown.Toggle variant="dark" id="dropdown-basic">
-                       Kids
-                     </Dropdown.Toggle>
-                     <Dropdown.Menu>
-                     <Dropdown.Item value="Shirt (Kids)" onClick={() => routeChange("kids/shirts")} >Shirts</Dropdown.Item>
-                       <Dropdown.Item value="Trouser (Kids)" onClick={() => routeChange("kids/trousers")} >Trousers</Dropdown.Item>
-                       <Dropdown.Item value="Shoe (Kids)" onClick={() => routeChange("kids/shoes")} >Shoes</Dropdown.Item>
-                     </Dropdown.Menu>
-                   </Dropdown>
-                 </Col>
-                <Col className="align-self-end">
-                <Button
-                  variant="outline-secondary"
-                  onClick={handleToggleExpand}
-                  aria-expanded={isExpanded}
-                  aria-controls="reviews-collapse"
-                  bg="dark"
-                  expand="sm"
-                  style={{ color: 'white', paddingLeft: '0.5rem', paddingRight: '0.5rem', fontSize: '14px', border: 'none' }}
-                >
-                  <h3 className="m-0 mr-2" style={{ color: 'white', fontSize: '16px' }}>
-                    Advanced Search
-                  </h3>
-                  {isExpanded ? <BsChevronCompactUp /> : <BsChevronCompactDown />}
-                </Button>
-                <div className={`collapse${isExpanded ? ' show' : ''}`} id="reviews-collapse">
-                  <Form>
-                    <Row >
-                      <Col xs={12} sm={6}>
-                        <Form.Group controlId="colorFilter">
-                          <Form.Label>Category</Form.Label>
-                          <Form.Check
-                            type="checkbox"
-                            id="publicFeminine"
-                            label="Feminine"
-                            onChange={() => handleFilterChange('targetPublic:Feminine')}
-                          />
-                          <Form.Check
-                            type="checkbox"
-                            id="publicMasculine"
-                            label="Masculine"
-                            onChange={() => handleFilterChange('targetPublic:Masculine')}
-                          />
-                          <Form.Check
-                            type="checkbox"
-                            id="publicKids"
-                            label="Kids"
-                            onChange={() => handleFilterChange('targetPublic:Kids')}
-                          />
-                        </Form.Group>
-                        <Form.Group controlId="colorFilter">
-                          <Form.Label>Category</Form.Label>
-                          <Form.Check
-                            type="checkbox"
-                            id="shirts"
-                            label="Shirts"
-                            onChange={() =>
-                              handleArrayFilterChange([
-                                'classification:ShirtM',
-                                'classification:ShirtF',
-                                'classification:ShirtK',
-                              ])
-                            }
-                          />
-                          <Form.Check
-                            type="checkbox"
-                            id="trousers"
-                            label="Trousers"
-                            onChange={() =>
-                              handleArrayFilterChange([
-                                'classification:TrouserM',
-                                'classification:TrouserF',
-                                'classification:TrouserK',
-                              ])
-                            }
-                          />
-                          <Form.Check
-                            type="checkbox"
-                            id="shoes"
-                            label="Shoes"
-                            onChange={() =>
-                              handleArrayFilterChange(['classification:ShoeM', 'classification:ShoeF'])
-                            }
-                          />
-                        </Form.Group>
-                      </Col>
-                      <Col xs={12} sm={6}>
-                        <Form.Group controlId="colorFilter">
-                          <Form.Label>Color</Form.Label>
-                          <Form.Check
-                            type="checkbox"
-                            id="colorRed"
-                            label="White"
-                            onChange={() => handleFilterChange('color:White')}
-                          />
-                          <Form.Check
-                            type="checkbox"
-                            id="colorBlue"
-                            label="Black"
-                            onChange={() => handleFilterChange('color:Black')}
-                          />
-                          <Form.Check
-                            type="checkbox"
-                            id="colorGreen"
-                            label="Blue"
-                            onChange={() => handleFilterChange('color:Blue')}
-                          />
-                        </Form.Group>
-              
-                        <Form.Group controlId="brandFilter">
-                          <Form.Label>Brand</Form.Label>
-                          <Form.Check
-                            type="checkbox"
-                            id="brandNike"
-                            label="Nike"
-                            onChange={() => handleFilterChange('brand:Nike')}
-                          />
-                          <Form.Check
-                            type="checkbox"
-                            id="brandAdidas"
-                            label="Adidas"
-                            onChange={() => handleFilterChange('brand:Adidas')}
-                          />
-                          <Form.Check
-                            type="checkbox"
-                            id="brandPuma"
-                            label="Puma"
-                            onChange={() => handleFilterChange('brand:Puma')}
-                          />
-                        </Form.Group>
-                      </Col>
-                    </Row>
-                    <Form.Group controlId="sizeFilter">
-                      <Form.Label>Size</Form.Label>
-                      <Form.Check
-                        type="checkbox"
-                        id="sizeS"
-                        label="S"
-                        onChange={() => handleFilterChange('sizeSML:S')}
-                      />
-                      <Form.Check
-                        type="checkbox"
-                        id="sizeM"
-                        label="M"
-                        onChange={() => handleFilterChange('sizeSML:M')}
-                      />
-                      <Form.Check
-                        type="checkbox"
-                        id="sizeL"
-                        label="L"
-                        onChange={() => handleFilterChange('sizeSML:L')}
-                      />
-                    </Form.Group>
-              
-                    <Button variant="primary" onClick={HandleSearch}>
-                      Search
-                    </Button>
-                  </Form>
-                </div>
-              </Col>
-         </Row> */

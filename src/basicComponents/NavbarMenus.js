@@ -50,6 +50,7 @@ export function UserNavBar({isLoggedIn, userName, routeChange, userId}) {
           <Dropdown.Item value="profile" onClick={() => routeChange("profile/" + userId)}>Your Profile</Dropdown.Item>
           <Dropdown.Item value="profile" onClick={() => routeChange("users/shopping_cart/" + userId)}>Your Cart</Dropdown.Item>
           <Dropdown.Item value="profile" onClick={() => routeChange("users/wishlist/" + userId)}>Your Wishlist</Dropdown.Item>
+          <Dropdown.Item value="profile" onClick={() => routeChange("your_orders/" + userId)}>Your Orders</Dropdown.Item>
           <Dropdown.Item><Logout /></Dropdown.Item> 
           </Dropdown.Menu>
         </Dropdown>
