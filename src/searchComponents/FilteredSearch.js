@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Navbar, Nav, Form, Button, Container, Col, Image, Row } from 'react-bootstrap';
+import { Navbar, Nav, Form, Button, Container, Col, Image, Row, Pagination } from 'react-bootstrap';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import SetProductRoutes from '../products/SetProductsRoutes';
 import { useEffect } from 'react';
@@ -9,6 +9,9 @@ import { returnUserId } from '../users/UserId';
 
 export const MakeFilteredSearch = ({ selectedFilters }) => {
     const userIsLoggedIn = returnUserId()
+    const navigate = useNavigate();
+
+
     const [filteredProducts, setFilteredProducts] = useState([]);
     function createFiltersArray(category) {
         return selectedFilters.filter(key => key.startsWith(`${category}`)).map(key => key.split(":")[1]);
@@ -44,8 +47,34 @@ export const MakeFilteredSearch = ({ selectedFilters }) => {
         .catch(error => console.log(error));
     }, [selectedFilters]);
   
+
+
+
+
+    const { pageNumber } = useParams();
+    const [totalResults, setTotalResults] = useState([])
+    const totalItems = filteredProducts.length;
+    const [currentPage, setCurrentPage] = useState(parseInt(pageNumber, 10) || 1);
+    const [postsPerPage, setPostsPerPage] = useState(2);
+    useEffect(() => {
+      setTotalResults(filteredProducts);
+    }, [filteredProducts]);
+    useEffect(() => {
+      setCurrentPage(parseInt(pageNumber, 10) || 1);
+    }, [pageNumber]);
+    const startIndex = (currentPage - 1) * postsPerPage;
+    const endIndex = startIndex + postsPerPage;
+    const itemsToDisplay = totalResults.slice(startIndex, endIndex);
+    const totalPages = Math.ceil(totalItems / postsPerPage);
+    const handlePageChange = (pageNumber) => {
+      setCurrentPage(pageNumber);
+      navigate(`/products/${classification}/page/${pageNumber}`);
+    };
+
+
+
     return ( <div>
-        {filteredProducts.map(product => (
+        {itemsToDisplay.map(product => (
           <div key={product.id} className="product">
             <Container className="mt-4">
           <Row>
@@ -69,10 +98,21 @@ export const MakeFilteredSearch = ({ selectedFilters }) => {
             </Col>
           </Row>
         </Container>
-    
           </div>
         ))
         }
+             <Pagination>
+      <Pagination.First disabled={currentPage === 1} onClick={() => handlePageChange(1)} />
+      <Pagination.Prev disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} />
+      {[...Array(totalPages)].map((_, index) => (
+        <Pagination.Item key={index + 1} active={index + 1 === currentPage} onClick={() => handlePageChange(index + 1)}>
+          {index + 1}
+        </Pagination.Item>
+      ))}
+      <Pagination.Next disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)} />
+      <Pagination.Last disabled={currentPage === totalPages} onClick={() => handlePageChange(totalPages)} />
+    </Pagination>
+
       </div>
     )
   };

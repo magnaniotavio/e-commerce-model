@@ -4,6 +4,7 @@ import { BsChevronCompactDown, BsChevronCompactUp } from 'react-icons/bs';
 import { Link } from "react-router-dom";
 import Logout from "../users/Logout";
 
+// Displays the WebsiteTitle, which links back to the homepage when clicked
 export function WebsiteTitle() {
     return (
         <Container fluid>
@@ -15,6 +16,7 @@ export function WebsiteTitle() {
     )
 }
 
+// Navbar which only users with Administrator status can see
 export function AdminNavBar({userRole}) {
     return (
     <Nav className="mr-auto">
@@ -36,7 +38,9 @@ export function AdminNavBar({userRole}) {
    </Nav>
    )
 }
-// <UserNavBar isLoggedIn={isLoggedIn} userName={userName} routeChange={routeChange} userId={userId} />
+
+/* When the user is logged in, this menus gives them access to the basic information of their profile.
+   When they are logged out, they see a 'Sign in' option. */
 export function UserNavBar({isLoggedIn, userName, routeChange, userId}) {
     return (
         <Col>
@@ -70,6 +74,7 @@ export function UserNavBar({isLoggedIn, userName, routeChange, userId}) {
     )
 }
 
+// Sets category routes (masculine, feminine, kids, shirts, trousers, shoes); and advanced search routes (by color, by brand, etc.)
 export function NavBarMenu({routeChange, handleFilterChange, handleArrayFilterChange, handleToggleExpand, isExpanded, HandleSearch }) {
     return (
         <Nav>

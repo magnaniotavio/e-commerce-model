@@ -10,6 +10,7 @@ import { returnUserId } from '../users/UserId';
 
 const SearchResults = ({ results, searchTerm, classification }) => {
   const userIsLoggedIn = returnUserId()
+  
   const navigate = useNavigate();
   const { pageNumber } = useParams();
   const [totalResults, setTotalResults] = useState([])
@@ -26,7 +27,6 @@ const SearchResults = ({ results, searchTerm, classification }) => {
   const endIndex = startIndex + postsPerPage;
   const itemsToDisplay = totalResults.slice(startIndex, endIndex);
   const totalPages = Math.ceil(totalItems / postsPerPage);
-
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
     navigate(`/search/${classification}/${searchTerm}/page/${pageNumber}`);

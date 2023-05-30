@@ -173,6 +173,7 @@ useEffect(() => {
        <Route path="/kids/trousers" element={<KidsTrousersRoute />} />
        <Route path="/kids/shoes" element={<KidsShoesRoute />} />
       <Route path="/products/*" element={<MakeFilteredSearch selectedFilters={selectedFilters} />} />
+      <Route path="/products/*/:searchTerm/page/*"  element={<MakeFilteredSearch selectedFilters={selectedFilters} />} />
     </Routes>
     </Container>
     <Footer/>

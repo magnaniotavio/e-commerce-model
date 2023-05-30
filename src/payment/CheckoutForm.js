@@ -19,6 +19,7 @@ export default function CheckoutForm() {
   const userId = decoded.userId;
   console.log(decoded)
   const {id} = useParams();
+  // Client Secret which is going to be used by Stripe in the payment process
   const [clientSecret, setClientSecret] = useState(null);
   const stripe = useStripe();
   const elements = useElements();
@@ -38,6 +39,7 @@ export default function CheckoutForm() {
     clientSecret: clientSecret,
   };
 
+// Verifies if there is a logged-in user user
   useEffect(() => {
     if (!token) {
       navigate("/homepage");
@@ -47,6 +49,7 @@ export default function CheckoutForm() {
     }
   }, [navigate, token]);
 
+// Gets the product Id by applying useParams(), then updates the constants using the response data
   useEffect(() => {
     axios.get(`http://localhost:4000/products/${id}`)
       .then(response => {
@@ -64,6 +67,7 @@ export default function CheckoutForm() {
       });
   }, [id]);
 
+// Gets the order history of the logged-in user, and updates the constant using the response data
     useEffect(() => {
     axios.get(`http://localhost:4000/users/${userId}`)
       .then(response => {
@@ -72,7 +76,7 @@ export default function CheckoutForm() {
       .catch(error => console.error(error));
   }, [userId]); 
       
-
+ // Creates a payment intend, posts the price to it, and gets the ClientSecret from the response data
   useEffect(() => {
     axios.post('http://localhost:4000/products/create-payment-intent', {
       price
@@ -84,6 +88,7 @@ export default function CheckoutForm() {
         console.error(error);
       });
   }, [price]);
+
 
   const handleClick = async () => {
     if (!elements || !stripe || !clientSecret) {
