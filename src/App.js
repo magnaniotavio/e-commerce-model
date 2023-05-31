@@ -63,6 +63,7 @@ export default function App() {
  const location = useLocation();
  const pathParams = location.pathname.split('/');
  const { selectedFilters, handleFilterChange, handleArrayFilterChange, HandleSearch} = NavbarFilterFunctions();
+ const [test, setSet] = useState('')
 
  function handleSearch(searchText, classification) {
   // Resets the search results no none, so that they will not show up one on top of each other
@@ -93,6 +94,11 @@ export default function App() {
     });
 };
 
+ axios.get('https://cloud.mongodb.com/v2/64147fe5897d32772e796662#/metrics/replicaSet/641482de81633f0e27dac42b/explorer/test/products/find').
+ then(response => {
+  setTest(response.data)
+ })
+
 // This function allows us to make a search by simply copying and pasting the search URL onto the browser
 useEffect(() => {
   if (pathParams[1] === 'search' && pathParams.length === 6) {
@@ -121,6 +127,7 @@ console.log(userRole)
  return (
     <Elements stripe={stripePromise}>
     <Container className="body">
+      {test}
         {/* Routes available only to the Admin */}
         <AdminNavBar isLoggedIn={isLoggedIn} userRole={userRole} />
         {/* Navbar with search and login/logout functionalities */}
