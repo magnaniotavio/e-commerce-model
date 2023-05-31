@@ -64,6 +64,32 @@ export default function App() {
  const pathParams = location.pathname.split('/');
  const { selectedFilters, handleFilterChange, handleArrayFilterChange, HandleSearch} = NavbarFilterFunctions();
 
+
+
+
+ const [orders, setOrders] = useState([]);
+
+ useEffect(() => {
+   axios.get('/api/orders')
+     .then((response) => {
+       setOrders(response.data);
+     })
+     .catch((error) => {
+       console.error(error);
+     });
+ }, []);
+
+
+
+
+
+
+
+
+
+
+
+
  function handleSearch(searchText, classification) {
   // Resets the search results no none, so that they will not show up one on top of each other
   setSearchResults([])
@@ -93,9 +119,6 @@ export default function App() {
     });
 };
 
- then(response => {
-  setTest(response.data)
- })
 
 // This function allows us to make a search by simply copying and pasting the search URL onto the browser
 useEffect(() => {
@@ -125,7 +148,7 @@ console.log(userRole)
  return (
     <Elements stripe={stripePromise}>
     <Container className="body">
-      {test}
+      {orders}
         {/* Routes available only to the Admin */}
         <AdminNavBar isLoggedIn={isLoggedIn} userRole={userRole} />
         {/* Navbar with search and login/logout functionalities */}
