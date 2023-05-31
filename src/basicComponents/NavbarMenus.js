@@ -17,26 +17,30 @@ export function WebsiteTitle() {
 }
 
 // Navbar which only users with Administrator status can see
-export function AdminNavBar({userRole}) {
+export function AdminNavBar({isLoggedIn, userRole}) {
     return (
-    <Nav className="mr-auto">
-    {userRole === "Administrator" && (
-      <>
-            <Link to="/create" className="nav-link">Create Post</Link>
-            <Link to="/edit" className="nav-link">Edit Post</Link>
-            <Link to="/postlist" className="nav-link">Posts</Link>
-            <Link to="/userlist" className="nav-link">Users</Link>
-      </>
-  )}
-   {userRole === "Administrator" || userRole === "Employee" || userRole === "Supplier" ? (
-    <>
-           <Link to="/create_product" className="nav-link">Create Product</Link>
-           <Link to="/edit_product" className="nav-link">Edit Product</Link>
-           <Link to="/product_list" className="nav-link">Products</Link>
-    </>
-   ) : null }
-   </Nav>
-   )
+      <Nav className="mr-auto">
+      {isLoggedIn ? (
+        <>
+          {userRole === "Administrator" && (
+            <>
+              <Link to="/create" className="nav-link">Create Post</Link>
+              <Link to="/edit" className="nav-link">Edit Post</Link>
+              <Link to="/postlist" className="nav-link">Posts</Link>
+              <Link to="/userlist" className="nav-link">Users</Link>
+            </>
+          )}
+          {(userRole === "Administrator" || userRole === "Employee" || userRole === "Supplier") && (
+            <>
+              <Link to="/create_product" className="nav-link">Create Product</Link>
+              <Link to="/edit_product" className="nav-link">Edit Product</Link>
+              <Link to="/product_list" className="nav-link">Products</Link>
+            </>
+          )}
+        </>
+      ) : null}
+    </Nav>
+     )
 }
 
 /* When the user is logged in, this menus gives them access to the basic information of their profile.
@@ -87,9 +91,9 @@ export function NavBarMenu({routeChange, handleFilterChange, handleArrayFilterCh
                        </Dropdown.Toggle>
                        <Dropdown.Menu>
                          <Dropdown.Item value="announcements/page/1" onClick={() => routeChange("announcements/page/1")}>Route 1</Dropdown.Item>
-                         <Dropdown.Item value="Shirt" onClick={() => routeChange("masculine/shirts")} >Shirts</Dropdown.Item>
-                         <Dropdown.Item value="Trouser" onClick={() => routeChange("masculine/trousers")} >Trousers</Dropdown.Item>
-                         <Dropdown.Item value="Shoe" onClick={() => routeChange("masculine/shoes")} >Shoes</Dropdown.Item>
+                         <Dropdown.Item value="Shirt" onClick={() => routeChange("masculine/shirts/page/1")} >Shirts</Dropdown.Item>
+                         <Dropdown.Item value="Trouser" onClick={() => routeChange("masculine/trousers/page/1")} >Trousers</Dropdown.Item>
+                         <Dropdown.Item value="Shoe" onClick={() => routeChange("masculine/shoes/page/1")} >Shoes</Dropdown.Item>
                        </Dropdown.Menu>
                      </Dropdown>
                    </Col>
@@ -99,9 +103,9 @@ export function NavBarMenu({routeChange, handleFilterChange, handleArrayFilterCh
                          Feminine
                        </Dropdown.Toggle>
                        <Dropdown.Menu>
-                       <Dropdown.Item value="Shirt (Feminine)" onClick={() => routeChange("feminine/shirts")} >Shirts</Dropdown.Item>
-                         <Dropdown.Item value="Trouser (Feminine)" onClick={() => routeChange("feminine/trousers")} >Trousers</Dropdown.Item>
-                         <Dropdown.Item value="Shoe (Feminine)" onClick={() => routeChange("feminine/shoes")} >Shoes</Dropdown.Item>
+                       <Dropdown.Item value="Shirt (Feminine)" onClick={() => routeChange("feminine/shirts/page/1")} >Shirts</Dropdown.Item>
+                         <Dropdown.Item value="Trouser (Feminine)" onClick={() => routeChange("feminine/trousers/page/1")} >Trousers</Dropdown.Item>
+                         <Dropdown.Item value="Shoe (Feminine)" onClick={() => routeChange("feminine/shoes/page/1")} >Shoes</Dropdown.Item>
                        </Dropdown.Menu>
                      </Dropdown>
                    </Col>
@@ -111,9 +115,9 @@ export function NavBarMenu({routeChange, handleFilterChange, handleArrayFilterCh
                          Kids
                        </Dropdown.Toggle>
                        <Dropdown.Menu>
-                       <Dropdown.Item value="Shirt (Kids)" onClick={() => routeChange("kids/shirts")} >Shirts</Dropdown.Item>
-                         <Dropdown.Item value="Trouser (Kids)" onClick={() => routeChange("kids/trousers")} >Trousers</Dropdown.Item>
-                         <Dropdown.Item value="Shoe (Kids)" onClick={() => routeChange("kids/shoes")} >Shoes</Dropdown.Item>
+                       <Dropdown.Item value="Shirt (Kids)" onClick={() => routeChange("kids/shirts/page/1")} >Shirts</Dropdown.Item>
+                         <Dropdown.Item value="Trouser (Kids)" onClick={() => routeChange("kids/trousers/page/1")} >Trousers</Dropdown.Item>
+                         <Dropdown.Item value="Shoe (Kids)" onClick={() => routeChange("kids/shoes/page/1")} >Shoes</Dropdown.Item>
                        </Dropdown.Menu>
                      </Dropdown>
                    </Col>

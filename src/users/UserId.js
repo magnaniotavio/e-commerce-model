@@ -12,6 +12,7 @@ export function returnUserData(userData) {
   
   if (token) {
     decoded = jwtDecode(token);
+    console.log(decoded)
     return decoded[userData]}    
 }
 
@@ -19,10 +20,10 @@ export function ReturnUserProperties(userProperty) {
   const cookies = new Cookies();
   const token = cookies.get("TOKEN");
   const [foundProperty, setFoundProperty] = useState('')
+  if (token) {
   let decoded;
   decoded = jwtDecode(token);
   const userId = decoded.userId;
-
     axios.get(`http://localhost:4000/users/${userId}`)
         .then((response) => {
           setFoundProperty(response.data[userProperty]);})
@@ -30,7 +31,9 @@ export function ReturnUserProperties(userProperty) {
           console.log(error);
         });
    // const userRole = decoded.user_role;
-  return foundProperty}
+  return foundProperty
+  }
+}
 
 export function returnUserId() {
 const cookies = new Cookies();
@@ -57,21 +60,4 @@ export function returnUserName() {
     }
   }
 
-  export function ReturnUserRole() {
-    const cookies = new Cookies();
-    const token = cookies.get("TOKEN");
-    const [userRole, setUserRole] = useState('')
-    let decoded;
-    decoded = jwtDecode(token);
-    const userId = decoded.userId;
-
-      axios.get(`http://localhost:4000/users/${userId}`)
-          .then((response) => {
-            setUserRole(response.data.user_role);})
-           .catch((error) => {
-            console.log(error);
-          });
-     // const userRole = decoded.user_role;
-    return userRole
-
-    }
+  

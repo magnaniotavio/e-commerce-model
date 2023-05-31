@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Form, FormControl, Button, InputGroup } from 'react-bootstrap'
+import { ReturnUserProperties, ReturnUserRole } from '../users/UserId';
 
 export default function CreateProduct() {
-
  const navigate = useNavigate();
  const currentDate = new Date()              
-
  const [name, setName] = useState("");
  const [classification, setClassification] = useState("");
  const [sizeSML, setSizeSML] = useState("");
@@ -218,5 +217,4 @@ return (
   </Form>
 </div>
 )
-
 }

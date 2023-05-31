@@ -26,7 +26,7 @@ import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Cookies from "universal-cookie";
 import Wishlist from './users/Wishlist';
-import { returnUserData, returnUserId } from './users/UserId';
+import { returnUserData, returnUserId, ReturnUserProperties, ReturnUserRole } from './users/UserId';
 import ShoppingCart from './users/Cart';
 import UserList from './users/UserList';
 import { useLocation } from 'react-router-dom';
@@ -53,7 +53,7 @@ export default function App() {
  const token = cookies.get("TOKEN");
  const userId = returnUserId();
  const userName = returnUserData('userEmail')
- const userRole = returnUserData('user_role')
+ const userRole = ReturnUserProperties('user_role')
  const [searchResults, setSearchResults] = useState([]);
  const [searchTerm, setSearchTerm] = useState([]);
  const [isExpanded, setIsExpanded] = useState(false);
@@ -117,11 +117,12 @@ useEffect(() => {
   }
 }, [token]);
 
+console.log(userRole)
  return (
     <Elements stripe={stripePromise}>
     <Container className="body">
         {/* Routes available only to the Admin */}
-        <AdminNavBar userRole={userRole} />
+        <AdminNavBar isLoggedIn={isLoggedIn} userRole={userRole} />
         {/* Navbar with search and login/logout functionalities */}
         <Navbar bg="dark" expand="lg" style={{ color: 'white', paddingLeft: '1%', paddingRight: '1%', height: '160px'}}>
            <WebsiteTitle />
@@ -163,16 +164,16 @@ useEffect(() => {
        <Route path="/products/payment_succesful/" element={<PaymentSuccessPage />} />
        <Route path="/search/:classification/:searchTerm/page/*"  element={<SearchResults results={searchResults} searchTerm={searchTerm} classification={pathParams[2]} />} />
        <Route path="/edit_user/:id"  element={<EditUser />} />
-       <Route path="/masculine/shirts" element={<ShirtsRoute />} />
-       <Route path="/masculine/trousers" element={<TrousersRoute />} />
-       <Route path="/masculine/shoes" element={<ShoesRoute />} />
-       <Route path="/feminine/shirts" element={<FeminineShirtsRoute />} />
-       <Route path="/feminine/trousers" element={<FeminineTrousersRoute />} />
-       <Route path="/feminine/shoes" element={<FemininineShoesRoute />} />
-       <Route path="/kids/shirts" element={<KidsShirtsRoute />} />
-       <Route path="/kids/trousers" element={<KidsTrousersRoute />} />
-       <Route path="/kids/shoes" element={<KidsShoesRoute />} />
-      <Route path="/products/*" element={<MakeFilteredSearch selectedFilters={selectedFilters} />} />
+       <Route path="/masculine/shirts/page/*" element={<ShirtsRoute />} />
+       <Route path="/masculine/trousers/page/*" element={<TrousersRoute />} />
+       <Route path="/masculine/shoes/page/*" element={<ShoesRoute />} />
+       <Route path="/feminine/shirts/page/*" element={<FeminineShirtsRoute />} />
+       <Route path="/feminine/trousers/page/*" element={<FeminineTrousersRoute />} />
+       <Route path="/feminine/shoes/page/*" element={<FemininineShoesRoute />} />
+       <Route path="/kids/shirts/page/*" element={<KidsShirtsRoute />} />
+       <Route path="/kids/trousers/page/*" element={<KidsTrousersRoute />} />
+       <Route path="/kids/shoes/page/*" element={<KidsShoesRoute />} />
+       <Route path="/products/*" element={<MakeFilteredSearch selectedFilters={selectedFilters} />} />
       <Route path="/products/*/:searchTerm/page/*"  element={<MakeFilteredSearch selectedFilters={selectedFilters} />} />
     </Routes>
     </Container>

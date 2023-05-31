@@ -4,9 +4,9 @@ import axios from 'axios';
 import { Form, FormControl, Button, InputGroup } from 'react-bootstrap'
 
 function EditProduct() {
+   const navigate = useNavigate();
    const currentDate = new Date()              
     const { id } = useParams();
-    const navigate = useNavigate();
     const [product, setProduct] = useState({
         name: '',
         classification: '',

@@ -4,27 +4,6 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const postRoutes = express.Router();
-const userRoutes = express.Router();
-const productRoutes = express.Router();
-const loginRoutes = express.Router();
-const logoutRoutes = express.Router();
-const orderRoutes = express.Router();
-
-const PORT = 4000;
-const newPost = require('./post.model');
-const newUser = require("./user.model");
-
-const newOrder = require("./order.model");
-
-const registrationTokenExpiration = "7d";
-
-const newProduct = require("./product.model")
-const auth = require("./auth");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-const { body, validationResult } = require('express-validator');
-const productModel = require('./product.model');
 app.use(cors());
 app.use(bodyParser.json());
 mongoose.connect(`mongodb+srv://otaviomagnani:${process.env.MONGODB_PASSWORD}@cluster0.cb2e1su.mongodb.net/?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -32,14 +11,31 @@ const connection = mongoose.connection;
 connection.once('open', function() {
   console.log("MongoDB database connection established successfully");
 })
-
-//const stripe = require('stripe')('sk_test_51N6tO8EFMUty2Z9OWvDRqLNvXGhfAxLUNI8V8yxUnv38CA2BWJx077WzoBhG7ncg6WC5MfFBzAR1BgmvYffOvccU00o7DnjzTp');
-
+// Stripe key for mock payments
 const stripe = require('stripe')(`${process.env.STRIPE_KEY}`);
+// Routes
+const postRoutes = express.Router();
+const userRoutes = express.Router();
+const productRoutes = express.Router();
+const loginRoutes = express.Router();
+const logoutRoutes = express.Router();
+const orderRoutes = express.Router();
+// Mongoose models
+const newPost = require('./post.model');
+const newUser = require("./user.model");
+const newOrder = require("./order.model");
+const newProduct = require("./product.model")
+// Port
+const PORT = 4000;
+// Registration constants
+const registrationTokenExpiration = "7d";
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+//const orderModel = require('./order.model');
+//const auth = require("./auth");
 
 productRoutes.post('/create-payment-intent', (req, res) => {
   const { price } = req.body;
-
   stripe.paymentIntents.create({
     amount: price * 100,
     currency: 'usd'
@@ -57,58 +53,28 @@ productRoutes.post('/create-payment-intent', (req, res) => {
     });
 });
 
-//DEFINING THE ENDPOINTS
+//DEFINING THE BASIC ENDPOINTS
 
-postRoutes.route('/').get(function(req, res) {
-  newPost.find()
-    .then(function(posts) {
-      res.json(posts);
-    })
-    .catch(function(err) {
-      console.log(err);
-    });
-});
+function DefineEndpoints(specificRoute, url, mongoose_model) {
+   specificRoute(url).get(function(req, res) {
+     mongoose_model.find()
+       .then(function(object) {
+         res.json(object);
+       })
+       .catch(function(err) {
+         console.log(err);
+       });
+   });
+   
+}
+ 
+DefineEndpoints(postRoutes.route.bind(postRoutes), '/', newPost);
+DefineEndpoints(productRoutes.route.bind(productRoutes), '/', newProduct);
+DefineEndpoints(userRoutes.route.bind(userRoutes), '/', newUser);
+DefineEndpoints(orderRoutes.route.bind(orderRoutes), '/', newOrder);
 
-productRoutes.route('/').get(function(req, res) {
-  newProduct.find()
-    .then(function(products) {
-      res.json(products);
-    })
-    .catch(function(err) {
-      console.log(err);
-    });
-});
 
-userRoutes.route('/').get(function(req, res) {
-  newUser.find()
-    .then(function(user) {
-      res.json(user);
-    })
-    .catch(function(err) {
-      console.log(err);
-    });
-});
-
-loginRoutes.route('/').get(function(req, res) {
-  newUser.find()
-    .then(function(user) {
-      res.json(user);
-    })
-    .catch(function(err) {
-      console.log(err);
-    });
-});
-
-orderRoutes.route('/').get(function(req, res) {
-  newOrder.find()
-    .then(function(order) {
-      res.json(order);
-    })
-    .catch(function(err) {
-      console.log(err);
-    });
-});
-
+// Registration endpoint
 userRoutes.route("/register").post((req, response) => {
   bcrypt
     .hash(req.body.password, 10)
@@ -117,25 +83,26 @@ userRoutes.route("/register").post((req, response) => {
         username: req.body.username,
         email: req.body.email,
         password: hashedPassword,
-    /*    description: req.body.description,
-        profile_picture: req.body.profile_picture,
-        language_preferences: req.body.language_preferences,
-        timezone: req.body.timezone,
-        wishlist: req.body.wishlist,
-        shopping_cart: req.body.shopping_cart,
-        payment_info: req.body.payment_info,
-        newsletter_subscription: req.body.newsletter_subscription,
-        verified: req.body.verified,
-        last_login: req.body.last_login,
-        birth_date: req.body.birth_date,
-        address: req.body.address,
-        first_name: req.body.first_name,
-        last_name:  req.body.last_name,
-        phone_number:  req.body.phone_number,
-        order_history:  req.body.order_history,
-        product_reviews: req.body.product_reviews,
-        user_role: req.body.user_role, */
-      });
+        birth_date: user.birth_date,
+        address: user.address,
+        first_name: user.first_name,
+        last_name:  user.last_name,
+        phone_number:  user.phone_number,
+        order_history:  user.order_history,
+        product_reviews:  user.product_reviews,
+        description: user.description,
+        profile_picture: user.profile_picture,
+        language_preferences: user.language_preferences,
+        timezone: user.timezone,
+        wishlist: user.wishlist,
+        shopping_cart: user.shopping_cart,
+        payment_info: user.payment_info,
+        newsletter_subscription: user.newsletter_subscription,
+        verified: user.verified,
+        created_at: user.created_at,
+        last_login: user.last_login,
+        user_role:  user.user_role, 
+});
       user
         .save()
         .then((result) => {
@@ -159,7 +126,7 @@ userRoutes.route("/register").post((req, response) => {
     });
 });
 
-// login endpoint
+// Login endpoint
 userRoutes.route("/login").post((request, response) => {
   newUser.findOne({ email: request.body.email })
     .then((user) => {
@@ -176,26 +143,6 @@ userRoutes.route("/login").post((request, response) => {
             {
               userId: user._id,
               userEmail: user.email,
-              userName: user.username,
-              birth_date: user.birth_date,
-              address: user.address,
-              first_name: user.first_name,
-              last_name:  user.last_name,
-              phone_number:  user.phone_number,
-              order_history:  user.order_history,
-              product_reviews:  user.product_reviews,
-              description: user.description,
-              profile_picture: user.profile_picture,
-              language_preferences: user.language_preferences,
-              timezone: user.timezone,
-              wishlist: user.wishlist,
-              shopping_cart: user.shopping_cart,
-              payment_info: user.payment_info,
-              newsletter_subscription: user.newsletter_subscription,
-              verified: user.verified,
-              created_at: user.created_at,
-              last_login: user.last_login,
-              user_role:  user.user_role, 
             },
             "RANDOM-TOKEN",
             { expiresIn: registrationTokenExpiration }
@@ -221,22 +168,14 @@ userRoutes.route("/login").post((request, response) => {
     });
 });
 
+// Logout endpoint
 userRoutes.route("/logout").get((request, response) => {
   response.clearCookie("TOKEN");
   response.status(200).send({ message: "Logout successful" });
 });
 
-userRoutes.route('/:id').get(function(req, res) {
-  newUser.findById(req.params.id)
-    .then(function(user) {
-      res.json(user);
-    })
-    .catch(function(err) {
-      console.log(err);
-      res.status(404).send("Product not found");
-    });
-});
 
+// Verification of the token of the logged-in user
 function verifyToken(req, res, next) {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) {
@@ -250,7 +189,75 @@ function verifyToken(req, res, next) {
     next();
   });
 }
-//,  { expiresIn: registrationTokenExpiration }
+
+// CRUD FUNCTIONS
+
+// Find by ID
+function FindObjectById(expressRoute, url, mongoose_model, name_of_object) {
+  expressRoute(url).get(function(req, res) {
+    mongoose_model.findById(req.params.id)
+      .then(function(object) {
+        res.json(object);
+      })
+      .catch(function(err) {
+        console.log(err);
+        res.status(404).send(`${name_of_object} not found`);
+      });
+  });
+  }
+// Create
+function Create(expressRoute, url, mongoose_model, name_of_object) {
+  return expressRoute(url).post(function(req, res) {
+    let object = new mongoose_model(req.body);
+    object.save()
+        .then(object => {
+          res.status(200).json({ [name_of_object]: `${name_of_object} added successfully` });
+        })
+        .catch(err => {
+            res.status(400).send(`adding new ${name_of_object} failed`);
+        });
+  }) 
+}
+// Update
+function Update(expressRoute, url, mongoose_model, name_of_object) {
+  expressRoute(url).post(function(req, res) {
+    const object = req.body;
+    const id = req.params.id;
+    mongoose_model.findByIdAndUpdate(id, object)
+      .then(() => {
+        const updatedObject = { ...req.object, ...object };
+        res.status(200).send(updatedObject);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).send({ message: `Error updating ${name_of_object}` });
+      });
+    });
+}
+// Delete
+function Delete(expressRoute, url, mongoose_model, name_of_object) {
+ expressRoute(url).delete(function(req, res) {
+  mongoose_model.findByIdAndDelete(req.params.id)
+    .then(function(object) {
+      if (!object) {
+        res.status(404).send("data is not found");
+      } else {
+        res.json(`${name_of_object} deleted!`);
+      }
+    })
+    .catch(function(err) {
+      console.log(err);
+      res.status(400).send("Delete not possible");
+    });
+});
+}
+
+//SPECIFIC CRUD (CREATE-READ-UPDATE-DELETE) ENDPOINTS FOR USERS, POSTS, PRODUCTS, ORDERS
+
+// Read, update, delete users
+// User creation has beend dealt with in the registration function
+FindObjectById(userRoutes.route.bind(userRoutes), '/:id', newUser, 'user');
+// Updating the user rquires updating the token, hence the function will be different than it is for posts, products, orders
 userRoutes.route('/update_user/:id').post(verifyToken, function(req, res) {
   const user = req.body;
   const id = req.params.id;
@@ -267,108 +274,26 @@ userRoutes.route('/update_user/:id').post(verifyToken, function(req, res) {
       res.status(500).send({ message: 'Error updating user' });
     });
 });
+Delete(userRoutes.route.bind(userRoutes), '/delete_user/:id', newUser, 'user');
 
-userRoutes.route('/delete_user/:id').delete(function(req, res) {
-  newUser.findByIdAndDelete(req.params.id)
-    .then(function(user) {
-      if (!user) {
-        res.status(404).send("data is not found");
-      } else {
-        res.json('user deleted!');
-      }
-    })
-    .catch(function(err) {
-      console.log(err);
-      res.status(400).send("Delete not possible");
-    });
-});
+// Create, read, update and delete posts
+FindObjectById(postRoutes.route.bind(postRoutes), '/:id', newPost, 'post');
+Create(postRoutes.route.bind(postRoutes), '/add', newPost, 'post');
+Update(postRoutes.route.bind(postRoutes), '/update/:id', newPost, 'post');
+Delete(postRoutes.route.bind(postRoutes), '/delete/:id', newPost, 'post');
 
-userRoutes.route('/:profile/:id').get(function(req, res) {
-  newUser.findOne({_id: req.params.id })
-    .then(function(post) {
-      res.json(post);
-    })
-    .catch(function(err) {
-      console.log(err);
-      res.status(404).send("User not found");
-    });
-});
+// Create, read, update and delete products
+FindObjectById(productRoutes.route.bind(productRoutes), '/:id', newProduct, 'product');
+Create(productRoutes.route.bind(productRoutes), '/add_product', newProduct, 'product');
+Update(productRoutes.route.bind(productRoutes), '/update_product/:id', newProduct, 'product');
+Delete(productRoutes.route.bind(productRoutes), '/delete_product/:id', newProduct, 'product');
 
-userRoutes.route('/:wishlist/:id').get(function(req, res) {
-  newUser.findOne({_id: req.params.id })
-    .then(function(post) {
-      res.json(post);
-    })
-    .catch(function(err) {
-      console.log(err);
-      res.status(404).send("Wishlist not found");
-    });
-});
+// Create, read, update and delete orders
+FindObjectById(orderRoutes.route.bind(orderRoutes), '/:id', newOrder, 'order');
+Create(orderRoutes.route.bind(orderRoutes), '/:add_orders', newOrder, 'order');
+Update(orderRoutes.route.bind(orderRoutes), '/:update_order/:id', newOrder, 'order');
+Delete(orderRoutes.route.bind(orderRoutes), '/:delete_order/:id', newOrder, 'order');
 
-userRoutes.route('/:shopping_cart/:id').get(function(req, res) {
-  newUser.findOne({_id: req.params.id })
-    .then(function(post) {
-      res.json(post);
-    })
-    .catch(function(err) {
-      console.log(err);
-      res.status(404).send("Shopping cart not found");
-    });
-});
-
-userRoutes.route('/:shopping_card/:id').get(function(req, res) {
-  newUser.findOne({_id: req.params.id })
-    .then(function(post) {
-      res.json(post);
-    })
-    .catch(function(err) {
-      console.log(err);
-      res.status(404).send("User not found");
-    });
-});
-
-// free endpoint
-userRoutes.get("/free-endpoint", (request, response) => {
-  response.json({ message: "You are free to access me anytime" });
-});
-
-// authentication endpoint
-userRoutes.get("/protected", auth, (request, response) => {
-  response.json({ message: "You are authorized to access me" });
-});
-
-// authenticate token
-function authenticateToken(req, res, next) {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-  if (token == null) return res.sendStatus(401);
-
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403);
-    req.user = user;
-    next();
-  });
-}
-
-const secret = 'my_secret_key';
-
-// Middleware to verify JWT token and extract user ID
-const authenticate = (req, res, next) => {
-  // Extract token from Authorization header
-  const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
-  if (!token) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-
-  try {
-    // Verify token and extract user ID
-    const decoded = jwt.verify(token, secret);
-    req.newUserId = decoded.newUserId; // Extract user ID from token and add to request object
-    next();
-  } catch (err) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-}
 
 // Curb Cores Error by adding a header here
 userRoutes.use((req, res, next) => {
@@ -384,188 +309,6 @@ userRoutes.use((req, res, next) => {
   next();
 });
 
-postRoutes.route('/:id').get(function(req, res) {
-  newPost.findById(req.params.id)
-    .then(function(post) {
-      res.json(post);
-    })
-    .catch(function(err) {
-      console.log(err);
-      res.status(404).send("Post not found");
-    });
-});
-
-postRoutes.route('/:newTitle/:id').get(function(req, res) {
-  newPost.findOne({_id: req.params.id, newTitle: req.params.newTitle })
-    .then(function(post) {
-      res.json(post);
-    })
-    .catch(function(err) {
-      console.log(err);
-      res.status(404).send("Post not found");
-    });
-});
-
-postRoutes.route('/:newClassification/:newTitle/:id').get(function(req, res) {
-  newPost.findOne({_id: req.params.id, newTitle: req.params.newTitle, newClassification: req.params.newClassification })
-    .then(function(post) {
-      res.json(post);
-    })
-    .catch(function(err) {
-      console.log(err);
-      res.status(404).send("Post not found");
-    });
-});
-
-productRoutes.route('/:id').get(function(req, res) {
-  newProduct.findById(req.params.id)
-    .then(function(post) {
-      res.json(post);
-    })
-    .catch(function(err) {
-      console.log(err);
-      res.status(404).send("Product not found");
-    });
-});
-
-productRoutes.route('/:name/:id').get(function(req, res) {
-  newProduct.findOne({name: req.params.name })
-    .then(function(posts) {
-      res.json(posts);
-    })
-    .catch(function(err) {
-      console.log(err);
-      res.status(404).send("Posts not found");
-    });
-});
-
-postRoutes.route('/update/:id').post(function(req, res) {
-  newPost.findById(req.params.id)
-    .then(function(post) {
-      if (!post) {
-        res.status(404).send("data is not found");
-      } else {
-        post.newPost = req.body.newPost;
-        post.newClassification = req.body.newClassification;
-        post.post_priority = req.body.post_priority;
-        post.newTitle = req.body.newTitle;
-        post.post_completed = req.body.post_completed;
-        post.creationDate = req.body.creationDate;
-        post.lastEdited = req.body.lastEdited;
-        post.country = req.body.country;
-        post.language = req.body.language;
-        post.postNumber = req.body.postNumber;
-        post.save()
-          .then(function(post) {
-            res.json('post updated!');
-          })
-          .catch(function(err) {
-            res.status(400).send("Update not possible");
-          });
-      }
-    })
-    .catch(function(err) {
-      console.log(err);
-    });
-});
-
-postRoutes.route('/delete/:id').delete(function(req, res) {
-  newPost.findByIdAndDelete(req.params.id)
-    .then(function(post) {
-      if (!post) {
-        res.status(404).send("data is not found");
-      } else {
-        res.json('post deleted!');
-      }
-    })
-    .catch(function(err) {
-      console.log(err);
-      res.status(400).send("Delete not possible");
-    });
-});
-
-productRoutes.route('/update_product/:id').post(function(req, res) {
-  newProduct.findById(req.params.id)
-    .then(function(product) {
-      if (!product) {
-        res.status(404).send("data is not found");
-      } else {
-        product.name = req.body.name;
-        product.classification = req.body.classification;
-        product.sizeSML = req.body.sizeSML;
-        product.sizeNumber = req.body.sizeNumber;
-        product.brand = req.body.brand;
-        product.price = req.body.price;
-        product.customerReview = req.body.customerReview;
-        product.popularity = req.body.popularity;
-        product.color = req.body.color;
-        product.creationDate = req.body.creationDate;
-        product.lastEdited = req.body.lastEdited;
-        product.condition = req.body.condition;
-        product.availability = req.body.availability;
-        product.description = req.body.description;
-        product.targetPublic = req.body.targetPublic;
-        product.save()
-          .then(function(product) {
-            res.json('product updated!');
-          })
-          .catch(function(err) {
-            res.status(400).send("Update not possible");
-          });
-      }
-    })
-    .catch(function(err) {
-      console.log(err);
-    });
-});
-productRoutes.route('/delete_product/:id').delete(function(req, res) {
-  newProduct.findByIdAndDelete(req.params.id)
-    .then(function(product) {
-      if (!product) {
-        res.status(404).send("data is not found");
-      } else {
-        res.json('product deleted!');
-      }
-    })
-    .catch(function(err) {
-      console.log(err);
-      res.status(400).send("Delete not possible");
-    });
-});
-
-postRoutes.route('/add').post(function(req, res) {
-    let post = new newPost(req.body);
-    post.save()
-        .then(post => {
-            res.status(200).json({'post': 'post added successfully'});
-        })
-        .catch(err => {
-            res.status(400).send('adding new post failed');
-        });
-});
-
-productRoutes.route('/add_product').post(function(req, res) {
-  let product = new newProduct(req.body);
-  product.save()
-      .then(product => {
-          res.status(200).json({'product': 'product added successfully'});
-      })
-      .catch(err => {
-          res.status(400).send('adding new product failed');
-      });
-});
-
-orderRoutes.route('/add_orders').post(function(req, res) {
-  let order = new newOrder(req.body);
-  order.save()
-      .then(order => {
-          res.status(200).json({'order': 'order added successfully'});
-      })
-      .catch(err => {
-          res.status(400).send('adding new order failed');
-      });
-});
-
 app.use('/purchases', orderRoutes);
 app.use('/products', productRoutes);
 app.use('/posts', postRoutes);
@@ -577,3 +320,32 @@ app.listen(PORT, function() {
     console.log(app._router.stack);
 
 });
+
+
+
+
+
+
+
+
+
+       /*       userName: user.username,
+              birth_date: user.birth_date,
+              address: user.address,
+              first_name: user.first_name,
+              last_name:  user.last_name,
+              phone_number:  user.phone_number,
+              order_history:  user.order_history,
+              product_reviews:  user.product_reviews,
+              description: user.description,
+              profile_picture: user.profile_picture,
+              language_preferences: user.language_preferences,
+              timezone: user.timezone,
+              wishlist: user.wishlist,
+              shopping_cart: user.shopping_cart,
+              payment_info: user.payment_info,
+              newsletter_subscription: user.newsletter_subscription,
+              verified: user.verified,
+              created_at: user.created_at,
+              last_login: user.last_login,
+              user_role:  user.user_role, */

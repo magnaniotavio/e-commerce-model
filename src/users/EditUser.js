@@ -3,7 +3,7 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 import { useParams, useNavigate } from "react-router-dom";
 import jwtDecode from 'jwt-decode';
-import { returnUserId, ReturnUserRole, ReturnUserProperties } from "./UserId";
+import { returnUserId, ReturnUserProperties } from "./UserId";
 
 let decoded;
 
@@ -69,9 +69,6 @@ function EditUser() {
       onDelete();
     }
   }
-
-  console.log('shit' + ReturnUserRole())
-  console.log('merde' + ReturnUserProperties('user_role'))
 
   return (
     <div>

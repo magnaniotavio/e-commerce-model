@@ -7,11 +7,9 @@ import axios from 'axios';
 import { AddToCartButton } from '../payment/CartWishlistAndBuyNowButtons';
 import { returnUserId } from '../users/UserId';
 
-export const MakeFilteredSearch = ({ selectedFilters }) => {
+export const MakeFilteredSearch = ({ selectedFilters, isMainRoute }) => {
     const userIsLoggedIn = returnUserId()
     const navigate = useNavigate();
-
-
     const [filteredProducts, setFilteredProducts] = useState([]);
     function createFiltersArray(category) {
         return selectedFilters.filter(key => key.startsWith(`${category}`)).map(key => key.split(":")[1]);
@@ -47,10 +45,6 @@ export const MakeFilteredSearch = ({ selectedFilters }) => {
         .catch(error => console.log(error));
     }, [selectedFilters]);
   
-
-
-
-
     const { pageNumber } = useParams();
     const [totalResults, setTotalResults] = useState([])
     const totalItems = filteredProducts.length;
@@ -66,16 +60,22 @@ export const MakeFilteredSearch = ({ selectedFilters }) => {
     const endIndex = startIndex + postsPerPage;
     const itemsToDisplay = totalResults.slice(startIndex, endIndex);
     const totalPages = Math.ceil(totalItems / postsPerPage);
+    const lowerCaseClassification = String(classification).toLowerCase();
+    const formatttedClassification = lowerCaseClassification.slice(0, lowerCaseClassification.length - 1) + 's';
+    const lowerCaseTargetPublic = String(targetPublic).toLowerCase();
+
     const handlePageChange = (pageNumber) => {
       setCurrentPage(pageNumber);
-      navigate(`/products/${classification}/page/${pageNumber}`);
+      if (selectedFilters && isMainRoute) {
+        navigate(`/${lowerCaseTargetPublic}/${formatttedClassification}/page/${pageNumber}`);
+      } else if (selectedFilters) {
+        navigate(`/products/?classification=${classification}&page=${pageNumber}`);
+      }
     };
-
-
 
     return ( <div>
         {itemsToDisplay.map(product => (
-          <div key={product.id} className="product">
+          <div key={product._id} className="product">
             <Container className="mt-4">
           <Row>
             <Col md={6}>
