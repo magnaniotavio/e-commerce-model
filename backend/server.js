@@ -53,52 +53,6 @@ productRoutes.post('/create-payment-intent', (req, res) => {
     });
 });
 
-
-
-
-
-
-
-app.get('/api/orders', async (req, res) => {
-  try {
-    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-    await client.connect();
-
-    const collection = client.db('<database-name>').collection('orders');
-    const orders = await collection.find({}).toArray();
-
-    client.close();
-
-    res.json(orders);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal Server Error');
-  }
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //DEFINING THE BASIC ENDPOINTS
 
 function DefineEndpoints(specificRoute, url, mongoose_model) {
