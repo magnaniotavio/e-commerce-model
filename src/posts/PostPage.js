@@ -15,13 +15,10 @@ function PostPage() {
     postBody: '',
   });
 
-  console.log(newTitle)
-
   useEffect(() => {
     let isMounted = true;
-    axios.get(`/api/posts/${newClassification}/${newTitle}/${id}`)
+    axios.get(`/http://localhost:4000/posts/${newClassification}/${newTitle}/${id}`)
       .then(response => {
-        console.log('response:', response);
         if (isMounted) {
           setPost({
             postTitle: response.data.newTitle,

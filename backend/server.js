@@ -57,21 +57,6 @@ productRoutes.post('/create-payment-intent', (req, res) => {
 });
 
 //DEFINING THE BASIC ENDPOINTS
-function DefinaEdnpoints(specificRoute, path, mongoose_model) {
-  specificRoute(path).get(function(req, res) {
-    const baseURL = process.env.BASE_URL || `http://localhost:${process.env.PORT || 4000}`;
-    const url = baseURL + path;
-    
-    mongoose_model.find()
-      .then(function(object) {
-        res.json(object);
-      })
-      .catch(function(err) {
-        console.log(err);
-      });
-  });
-}
-
 function DefineEndpoints(specificRoute, url, mongoose_model) {
    specificRoute(url).get(function(req, res) {
      mongoose_model.find()
@@ -294,9 +279,6 @@ userRoutes.route('/update_user/:id').post(verifyToken, function(req, res) {
 });
 Delete(userRoutes.route.bind(userRoutes), '/delete_user/:id', newUser, 'user');
 
-
-
-
 // Create, read, update and delete posts
 FindObjectById(postRoutes.route.bind(postRoutes), '/:id', newPost, 'post');
 Create(postRoutes.route.bind(postRoutes), '/add', newPost, 'post');
@@ -331,28 +313,24 @@ userRoutes.use((req, res, next) => {
 });
 
 
-app.post('/test', (req, res) => {
-  const response = { message: 'This is a test endpoint' };
-  res.json(response);
-});
-
-app.use(express.json());
 
 
 
 
 
 
-app.post('/api/posts', (req, res) => {
-  // Use the UserOrder model to fetch user orders from the database
-  newOrder.find()
-    .then((newOrder) => {
-      res.json(newOrder);
-    })
-    .catch((error) => {
-      console.error('Error fetching user orders:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    });
+
+
+app.get('/test', (req, res) => {
+  const testCollection = connection.db.collection('test');
+  testCollection.find().toArray((error, data) => {
+    if (error) {
+      console.error('Error retrieving data from MongoDB:', error);
+      res.status(500).send('Internal Server Error');
+    } else {
+      res.json(data);
+    }
+  });
 });
 
 
@@ -367,10 +345,15 @@ app.post('/api/posts', (req, res) => {
 
 
 
-const corsOptions = {
-  origin: 'https://e-commerce-model.onrender.com',
-  optionsSuccessStatus: 200 // Some legacy browsers (e.g., IE11) choke on 204
-};
+
+
+
+
+
+
+
+
+
 
 app.use('/purchases', orderRoutes);
 app.use('/products', productRoutes);
@@ -383,7 +366,6 @@ app.listen(PORT, function() {
   console.log(app._router.stack);
 
 });
-
 
 
 

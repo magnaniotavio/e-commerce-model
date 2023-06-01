@@ -7,22 +7,12 @@ export default function CreatePost() {
 
  const [post, setPost] = useState("");
  const [classification, setClassification] = useState("");
-
  const [title, setTitle] = useState("")
-
  const [creationDate, setCreationDate] = useState("");
-
  const [lastEdited, setLastEdited] = useState("");
-
  const [country, setCountry] = useState("");
-
  const [language, setLanguage] = useState("");
-
  const [postNumber, setPostNumber] = useState("");
-
-
-
-
  const [posted, setPosted] = useState(false);
 
 
@@ -72,7 +62,7 @@ export default function CreatePost() {
         }; 
         console.log(newPosts)
 
-        axios.post('/api/posts', newPosts)
+        axios.post('http://localhost:4000/posts/add', newPosts)
         .then(res => {
           console.log(res.data);
           navigate(`/${newPosts.newTitle}`);
