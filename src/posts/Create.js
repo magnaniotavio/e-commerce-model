@@ -72,7 +72,7 @@ export default function CreatePost() {
         }; 
         console.log(newPosts)
 
-        axios.post('https://e-commerce-model.onrender.com/e-commerce-model/posts/add', newPosts)
+        axios.post('/api/posts', newPosts)
         .then(res => {
           console.log(res.data);
           navigate(`/${newPosts.newTitle}`);

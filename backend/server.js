@@ -28,15 +28,12 @@ const newUser = require("./user.model");
 const newOrder = require("./order.model");
 const newProduct = require("./product.model")
 // Port
-//const PORT = 4000;
-const baseURL = process.env.BASE_URL || `http://localhost:${process.env.PORT || 4000}`;
-const port = process.env.PORT || 4000;
-
+const PORT = 4000;
 // Registration constants
 const registrationTokenExpiration = "7d";
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { defer } = require('react-router-dom');
+//const { defer } = require('react-router-dom');
 //const orderModel = require('./order.model');
 //const auth = require("./auth");
 
@@ -88,7 +85,7 @@ function DefineEndpoints(specificRoute, url, mongoose_model) {
    
 }
  
-DefinaEdnpoints(postRoutes.route.bind(postRoutes), '/', newPost);
+DefineEndpoints(postRoutes.route.bind(postRoutes), '/', newPost);
 DefineEndpoints(productRoutes.route.bind(productRoutes), '/', newProduct);
 DefineEndpoints(userRoutes.route.bind(userRoutes), '/', newUser);
 DefineEndpoints(orderRoutes.route.bind(orderRoutes), '/', newOrder);
@@ -346,7 +343,7 @@ app.use(express.json());
 
 
 
-app.get('/api/userorders', (req, res) => {
+app.post('/api/posts', (req, res) => {
   // Use the UserOrder model to fetch user orders from the database
   newOrder.find()
     .then((newOrder) => {
@@ -381,9 +378,9 @@ app.use('/posts', postRoutes);
 app.use('/users', userRoutes);
 app.use('/login', loginRoutes);
 app.use('/logout', logoutRoutes);
-app.listen(port, function() {
-    console.log("Server is running on Port: " + port);
-    console.log(app._router.stack);
+app.listen(PORT, function() {
+  console.log("Server is running on Port: " + PORT);
+  console.log(app._router.stack);
 
 });
 

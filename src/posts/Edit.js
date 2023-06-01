@@ -19,7 +19,7 @@ function EditPost() {
     });
 
     useEffect(() => {
-      const hello = axios.get(`https://e-commerce-model.onrender.com/e-commerce-model/posts/${id}`)
+      const hello = axios.get(`/api/posts/${id}`)
       hello.then(response => {
           setPost({
             postTitle: response.data.newTitle,
@@ -109,11 +109,11 @@ const onChangePostTitle = (e) => {
         language: post.postLanguage,
         postNumber: post.postNumber,
       };  
-      axios.post(`https://e-commerce-model.onrender.com/posts/update/${id}`, obj)
+      axios.post(`/api/posts/update/${id}`, obj)
         .then(res => console.log(res.data));
       navigate('/postlist');
     } else if (e.nativeEvent.submitter.name === 'Delete') {
-      axios.delete(`https://e-commerce-model.onrender.com/delete/${id}`)
+      axios.delete(`/api/delete/${id}`)
       .then(res => console.log(res.data));
       navigate('/postlist');
 
