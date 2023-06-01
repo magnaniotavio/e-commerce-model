@@ -19,7 +19,7 @@ function EditPost() {
     });
 
     useEffect(() => {
-      const hello = axios.get(`https://e-commerce-model.onrender.com/posts/${id}`)
+      const hello = axios.get(`https://e-commerce-model.onrender.com/e-commerce-model/posts/${id}`)
       hello.then(response => {
           setPost({
             postTitle: response.data.newTitle,

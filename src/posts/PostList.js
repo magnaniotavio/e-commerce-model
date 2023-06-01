@@ -28,7 +28,7 @@ export default function List() {
 
 
   useEffect(() => {
-      axios.get('https://e-commerce-model.onrender.com/posts/')
+      axios.get('https://e-commerce-model.onrender.com/e-commerce-model/posts/')
         .then(response => {
           setPosts(response.data);
         })
