@@ -72,14 +72,13 @@ export default function CreatePost() {
         }; 
         console.log(newPosts)
 
-    axios.post('https://e-commerce-model.onrender.com/posts/add', newPosts)
-      .then(res => {
-        console.log(res.data);
-        navigate(`/${newPosts.newTitle}`);
-      })
-      .catch(error => console.log(error));
-
-        setPost('');
+        axios.post('https://e-commerce-model.onrender.com/e-commerce-model/posts/add', newPosts)
+        .then(res => {
+          console.log(res.data);
+          navigate(`/${newPosts.newTitle}`);
+        })
+        .catch(error => console.log(error));
+              setPost('');
         setClassification('');
         setTitle('');
         setPosted(false);
