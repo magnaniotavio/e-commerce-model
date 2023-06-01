@@ -46,7 +46,6 @@ const TestComponent = () => {
     );
   };
   
-  export default TestComponent;
 
   
 export default function CreatePost() {
