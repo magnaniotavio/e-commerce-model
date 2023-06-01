@@ -6,7 +6,8 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 app.use(cors());
 app.use(bodyParser.json());
-mongoose.connect(`mongodb+srv://otaviomagnani:${process.env.MONGODB_PASSWORD}@cluster0.cb2e1su.mongodb.net/?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true })
+//process.env.MONGODB_PASSWORD
+mongoose.connect(`mongodb+srv://otaviomagnani:${infinitejest}@cluster0.cb2e1su.mongodb.net/?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connected to MongoDB Atlas'))
   .catch((error) => console.error('Error connecting to MongoDB Atlas:', error));
 const connection = mongoose.connection;
