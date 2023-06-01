@@ -298,31 +298,9 @@ Delete(userRoutes.route.bind(userRoutes), '/delete_user/:id', newUser, 'user');
 
 
 
-
-
-
-
-
-function CreateRender(expressRoute, path, mongoose_model, name_of_object) {
-  return expressRoute(path).post(function(req, res) {
-    const baseURL = process.env.BASE_URL || `http://localhost:${process.env.PORT || 4000}`;
-    const url = baseURL + path;
-
-    let object = new mongoose_model(req.body);
-    object.save()
-      .then(object => {
-        res.status(200).json({ [name_of_object]: `${name_of_object} added successfully` });
-      })
-      .catch(err => {
-        res.status(400).send(`Adding new ${name_of_object} failed`);
-      });
-  });
-}
-
-
 // Create, read, update and delete posts
 FindObjectById(postRoutes.route.bind(postRoutes), '/:id', newPost, 'post');
-CreateRender(postRoutes.route.bind(postRoutes), '/add', newPost, 'post');
+Create(postRoutes.route.bind(postRoutes), '/add', newPost, 'post');
 Update(postRoutes.route.bind(postRoutes), '/update/:id', newPost, 'post');
 Delete(postRoutes.route.bind(postRoutes), '/delete/:id', newPost, 'post');
 
