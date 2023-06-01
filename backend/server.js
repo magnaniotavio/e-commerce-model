@@ -331,6 +331,15 @@ userRoutes.use((req, res, next) => {
   next();
 });
 
+
+app.post('/test', (req, res) => {
+  const response = { message: 'This is a test endpoint' };
+  res.json(response);
+});
+
+app.use(express.json());
+
+
 app.use('/purchases', orderRoutes);
 app.use('/products', productRoutes);
 app.use('/posts', postRoutes);
