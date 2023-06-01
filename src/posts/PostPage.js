@@ -19,7 +19,7 @@ function PostPage() {
 
   useEffect(() => {
     let isMounted = true;
-    axios.get(`http://localhost:4000/posts/${newClassification}/${newTitle}/${id}`)
+    axios.get(`https://e-commerce-model.onrender.com/posts/${newClassification}/${newTitle}/${id}`)
       .then(response => {
         console.log('response:', response);
         if (isMounted) {

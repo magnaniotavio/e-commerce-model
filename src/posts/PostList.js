@@ -28,7 +28,7 @@ export default function List() {
 
 
   useEffect(() => {
-      axios.get('http://localhost:4000/posts/')
+      axios.get('https://e-commerce-model.onrender.com/posts/')
         .then(response => {
           setPosts(response.data);
         })

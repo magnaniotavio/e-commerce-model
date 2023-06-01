@@ -26,7 +26,10 @@ const newUser = require("./user.model");
 const newOrder = require("./order.model");
 const newProduct = require("./product.model")
 // Port
-const PORT = 4000;
+//const PORT = 4000;
+const baseURL = process.env.BASE_URL || `http://localhost:${process.env.PORT || 4000}`;
+const port = process.env.PORT || 4000;
+
 // Registration constants
 const registrationTokenExpiration = "7d";
 const jwt = require("jsonwebtoken");
@@ -315,8 +318,8 @@ app.use('/posts', postRoutes);
 app.use('/users', userRoutes);
 app.use('/login', loginRoutes);
 app.use('/logout', logoutRoutes);
-app.listen(PORT, function() {
-    console.log("Server is running on Port: " + PORT);
+app.listen(port, function() {
+    console.log("Server is running on Port: " + port);
     console.log(app._router.stack);
 
 });

@@ -34,7 +34,7 @@ function SetRoute(parameter) {
 
   useEffect(() => {
     let isMounted = true;
-    axios.get('http://localhost:4000/posts/')
+    axios.get('https://e-commerce-model.onrender.com/posts/')
       .then(response => {
         const filteredPosts = response.data.filter(
           post => post.newClassification === `${parameter}` )
