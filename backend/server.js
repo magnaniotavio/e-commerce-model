@@ -312,49 +312,6 @@ userRoutes.use((req, res, next) => {
   next();
 });
 
-
-
-
-
-
-
-
-
-
-app.get('/test', (req, res) => {
-  const testCollection = connection.db.collection('test');
-  testCollection.find().toArray((error, data) => {
-    if (error) {
-      console.error('Error retrieving data from MongoDB:', error);
-      res.status(500).send('Internal Server Error');
-    } else {
-      res.json(data);
-    }
-  });
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 app.use('/purchases', orderRoutes);
 app.use('/products', productRoutes);
 app.use('/posts', postRoutes);
@@ -366,31 +323,3 @@ app.listen(PORT, function() {
   console.log(app._router.stack);
 
 });
-
-
-
-
-
-
-
-
-       /*       userName: user.username,
-              birth_date: user.birth_date,
-              address: user.address,
-              first_name: user.first_name,
-              last_name:  user.last_name,
-              phone_number:  user.phone_number,
-              order_history:  user.order_history,
-              product_reviews:  user.product_reviews,
-              description: user.description,
-              profile_picture: user.profile_picture,
-              language_preferences: user.language_preferences,
-              timezone: user.timezone,
-              wishlist: user.wishlist,
-              shopping_cart: user.shopping_cart,
-              payment_info: user.payment_info,
-              newsletter_subscription: user.newsletter_subscription,
-              verified: user.verified,
-              created_at: user.created_at,
-              last_login: user.last_login,
-              user_role:  user.user_role, */

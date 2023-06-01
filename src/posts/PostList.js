@@ -5,20 +5,6 @@ import axios from 'axios';
 import PostPage from './PostPage';
 import { Button } from 'react-bootstrap';
 
-
-const RetrieveData = () => {
-  const retrieveData = () => {
-    fetch('/test') // Change '/test' to the appropriate route you want to retrieve data from
-      .then(response => response)
-      .then(data => console.log(data))
-      .catch(error => console.error(error));
-  };
-
-  return (
-    <Button onClick={retrieveData}>Retrieve Data</Button>
-  );
-};
-
 export default function List() {
 
   const { id } = useParams();
@@ -90,22 +76,6 @@ export default function List() {
   return postList
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 return (
     <div>
       <h3>Post List</h3>
@@ -124,7 +94,6 @@ return (
         <tbody>{thePosts(orderPostsBy)}</tbody>
       </table>
       <div>
-        <RetrieveData />
     </div>
 
     </div>
