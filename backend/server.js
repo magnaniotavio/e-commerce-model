@@ -6,7 +6,9 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 app.use(cors());
 app.use(bodyParser.json());
-mongoose.connect(`mongodb+srv://otaviomagnani:${process.env.MONGODB_PASSWORD}@cluster0.cb2e1su.mongodb.net/?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(`mongodb+srv://otaviomagnani:${process.env.MONGODB_PASSWORD}@cluster0.cb2e1su.mongodb.net/?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Connected to MongoDB Atlas'))
+  .catch((error) => console.error('Error connecting to MongoDB Atlas:', error));
 const connection = mongoose.connection;
 connection.once('open', function() {
   console.log("MongoDB database connection established successfully");
@@ -339,6 +341,39 @@ app.post('/test', (req, res) => {
 
 app.use(express.json());
 
+
+
+
+
+
+app.get('/api/userorders', (req, res) => {
+  // Use the UserOrder model to fetch user orders from the database
+  newOrder.find()
+    .then((newOrder) => {
+      res.json(newOrder);
+    })
+    .catch((error) => {
+      console.error('Error fetching user orders:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+const corsOptions = {
+  origin: 'https://e-commerce-model.onrender.com',
+  optionsSuccessStatus: 200 // Some legacy browsers (e.g., IE11) choke on 204
+};
 
 app.use('/purchases', orderRoutes);
 app.use('/products', productRoutes);

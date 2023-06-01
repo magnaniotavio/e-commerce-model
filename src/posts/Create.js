@@ -2,52 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const TestComponent = () => {
-    const [postData, setPostData] = useState(null);
-  
-    useEffect(() => {
-      createPost();
-    }, []);
-  
-    const createPost = () => {
-      const newPost = {
-        title: 'Test Post',
-        content: 'This is a test post content.'
-      };
-  
-      axios.post('https://e-commerce-model.onrender.com/test', newPost)
-        .then(res => {
-          console.log('Post created:', res.data);
-          retrieveData();
-        })
-        .catch(error => console.log(error));
-    };
-  
-    const retrieveData = () => {
-      axios.get('https://e-commerce-model.onrender.com/test')
-        .then(res => {
-          const data = res.data;
-          setPostData(data);
-        })
-        .catch(error => console.log(error));
-    };
-  
-    return (
-      <div>
-        {postData ? (
-          <div>
-            <h2>{postData.title}</h2>
-            <p>{postData.content}</p>
-          </div>
-        ) : (
-          <p>Loading...</p>
-        )}
-      </div>
-    );
-  };
-  
-
-  
 export default function CreatePost() {
     const navigate = useNavigate();
 
@@ -190,7 +144,6 @@ return (
                                 />
                     </div>
                     <div className="form-group">
-                        <TestComponent />
                         <input type="submit" value="Create Todo" className="btn btn-primary" />
                     </div>
                 </form>
