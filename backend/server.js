@@ -34,6 +34,7 @@ const port = process.env.PORT || 4000;
 const registrationTokenExpiration = "7d";
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const { defer } = require('react-router-dom');
 //const orderModel = require('./order.model');
 //const auth = require("./auth");
 
@@ -57,6 +58,20 @@ productRoutes.post('/create-payment-intent', (req, res) => {
 });
 
 //DEFINING THE BASIC ENDPOINTS
+function DefinaEdnpoints(specificRoute, path, mongoose_model) {
+  specificRoute(path).get(function(req, res) {
+    const baseURL = process.env.BASE_URL || `http://localhost:${process.env.PORT || 4000}`;
+    const url = baseURL + path;
+    
+    mongoose_model.find()
+      .then(function(object) {
+        res.json(object);
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
+  });
+}
 
 function DefineEndpoints(specificRoute, url, mongoose_model) {
    specificRoute(url).get(function(req, res) {
@@ -71,7 +86,7 @@ function DefineEndpoints(specificRoute, url, mongoose_model) {
    
 }
  
-DefineEndpoints(postRoutes.route.bind(postRoutes), '/', newPost);
+DefinaEdnpoints(postRoutes.route.bind(postRoutes), '/', newPost);
 DefineEndpoints(productRoutes.route.bind(productRoutes), '/', newProduct);
 DefineEndpoints(userRoutes.route.bind(userRoutes), '/', newUser);
 DefineEndpoints(orderRoutes.route.bind(orderRoutes), '/', newOrder);
