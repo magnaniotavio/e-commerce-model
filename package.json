@@ -5,7 +5,6 @@
   "dependencies": {
     "@auth0/auth0-spa-js": "^2.0.4",
     "@stripe/react-stripe-js": "^2.1.0",
-    "homepage": "https://magnaniotavio.github.io/e-commerce-model/",
     "@stripe/stripe-js": "^1.52.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
