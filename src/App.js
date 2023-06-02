@@ -71,7 +71,7 @@ export default function App() {
   // Navigates to the search page
   navigate(`/search/${classification}/${searchText}/page/1`);
   const specialChars = /[^\w\s]/g;
-  axios.get('http://localhost:4000/products/')
+  axios.get('https://e-commerce-model.onrender.com/products/')
     .then(response => {
       // First filter: products that correspond to the classification (i.e. 'masculine trousers' or 'feminine shirts')
        if (classification !== "undefined") {
