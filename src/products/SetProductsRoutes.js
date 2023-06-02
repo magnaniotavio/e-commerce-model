@@ -9,8 +9,7 @@ export default function SetProductRoutes(searchProperty, parameter, ...filter) {
   const [products, setProducts] = useState([]);
 
 useEffect(() => {
-    axios.get('http://localhost:4000/products/')
-  // axios.get('https://cloud.mongodb.com/v2/64147fe5897d32772e796662#/metrics/replicaSet/641482de81633f0e27dac42b/explorer/test/products/find')
+    axios.get('https://e-commerce-model.onrender.com/products/')
       .then(response => {
         if (filter.length > 0) {
           const filteredProducts = response.data.filter(product => product[`${searchProperty}`] === `${parameter}`);

@@ -44,7 +44,7 @@ function ProductPage() {
 
   useEffect(() => {
     let isMounted = true;
-    axios.get(`http://localhost:4000/products/${id}`)
+    axios.get(`https://e-commerce-model.onrender.com/products/${id}`)
       .then(response => {
         console.log('response:', response);
         if (isMounted) {
@@ -87,11 +87,11 @@ function ProductPage() {
     if (userId) {
       const currentReview = [...product.customerReview];
       currentReview.push(userReview);
-      axios.post(`http://localhost:4000/products/update_product/${id}`, {
+      axios.post(`https://e-commerce-model.onrender.com/products/update_product/${id}`, {
         ...product,
         customerReview: currentReview
       })  
-      axios.post(`http://localhost:4000/users/update_user/${userId}`, {
+      axios.post(`https://e-commerce-model.onrender.com/users/update_user/${userId}`, {
         payment_info: currentReview.filter(review => review.id === userId)
       })  
       .then(() => window.location.reload())

@@ -93,7 +93,7 @@ function onChangeTargetPublic(e) {
         targetPublic: targetPublic,
         }; 
 
-    axios.post('http://localhost:4000/products/add_product', newProduct)
+    axios.post('https://e-commerce-model.onrender.com/add_product', newProduct)
       .then(res => {
       //  navigate(`/${newProduct.newname}`);
       console.log(res.data)

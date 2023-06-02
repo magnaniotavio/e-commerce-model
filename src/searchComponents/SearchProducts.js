@@ -27,7 +27,7 @@ function HandleSubmit(event, navigate) {
     if (event) {
     navigate(`/search/${searchTerm}`);
   }  
-  axios.get('http://localhost:4000/products/')
+  axios.get('https://e-commerce-model.onrender.com/products/')
     .then(response => {
       const foundPosts = response.data.filter(post => {
         for (let key in post)
@@ -52,7 +52,7 @@ function SelectedSearch(event, navigate, selectedSection) {
   setProducts([]); // Clear previous search results
     if (event && searchTerm) {
     navigate(`/search/${searchTerm}`);
-      axios.get('http://localhost:4000/products/')
+      axios.get('https://e-commerce-model.onrender.com/products/')
       .then(response => 
         {if (typeof selectedSection === 'String') {{
           const foundPosts = response.data.filter(post => {
@@ -91,7 +91,7 @@ useEffect(() => {
   const fetchProducts = async () => {
     for (let i in ids) {
       try {
-        const response = await axios.get(`http://localhost:4000/products/${ids[i]}`);
+        const response = await axios.get(`https://e-commerce-model.onrender.com/products/${ids[i]}`);
         const product = response.data;
         setProducts(prevProducts => [...prevProducts, product]);
       } catch (error) {

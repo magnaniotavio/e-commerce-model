@@ -25,7 +25,7 @@ function EditProduct() {
     useEffect(() => {
         console.log(id);
 
-      const foundProduct = axios.get(`http://localhost:4000/products/${id}`)
+      const foundProduct = axios.get(`https://e-commerce-model.onrender.com/products/${id}`)
       foundProduct.then(response => {        
           setProduct({
             name: response.data.name,
@@ -70,11 +70,11 @@ function EditProduct() {
         lastEdited: product.lastEdited,
         targetPublic: product.targetPublic,
       };  
-      axios.post(`http://localhost:4000/products/update_product/${id}`, obj)
+      axios.post(`https://e-commerce-model.onrender.com/products/update_product/${id}`, obj)
         .then(res => console.log(res.data));
       navigate('/product_list');
     } else if (e.nativeEvent.submitter.name === 'Delete') {
-      axios.delete(`http://localhost:4000/products/delete_product/${id}`)
+      axios.delete(`https://e-commerce-model.onrender.com/products/delete_product/${id}`)
       .then(res => console.log(res.data));
       navigate('/product_list');
 

@@ -21,7 +21,7 @@ export const MakeFilteredSearch = ({ selectedFilters, isMainRoute }) => {
     const size = createFiltersArray("sizeSML")
     useEffect(() => {
       axios
-        .get('http://localhost:4000/products/')
+        .get('https://e-commerce-model.onrender.com/products/')
         .then(response => {
           const newFilteredProducts = response.data
             .filter(obj => {

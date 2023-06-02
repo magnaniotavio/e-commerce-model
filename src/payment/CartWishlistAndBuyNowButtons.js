@@ -62,7 +62,7 @@ export function AddToCartButton({button, productId}) {
       
     useEffect(() => {
       let isMounted = true;
-      axios.get(`http://localhost:4000/products/${id}`)
+      axios.get(`https://e-commerce-model.onrender.com/products/${id}`)
         .then(response => {
           console.log('response:', response);
           if (isMounted) {
@@ -92,7 +92,7 @@ export function AddToCartButton({button, productId}) {
    // }, [id]);
   
     useEffect(() => {
-      axios.get(`http://localhost:4000/users/${userId}`)
+      axios.get(`https://e-commerce-model.onrender.com/users/${userId}`)
         .then(response => {
           console.log(response.data.wishlist);
           setCurrentWishlist(response.data.wishlist);
@@ -105,7 +105,7 @@ export function AddToCartButton({button, productId}) {
     const onSubmitShoppingCart = (e, productId) => {
         e.preventDefault();
         const newShoppingCart = [...currentShoppingCart, productId];
-        axios.post(`http://localhost:4000/users/update_user/${userId}`, {
+        axios.post(`https://e-commerce-model.onrender.com/users/update_user/${userId}`, {
           shopping_cart: newShoppingCart
         })
           .then(navigate(`/users/shopping_cart/${userId}`)      )
@@ -117,7 +117,7 @@ export function AddToCartButton({button, productId}) {
         e.preventDefault();
         const newWishList = [...currentWishlist, productId];
         console.log('hahhhahha', newWishList)
-        axios.post(`http://localhost:4000/users/update_user/${userId}`, {
+        axios.post(`https://e-commerce-model.onrender.com/users/update_user/${userId}`, {
           wishlist: newWishList
         })
           .then(navigate(`/users/wishlist/${userId}`)      )
@@ -127,7 +127,7 @@ export function AddToCartButton({button, productId}) {
       const removeFromWishlist = (e, productId) => {
         e.preventDefault();
         const updatedList = currentWishlist.filter((product) => product !== productId);
-        axios.post(`http://localhost:4000/users/update_user/${userId}`, {
+        axios.post(`https://e-commerce-model.onrender.com/users/update_user/${userId}`, {
           wishlist: updatedList
         })
           .then(window.location.reload()    )
@@ -137,7 +137,7 @@ export function AddToCartButton({button, productId}) {
       const removeFromCart = (e, productId) => {
         e.preventDefault();
         const updatedCart = currentShoppingCart.filter((product) => product !== productId);
-        axios.post(`http://localhost:4000/users/update_user/${userId}`, {
+        axios.post(`https://e-commerce-model.onrender.com/users/update_user/${userId}`, {
           shopping_cart: updatedCart
         })
           .then(window.location.reload()    )
@@ -147,7 +147,7 @@ export function AddToCartButton({button, productId}) {
 
     const onSubmitBuyNow = async () => {
         // Create a payment intent with the product information
-        const response = await fetch("http://localhost:4000/products/create-payment-intent", {
+        const response = await fetch("https://e-commerce-model.onrender.com/products/create-payment-intent", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

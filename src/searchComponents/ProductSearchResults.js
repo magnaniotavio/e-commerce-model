@@ -8,10 +8,9 @@ export default function SearchProducts(parameter) {
 const [products, setProducts] = useState([]);
 
 useEffect(() => {
-    axios.get('http://localhost:4000/products/')
+    axios.get('https://e-commerce-model.onrender.com/products/')
       .then(response => {
         const filteredProducts = response.data.filter(product => product._id === `${parameter}`);
-        console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' + response.data);
         setProducts(filteredProducts)
       })
       .catch(error => console.log(error));

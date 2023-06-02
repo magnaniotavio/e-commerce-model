@@ -31,7 +31,7 @@ export default function ProductsList() {
   );
  
   useEffect(() => {
-      axios.get('http://localhost:4000/products/')
+      axios.get('https://e-commerce-model.onrender.com/products/')
         .then(response => {
           setProducts(response.data);
         })

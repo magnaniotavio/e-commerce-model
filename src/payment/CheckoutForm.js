@@ -51,7 +51,7 @@ export default function CheckoutForm() {
 
 // Gets the product Id by applying useParams(), then updates the constants using the response data
   useEffect(() => {
-    axios.get(`http://localhost:4000/products/${id}`)
+    axios.get(`https://e-commerce-model.onrender.com/products/${id}`)
       .then(response => {
         setPrice(response.data.price);
         setProduct(response.data.name);
@@ -69,7 +69,7 @@ export default function CheckoutForm() {
 
 // Gets the order history of the logged-in user, and updates the constant using the response data
     useEffect(() => {
-    axios.get(`http://localhost:4000/users/${userId}`)
+    axios.get(`https://e-commerce-model.onrender.com/users/${userId}`)
       .then(response => {
         setCurrentOrderHistory(response.data.order_history);
       })
@@ -78,7 +78,7 @@ export default function CheckoutForm() {
       
  // Creates a payment intend, posts the price to it, and gets the ClientSecret from the response data
   useEffect(() => {
-    axios.post('http://localhost:4000/products/create-payment-intent', {
+    axios.post('https://e-commerce-model.onrender.com/products/create-payment-intent', {
       price
     })
       .then(response => {
@@ -107,7 +107,7 @@ export default function CheckoutForm() {
       console.error(result.error);
     } else if (userId)  {
       console.log('Payment successful!');
-      axios.post('http://localhost:4000/purchases/add_orders', order)
+      axios.post('https://e-commerce-model.onrender.com/purchases/add_orders', order)
       .then(response => {
         // Handle the response if needed
         console.log(response.data);
@@ -118,7 +118,7 @@ export default function CheckoutForm() {
       });
       const newOrderHistory = [...currentOrderHistory];
       newOrderHistory.push(order);
-          axios.post(`http://localhost:4000/users/update_user/${userId}`, {
+          axios.post(`https://e-commerce-model.onrender.com/users/update_user/${userId}`, {
         order_history: newOrderHistory
       })
         .then(
