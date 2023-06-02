@@ -33,7 +33,12 @@ const newUser = require("./user.model");
 const newOrder = require("./order.model");
 const newProduct = require("./product.model")
 // Port
-const PORT = process.env.PORT || 4000;
+
+
+const baseURL = process.env.BASE_URL || `http://localhost:${process.env.PORT || 4000}`;
+const port = process.env.PORT || 4000;
+
+//const PORT = process.env.PORT || 4000;
 //const PORT = 4000;
 // Registration constants
 const registrationTokenExpiration = "7d";
