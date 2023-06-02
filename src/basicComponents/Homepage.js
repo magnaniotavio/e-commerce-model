@@ -9,7 +9,7 @@ export default function Homepage() {
   useEffect(() => {
     let isMounted = true;
     axios
-      .get('http://localhost:4000/products/')
+      .get('https://e-commerce-model.onrender.com/products/')
       .then((response) => {
         const filteredProducts = response.data.slice(0, 5); // limit the products to at most five items
         if (isMounted) {
