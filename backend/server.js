@@ -36,7 +36,7 @@ const newProduct = require("./product.model")
 
 
 const baseURL = process.env.BASE_URL || `http://localhost:${process.env.PORT || 4000}`;
-const port = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4000;
 
 //const PORT = process.env.PORT || 4000;
 //const PORT = 4000;
