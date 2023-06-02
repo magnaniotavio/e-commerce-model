@@ -149,7 +149,7 @@ useEffect(() => {
        <Route path="/create_product" element={<CreateProduct />} />
        <Route path="/edit_product/" element ={<EditProduct />} />
        <Route path="/edit_product/:id" element ={<EditProduct />} />
-       <Route path="product/:id" element={<ProductPage />} />
+       <Route path="/product/:id" element={<ProductPage />} />
        <Route path="/product_list" element={<ProductsList />} />
        <Route path="/postlist" element={<List />} />
        <Route path="/userlist" element={<UserList />} />
