@@ -323,6 +323,9 @@ userRoutes.use((req, res, next) => {
   next();
 });
 
+app.get('/', (req, res) => {
+  res.send('Hello World!'); // Replace with your desired response or logic
+});
 
 
 const corsOptions = {
