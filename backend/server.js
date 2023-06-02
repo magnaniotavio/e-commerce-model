@@ -6,15 +6,20 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 app.use(cors());
 app.use(bodyParser.json());
-mongoose.connect(`mongodb+srv://otaviomagnani:${process.env.MONGODB_PASSWORD}@cluster0.cb2e1su.mongodb.net/?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Connected to MongoDB Atlas'))
-  .catch((error) => console.error('Error connecting to MongoDB Atlas:', error));
+//mongoose.connect(`mongodb+srv://otaviomagnani:${process.env.MONGODB_PASSWORD}@cluster0.cb2e1su.mongodb.net/?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true })
+//  .then(() => console.log('Connected to MongoDB Atlas'))
+//  .catch((error) => console.error('Error connecting to MongoDB Atlas:', error));
+
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+
 const connection = mongoose.connection;
 connection.once('open', function() {
   console.log("MongoDB database connection established successfully");
 })
 // Stripe key for mock payments
+//const stripe = require('stripe')(`${process.env.STRIPE_KEY}`);
 const stripe = require('stripe')(`${process.env.STRIPE_KEY}`);
+
 // Routes
 const postRoutes = express.Router();
 const userRoutes = express.Router();
@@ -28,7 +33,8 @@ const newUser = require("./user.model");
 const newOrder = require("./order.model");
 const newProduct = require("./product.model")
 // Port
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
+//const PORT = 4000;
 // Registration constants
 const registrationTokenExpiration = "7d";
 const jwt = require("jsonwebtoken");
