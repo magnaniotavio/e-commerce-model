@@ -60,7 +60,7 @@ export default function Register() {
           console.log(res.data)
           setRegister(true);
           const userId = res.data.result._id; // get the user's ID from the response
-          navigate(`/login`); // redirect to the profile page with the ID
+          navigate(`https://e-commerce-model.onrender.com/login`); // redirect to the profile page with the ID
             })
         .catch(error => console.log(error));   
           };   
