@@ -2,6 +2,7 @@
   "name": "newspaper",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://magnaniotavio.github.io/e-commerce-model/",
   "dependencies": {
     "@auth0/auth0-spa-js": "^2.0.4",
     "@stripe/react-stripe-js": "^2.1.0",
