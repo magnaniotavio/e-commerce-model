@@ -35,7 +35,7 @@ const newProduct = require("./product.model")
 // Port
 
 
-const baseURL = process.env.BASE_URL || `http://localhost:${process.env.PORT || 4000}`;
+const baseURL = 'https://my-e-commerce-project.onrender.com/' || `http://localhost:10000 || 4000}`;
 const PORT = process.env.PORT || 4000;
 
 //const PORT = process.env.PORT || 4000;
