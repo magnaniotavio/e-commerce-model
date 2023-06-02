@@ -24,7 +24,7 @@ function EditUser() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/users/${id}`)
+      .get(`https://e-commerce-model.onrender.com/users/${id}`)
       .then((response) => {
         console.log('blaaaaaaaaaaaaaaaaaa' + response)
         setUser({
@@ -38,7 +38,7 @@ function EditUser() {
   
   const onUpdate = () => {
     console.log(user.user_role)
-    axios.post(`http://localhost:4000/users/update_user/${id}`, {
+    axios.post(`https://e-commerce-model.onrender.com/users/update_user/${id}`, {
         user_role: user.user_role
       })  
         .then((res) => {
@@ -51,7 +51,7 @@ function EditUser() {
   function onDelete(e) {
     e.preventDefault()
     axios
-      .delete(`http://localhost:4000/users/delete_user/${id}`)
+      .delete(`https://e-commerce-model.onrender.com/users/delete_user/${id}`)
       .then((res) => {
         console.log(res.data);
         window.location.reload();

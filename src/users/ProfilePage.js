@@ -20,7 +20,7 @@ function Profile() {
       return <div>Please log in to view this page.</div>;
     }
     axios
-      .get(`http://localhost:4000/users/${id}`)
+      .get(`https://e-commerce-model.onrender.com/users/${id}`)
       .then((response) => {
         setUser(response.data);
       })

@@ -32,7 +32,7 @@ export default function UserList() {
   );
  
   useEffect(() => {
-      axios.get('http://localhost:4000/users/')
+      axios.get('https://e-commerce-model.onrender.com/users/')
         .then(response => {
           setUsers(response.data);
         })
@@ -84,7 +84,7 @@ function changeSortingCriterion(event, sortingCriterion) {
 function onDelete(event, parameter) {
     event.preventDefault()
     axios
-      .delete(`http://localhost:4000/users/delete_user/${parameter}`)
+      .delete(`https://e-commerce-model.onrender.com/users/delete_user/${parameter}`)
       .then((res) => {
         console.log(res.data);
         window.location.reload();

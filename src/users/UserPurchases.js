@@ -13,11 +13,11 @@ export default function UserOrders() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    axios.get(`http://localhost:4000/users/${userId}`)
+    axios.get(`https://e-commerce-model.onrender.com/users/${userId}`)
       .then(response => {
         const userOrdersIds = response.data.order_history;
         console.log(response.data.order_history);
-        axios.get(`http://localhost:4000/products/`)
+        axios.get(`https://e-commerce-model.onrender.com/products/`)
           .then(response => {
             setProducts(userOrdersIds);
           })

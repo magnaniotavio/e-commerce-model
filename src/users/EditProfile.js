@@ -52,7 +52,7 @@ function EditProfile() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/users/${id}`)
+      .get(`https://e-commerce-model.onrender.com/users/${id}`)
       .then((response) => {
         setUser(response.data);
       })
@@ -64,7 +64,7 @@ function EditProfile() {
 
   const onUpdate = () => {
     axios
-      .post(`http://localhost:4000/users/update_user/${id}`, user)
+      .post(`https://e-commerce-model.onrender.com/users/update_user/${id}`, user)
       .then((res) => {
         console.log('this is my updaaaaaaaaaaaaaaaaaate' + res.data);
       })
@@ -74,7 +74,7 @@ function EditProfile() {
   };
   const onDelete = () => {
     axios
-      .delete(`http://localhost:4000/users/delete_user/${id}`)
+      .delete(`https://e-commerce-model.onrender.com/users/delete_user/${id}`)
       .then((res) => {
         console.log(res.data);
         navigate("/");

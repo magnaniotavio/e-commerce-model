@@ -16,11 +16,11 @@ export default function ShoppingCart() {
   const [quantity, setQuantity] = useState(2);
 
   useEffect(() => {
-    axios.get(`http://localhost:4000/users/${userId}`)
+    axios.get(`https://e-commerce-model.onrender.com/users/${userId}`)
       .then(response => {
         const userShoppingCartIds = response.data.shopping_cart;
         console.log(response.data.shopping_cart);
-        axios.get(`http://localhost:4000/products/`)
+        axios.get(`https://e-commerce-model.onrender.com/products/`)
           .then(response => {
             const filteredProducts = response.data.filter(
               product => userShoppingCartIds.includes(product._id)

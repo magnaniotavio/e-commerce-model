@@ -24,7 +24,7 @@ export function ReturnUserProperties(userProperty) {
   let decoded;
   decoded = jwtDecode(token);
   const userId = decoded.userId;
-    axios.get(`http://localhost:4000/users/${userId}`)
+    axios.get(`https://e-commerce-model.onrender.com/users/${userId}`)
         .then((response) => {
           setFoundProperty(response.data[userProperty]);})
          .catch((error) => {

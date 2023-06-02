@@ -26,7 +26,7 @@ export default function Login() {
     const email = e.target.email.value;
     const password = e.target.password.value;
     axios
-      .post('http://localhost:4000/users/login', { email, password })
+      .post('https://e-commerce-model.onrender.com/users/login', { email, password })
       .then((res) => {
         cookies.set('TOKEN', res.data.token, { path: '/' });
         axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;

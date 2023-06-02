@@ -16,12 +16,12 @@ export default function Wishlist() {
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
-    axios.get(`http://localhost:4000/users/${userId}`)
+    axios.get(`https://e-commerce-model.onrender.com/users/${userId}`)
       .then(response => {
         const setCurrentWishlist = response.data.wishlist;
         const userWishlistIds = response.data.wishlist;
         console.log(response.data.wishlist);
-        axios.get(`http://localhost:4000/products/`)
+        axios.get(`https://e-commerce-model.onrender.com/products/`)
           .then(response => {
             const filteredProducts = response.data.filter(
               product => userWishlistIds.includes(product._id)

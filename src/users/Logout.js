@@ -12,7 +12,7 @@ export default function Logout() {
 
     const handleLogout = (e) => {
         e.preventDefault();
-        axios.get('http://localhost:4000/users/logout')
+        axios.get('https://e-commerce-model.onrender.com/users/logout')
         .then(res => {
             setLogout(true);
             cookies.remove("TOKEN", {
