@@ -44,7 +44,7 @@ const PORT = process.env.PORT || 4000;
 const registrationTokenExpiration = "7d";
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-//const { defer } = require('react-router-dom');
+const { defer } = require('react-router-dom');
 //const orderModel = require('./order.model');
 //const auth = require("./auth");
 
@@ -322,6 +322,13 @@ userRoutes.use((req, res, next) => {
   );
   next();
 });
+
+
+
+const corsOptions = {
+  origin: 'https://e-commerce-model.onrender.com',
+  optionsSuccessStatus: 200 // Some legacy browsers (e.g., IE11) choke on 204
+};
 
 app.use('/purchases', orderRoutes);
 app.use('/products', productRoutes);
