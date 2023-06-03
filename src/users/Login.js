@@ -14,7 +14,6 @@ export default function Login() {
   const navigate = useNavigate()
   const [loginError, setLoginError] = useState('');
 
-
   useEffect(() => {
     if (token) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
