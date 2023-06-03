@@ -538,7 +538,7 @@ userRoutes.route("/register").post((req, response) => {
       const user = new newUser({
         username: req.body.username,
         email: req.body.email,
-        password: hashedPassword,
+        password: password,
         birth_date: user.birth_date,
         address: user.address,
         first_name: user.first_name,
