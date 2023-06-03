@@ -48,20 +48,6 @@ const { defer } = require('react-router-dom');
 //const orderModel = require('./order.model');
 //const auth = require("./auth");
 
-
-app.use('/purchases', orderRoutes);
-app.use('/products', productRoutes);
-app.use('/posts', postRoutes);
-app.use('/users', userRoutes);
-app.use('/login', loginRoutes);
-app.use('/logout', logoutRoutes);
-app.listen(PORT, function() {
-  console.log("Server is running on Port: " + PORT);
-  console.log(app._router.stack);
-}
-);
-
-
 productRoutes.post('/create-payment-intent', (req, res) => {
   const { price } = req.body;
   stripe.paymentIntents.create({
@@ -346,3 +332,16 @@ const corsOptions = {
   origin: 'https://e-commerce-model.onrender.com',
   optionsSuccessStatus: 200 // Some legacy browsers (e.g., IE11) choke on 204
 };
+
+
+app.use('/purchases', orderRoutes);
+app.use('/products', productRoutes);
+app.use('/posts', postRoutes);
+app.use('/users', userRoutes);
+app.use('/login', loginRoutes);
+app.use('/logout', logoutRoutes);
+app.listen(PORT, function() {
+  console.log("Server is running on Port: " + PORT);
+  console.log(app._router.stack);
+}
+);
