@@ -384,9 +384,7 @@ app.use(bodyParser.json());
 //mongoose.connect(`mongodb+srv://otaviomagnani:${process.env.MONGODB_PASSWORD}@cluster0.cb2e1su.mongodb.net/?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true })
 //  .then(() => console.log('Connected to MongoDB Atlas'))
 //  .catch((error) => console.error('Error connecting to MongoDB Atlas:', error));
-
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-
 const connection = mongoose.connection;
 connection.once('open', function() {
   console.log("MongoDB database connection established successfully");
@@ -394,7 +392,6 @@ connection.once('open', function() {
 // Stripe key for mock payments
 //const stripe = require('stripe')(`${process.env.STRIPE_KEY}`);
 const stripe = require('stripe')(`${process.env.STRIPE_KEY}`);
-
 // Routes
 const postRoutes = express.Router();
 const userRoutes = express.Router();
@@ -408,11 +405,8 @@ const newUser = require("./user.model");
 const newOrder = require("./order.model");
 const newProduct = require("./product.model")
 // Port
-
-
 const baseURL = 'https://my-e-commerce-project.onrender.com/' || 'https://e-commerce-model.onrender.com/' || `http://localhost:10000 || 4000}`;
 const PORT = process.env.PORT || 4000;
-
 //const PORT = process.env.PORT || 4000;
 //const PORT = 4000;
 // Registration constants
@@ -422,7 +416,6 @@ const bcrypt = require("bcrypt");
 const { defer } = require('react-router-dom');
 //const orderModel = require('./order.model');
 //const auth = require("./auth");
-
 productRoutes.post('/create-payment-intent', (req, res) => {
   const { price } = req.body;
   stripe.paymentIntents.create({
@@ -441,7 +434,6 @@ productRoutes.post('/create-payment-intent', (req, res) => {
       });
     });
 });
-
 //DEFINING THE BASIC ENDPOINTS
 function DefineEndpoints(specificRoute, url, mongoose_model) {
    specificRoute(url).get(function(req, res) {
@@ -460,9 +452,7 @@ DefineEndpoints(postRoutes.route.bind(postRoutes), '/', newPost);
 DefineEndpoints(productRoutes.route.bind(productRoutes), '/', newProduct);
 DefineEndpoints(userRoutes.route.bind(userRoutes), '/', newUser);
 DefineEndpoints(orderRoutes.route.bind(orderRoutes), '/', newOrder);
-
 // CRUD FUNCTIONS
-
 // Find by ID
 function FindObjectById(expressRoute, url, mongoose_model, name_of_object) {
   expressRoute(url).get(function(req, res) {
@@ -489,7 +479,6 @@ function Create(expressRoute, url, mongoose_model, name_of_object) {
         });
   }) 
 }
-
 // Update
 function Update(expressRoute, url, mongoose_model, name_of_object) {
   expressRoute(url).post(function(req, res) {
@@ -523,22 +512,74 @@ function Delete(expressRoute, url, mongoose_model, name_of_object) {
     });
 });
 }
-
 //SPECIFIC CRUD (CREATE-READ-UPDATE-DELETE) ENDPOINTS FOR USERS, POSTS, PRODUCTS, ORDERS
-
 // Read, update, delete users
 // User creation has beend dealt with in the registration function
 FindObjectById(userRoutes.route.bind(userRoutes), '/:id', newUser, 'user');
 // Updating the user rquires updating the token, hence the function will be different than it is for posts, products, orders
 // Registration endpoint
+
 userRoutes.route("/register").post((req, response) => {
  // bcrypt
  //   .hash(req.body.password, 10)
  //   .then((hashedPassword)=> {
+  bcrypt
+    .hash(req.body.password, 10)
+    .then((hashedPassword) => {
       const user = new newUser({
         username: req.body.username,
         email: req.body.email,
-        password: password,
+        password: hashedPassword,
+        description: req.body.description,
+        profile_picture: req.body.profile_picture,
+        language_preferences: req.body.language_preferences,
+        timezone: req.body.timezone,
+        wishlist: req.body.wishlist,
+        shopping_cart: req.body.shopping_cart,
+        payment_info: req.body.payment_info,
+        newsletter_subscription: req.body.newsletter_subscription,
+        verified: req.body.verified,
+        last_login: req.body.last_login,
+        birth_date: req.body.birth_date,
+        address: req.body.address,
+        first_name: req.body.first_name,
+        last_name:  req.body.last_name,
+        phone_number:  req.body.phone_number,
+        order_history:  req.body.order_history,
+        product_reviews: req.body.product_reviews,
+        user_role: req.body.user_role,
+      });
+      user
+        .save()
+        .then((result) => {
+          response.status(201).send({
+            message: "User Created Successfully",
+            result,
+          });
+        })
+        .catch((error) => {
+          response.status(500).send({
+            message: "Error creating user",
+            error,
+          });
+        });
+    })
+    .catch((e) => {
+      response.status(500).send({
+        message: "Password was not hashed successfully",
+        e,
+      });
+    });
+});
+
+/*userRoutes.route("/register").post((req, response) => {
+  bcrypt
+    .hash(req.body.password, 10)
+    .then((hashedPassword)=> {
+      const user = new newUser({
+        username: req.body.username,
+        email: req.body.email,
+        password: hashedPassword,
         birth_date: user.birth_date,
         address: user.address,
         first_name: user.first_name,
@@ -567,8 +608,21 @@ userRoutes.route("/register").post((req, response) => {
             result,
           });
         })
+        .catch((error) => {
+          response.status(500).send({
+            message: "Error creating user",
+            error,
+          });
+        });
+    })
+    .catch((e) => {
+      response.status(500).send({
+        message: "Password was not hashed successfully",
+        e,
+      });
     });
 //});
+}); */
 
 // Login endpoint
 userRoutes.route("/login").post((request, response) => {
@@ -611,14 +665,11 @@ userRoutes.route("/login").post((request, response) => {
       });
     });
 });
-
 // Logout endpoint
 userRoutes.route("/logout").get((request, response) => {
   response.clearCookie("TOKEN");
   response.status(200).send({ message: "Logout successful" });
 });
-
-
 // Verification of the token of the logged-in user
 function verifyToken(req, res, next) {
   const token = req.headers.authorization?.split(' ')[1];
@@ -633,7 +684,6 @@ function verifyToken(req, res, next) {
     next();
   });
 }
-
 userRoutes.route('/update_user/:id').post(verifyToken, function(req, res) {
   const user = req.body;
   const id = req.params.id;
@@ -651,26 +701,21 @@ userRoutes.route('/update_user/:id').post(verifyToken, function(req, res) {
     });
 });
 Delete(userRoutes.route.bind(userRoutes), '/delete_user/:id', newUser, 'user');
-
 // Create, read, update and delete posts
 FindObjectById(postRoutes.route.bind(postRoutes), '/:id', newPost, 'post');
 Create(postRoutes.route.bind(postRoutes), '/add', newPost, 'post');
 Update(postRoutes.route.bind(postRoutes), '/update/:id', newPost, 'post');
 Delete(postRoutes.route.bind(postRoutes), '/delete/:id', newPost, 'post');
-
 // Create, read, update and delete products
 FindObjectById(productRoutes.route.bind(productRoutes), '/:id', newProduct, 'product');
 Create(productRoutes.route.bind(productRoutes), '/add_product', newProduct, 'product');
 Update(productRoutes.route.bind(productRoutes), '/update_product/:id', newProduct, 'product');
 Delete(productRoutes.route.bind(productRoutes), '/delete_product/:id', newProduct, 'product');
-
 // Create, read, update and delete orders
 FindObjectById(orderRoutes.route.bind(orderRoutes), '/:id', newOrder, 'order');
 Create(orderRoutes.route.bind(orderRoutes), '/:add_orders', newOrder, 'order');
 Update(orderRoutes.route.bind(orderRoutes), '/:update_order/:id', newOrder, 'order');
 Delete(orderRoutes.route.bind(orderRoutes), '/:delete_order/:id', newOrder, 'order');
-
-
 // Curb Cores Error by adding a header here
 userRoutes.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -684,17 +729,13 @@ userRoutes.use((req, res, next) => {
   );
   next();
 });
-
 app.get('/', (req, res) => {
   res.send('Hello World!'); // Replace with your desired response or logic
 });
-
-
 const corsOptions = {
   origin: 'https://e-commerce-model.onrender.com',
   optionsSuccessStatus: 200 // Some legacy browsers (e.g., IE11) choke on 204
 };
-
 app.use('/purchases', orderRoutes);
 app.use('/products', productRoutes);
 app.use('/posts', postRoutes);
@@ -704,5 +745,4 @@ app.use('/logout', logoutRoutes);
 app.listen(PORT, function() {
   console.log("Server is running on Port: " + PORT);
   console.log(app._router.stack);
-
 });
