@@ -271,7 +271,17 @@ function Delete(expressRoute, url, mongoose_model, name_of_object) {
 
 // Read, update, delete users
 // User creation has beend dealt with in the registration function
-FindObjectById(userRoutes.route.bind(userRoutes), '/:id', newUser, 'user');
+userRoutes.route('/:id').get(function(req, res) {
+  newUser.findById(req.params.id)
+    .then(function(user) {
+      res.json(user);
+    })
+    .catch(function(err) {
+      console.log(err);
+      res.status(404).send("Product not found");
+    });
+});
+                                  //FindObjectById(userRoutes.route.bind(userRoutes), '/:id', newUser, 'user');
 // Updating the user rquires updating the token, hence the function will be different than it is for posts, products, orders
 userRoutes.route('/update_user/:id').post(verifyToken, function(req, res) {
   const user = req.body;
@@ -289,7 +299,23 @@ userRoutes.route('/update_user/:id').post(verifyToken, function(req, res) {
       res.status(500).send({ message: 'Error updating user' });
     });
 });
-Delete(userRoutes.route.bind(userRoutes), '/delete_user/:id', newUser, 'user');
+
+
+userRoutes.route('/delete_user/:id').delete(function(req, res) {
+  newUser.findByIdAndDelete(req.params.id)
+    .then(function(user) {
+      if (!user) {
+        res.status(404).send("data is not found");
+      } else {
+        res.json('user deleted!');
+      }
+    })
+    .catch(function(err) {
+      console.log(err);
+      res.status(400).send("Delete not possible");
+    });
+});
+                              //Delete(userRoutes.route.bind(userRoutes), '/delete_user/:id', newUser, 'user');
 
 // Create, read, update and delete posts
 FindObjectById(postRoutes.route.bind(postRoutes), '/:id', newPost, 'post');
