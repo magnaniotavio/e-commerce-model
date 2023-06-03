@@ -1,4 +1,4 @@
-/*const express = require('express');
+const express = require('express');
 require('dotenv').config();
 const app = express();
 const bodyParser = require('body-parser');
@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 //mongoose.connect(`mongodb+srv://otaviomagnani:${process.env.MONGODB_PASSWORD}@cluster0.cb2e1su.mongodb.net/?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true })
 //  .then(() => console.log('Connected to MongoDB Atlas'))
 //  .catch((error) => console.error('Error connecting to MongoDB Atlas:', error));
-xxxxxxxxxxxxxxxxxxx
+
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 
 const connection = mongoose.connection;
@@ -343,9 +343,9 @@ app.listen(PORT, function() {
   console.log("Server is running on Port: " + PORT);
   console.log(app._router.stack);
 }
-); */
+); 
 
-
+/*
 const express = require('express');
 require('dotenv').config();
 const app = express();
@@ -691,3 +691,4 @@ app.listen(port, function() {
 
 });
 
+*/
