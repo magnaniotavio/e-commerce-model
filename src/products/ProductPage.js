@@ -12,8 +12,7 @@ import { AddToCartButton } from '../payment/CartWishlistAndBuyNowButtons';
  
 function ProductPage() {
   const userId = returnUserId()
-  const username = returnUserName()
-  const usuario = ReturnUserProperties('username')
+  const username = ReturnUserProperties('username')
   const {id} = useParams();
   const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -42,9 +41,6 @@ function ProductPage() {
     creationDate: '',
     lastEdited: '',
   });
-
-  console.log('username:' + username)
-  console.log('usuario:' + usuario)
 
   useEffect(() => {
     let isMounted = true;
@@ -182,7 +178,7 @@ function ProductPage() {
           <ListGroup>
             {product.customerReview.map((review, index) => (
               <ListGroup.Item key={index}>
-                <h4 className="text-left">Reviewed by: {review.name}</h4>
+                <h4 className="text-left">Reviewed by: {username}</h4>
                 <ReactMarkdown>{review.content}</ReactMarkdown>
               </ListGroup.Item>
             ))}
