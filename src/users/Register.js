@@ -201,7 +201,7 @@ export default function Register() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:4000/users/register', newUser)
+        axios.post('https://e-commerce-model.onrender.com/users/register', newUser)
         .then(res => {
           console.log(res.data)
           setRegister(true);
