@@ -4,7 +4,7 @@ import axios from 'axios';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import CreatePost from '../posts/Create';
 import { Container, Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap';
-import {returnUserData, returnUserId, ReturnUserProperties } from '../users/UserId';
+import {returnUserData, returnUserId, returnUserName, ReturnUserProperties } from '../users/UserId';
 import { BsChevronCompactDown, BsChevronCompactUp } from 'react-icons/bs';
 import Cookies from 'universal-cookie';
 import jwtDecode from 'jwt-decode';
@@ -12,7 +12,8 @@ import { AddToCartButton } from '../payment/CartWishlistAndBuyNowButtons';
  
 function ProductPage() {
   const userId = returnUserId()
-  const username = ReturnUserProperties('username')
+  const username = returnUserName()
+  const usuario = ReturnUserProperties('username')
   const {id} = useParams();
   const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -41,6 +42,9 @@ function ProductPage() {
     creationDate: '',
     lastEdited: '',
   });
+
+  console.log('username:' + username)
+  console.log('usuario:' + usuario)
 
   useEffect(() => {
     let isMounted = true;
