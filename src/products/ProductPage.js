@@ -4,7 +4,7 @@ import axios from 'axios';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import CreatePost from '../posts/Create';
 import { Container, Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap';
-import {returnUserData, returnUserId, returnUserName } from '../users/UserId';
+import {returnUserData, returnUserId, ReturnUserProperties } from '../users/UserId';
 import { BsChevronCompactDown, BsChevronCompactUp } from 'react-icons/bs';
 import Cookies from 'universal-cookie';
 import jwtDecode from 'jwt-decode';
@@ -12,7 +12,7 @@ import { AddToCartButton } from '../payment/CartWishlistAndBuyNowButtons';
  
 function ProductPage() {
   const userId = returnUserId()
-  const username = returnUserName()
+  const username = ReturnUserProperties('username')
   const {id} = useParams();
   const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
