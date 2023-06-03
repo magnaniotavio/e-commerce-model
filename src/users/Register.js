@@ -30,7 +30,6 @@ export default function Register() {
   const [last_login, setLastLogin] = useState('');
   const [user_role, setUserRole] = useState("");
 
-
   const [errorMessage, setErrorMessage] = useState({
     notAnEmail: 'The adress you typed does not correspond to an email.',
     takenEmail: 'That email is already taken',
@@ -64,8 +63,6 @@ export default function Register() {
     last_login,
     user_role, 
   };  
-
-  console.log(newUser)
 
     const handleSubmit = (e) => {
         e.preventDefault();
