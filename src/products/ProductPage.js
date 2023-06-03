@@ -12,7 +12,6 @@ import { AddToCartButton } from '../payment/CartWishlistAndBuyNowButtons';
  
 function ProductPage() {
   const userId = returnUserId()
-  const username = ReturnUserProperties('username')
   const {id} = useParams();
   const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -21,7 +20,7 @@ function ProductPage() {
   };
   const [userReview, setUserReview] = useState({
     id: userId,
-    name: username,
+    name: '',
     content: '',
   })
   const [product, setPost] = useState({
@@ -82,9 +81,36 @@ function ProductPage() {
     })
   }
 
+
+  useEffect(() => {
+    if (userId) {
+      axios
+        .get(`https://e-commerce-model.onrender.com/users/${userId}`)
+        .then((res) => {
+          const updatedUsername = res.data.username;
+          setUserReview((prevReview) => ({
+            ...prevReview,
+            name: updatedUsername,
+          }));
+        })
+        .catch((error) => console.error(error));
+    }
+  }, [userId]);
+  
+
   const onSubmitUserReview = (e) => {
     e.preventDefault()
     if (userId) {
+
+      axios.get(`https://e-commerce-model.onrender.com/users/${userId}`)
+      .then((res) => {
+        console.log('this is res' + res)
+        const updatedUsername = res.data.username;
+        setUserReview((prevReview) => ({
+          ...prevReview,
+          name: updatedUsername,
+        }))
+      })
       const currentReview = [...product.customerReview];
       currentReview.push(userReview);
       axios.post(`https://e-commerce-model.onrender.com/products/update_product/${id}`, {
@@ -178,7 +204,7 @@ function ProductPage() {
           <ListGroup>
             {product.customerReview.map((review, index) => (
               <ListGroup.Item key={index}>
-                <h4 className="text-left">Reviewed by: {username}</h4>
+                <h4 className="text-left">Reviewed by: {review.name}</h4>
                 <ReactMarkdown>{review.content}</ReactMarkdown>
               </ListGroup.Item>
             ))}

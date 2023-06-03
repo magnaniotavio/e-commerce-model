@@ -86,123 +86,6 @@ DefineEndpoints(productRoutes.route.bind(productRoutes), '/', newProduct);
 DefineEndpoints(userRoutes.route.bind(userRoutes), '/', newUser);
 DefineEndpoints(orderRoutes.route.bind(orderRoutes), '/', newOrder);
 
-
-// Registration endpoint
-userRoutes.route("/register").post((req, response) => {
-  bcrypt
-    .hash(req.body.password, 10)
-    .then((hashedPassword) => {
-      const user = new newUser({
-        username: req.body.username,
-        email: req.body.email,
-        password: hashedPassword,
-        birth_date: user.birth_date,
-        address: user.address,
-        first_name: user.first_name,
-        last_name:  user.last_name,
-        phone_number:  user.phone_number,
-        order_history:  user.order_history,
-        product_reviews:  user.product_reviews,
-        description: user.description,
-        profile_picture: user.profile_picture,
-        language_preferences: user.language_preferences,
-        timezone: user.timezone,
-        wishlist: user.wishlist,
-        shopping_cart: user.shopping_cart,
-        payment_info: user.payment_info,
-        newsletter_subscription: user.newsletter_subscription,
-        verified: user.verified,
-        created_at: user.created_at,
-        last_login: user.last_login,
-        user_role:  user.user_role, 
-});
-      user
-        .save()
-        .then((result) => {
-          response.status(201).send({
-            message: "User Created Successfully",
-            result,
-          });
-        })
-        .catch((error) => {
-          response.status(500).send({
-            message: "Error creating user",
-            error,
-          });
-        });
-    })
-    .catch((e) => {
-      response.status(500).send({
-        message: "Password was not hashed successfully",
-        e,
-      });
-    });
-});
-
-// Login endpoint
-userRoutes.route("/login").post((request, response) => {
-  newUser.findOne({ email: request.body.email })
-    .then((user) => {
-      bcrypt
-        .compare(request.body.password, user.password)
-        .then((passwordCheck) => {
-          if(!passwordCheck) {
-            return response.status(400).send({
-              message: "Passwords does not match",
-              error,
-            });
-          }
-          const token = jwt.sign(
-            {
-              userId: user._id,
-              userEmail: user.email,
-            },
-            "RANDOM-TOKEN",
-            { expiresIn: registrationTokenExpiration }
-          );
-          response.status(200).send({
-            message: "Login Successful",
-            email: user.email,
-            token,
-          });
-        })
-        .catch((error) => {
-          response.status(400).send({
-            message: "Passwords does not match",
-            error,
-          });
-        });
-    })
-    .catch((e) => {
-      response.status(404).send({
-        message: "Email not found",
-        e,
-      });
-    });
-});
-
-// Logout endpoint
-userRoutes.route("/logout").get((request, response) => {
-  response.clearCookie("TOKEN");
-  response.status(200).send({ message: "Logout successful" });
-});
-
-
-// Verification of the token of the logged-in user
-function verifyToken(req, res, next) {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) {
-    return res.status(401).send({ message: 'Unauthorized' });
-  }
-  jwt.verify(token, 'RANDOM-TOKEN', function(err, payload) {
-    if (err) {
-      return res.status(401).send({ message: 'Unauthorized' });
-    }
-    req.user = payload;
-    next();
-  });
-}
-
 // CRUD FUNCTIONS
 
 // Find by ID
@@ -272,6 +155,110 @@ function Delete(expressRoute, url, mongoose_model, name_of_object) {
 // User creation has beend dealt with in the registration function
 FindObjectById(userRoutes.route.bind(userRoutes), '/:id', newUser, 'user');
 // Updating the user rquires updating the token, hence the function will be different than it is for posts, products, orders
+// Registration endpoint
+userRoutes.route("/register").post((req, response) => {
+ // bcrypt
+ //   .hash(req.body.password, 10)
+ //   .then((hashedPassword)=> {
+      const user = new newUser({
+        username: req.body.username,
+        email: req.body.email,
+        password: hashedPassword,
+        birth_date: user.birth_date,
+        address: user.address,
+        first_name: user.first_name,
+        last_name:  user.last_name,
+        phone_number:  user.phone_number,
+        order_history:  user.order_history,
+        product_reviews:  user.product_reviews,
+        description: user.description,
+        profile_picture: user.profile_picture,
+        language_preferences: user.language_preferences,
+        timezone: user.timezone,
+        wishlist: user.wishlist,
+        shopping_cart: user.shopping_cart,
+        payment_info: user.payment_info,
+        newsletter_subscription: user.newsletter_subscription,
+        verified: user.verified,
+        created_at: user.created_at,
+        last_login: user.last_login,
+        user_role:  user.user_role,  
+});
+      user
+        .save()
+        .then((result) => {
+          response.status(201).send({
+            message: "User Created Successfully",
+            result,
+          });
+        })
+    });
+//});
+
+// Login endpoint
+userRoutes.route("/login").post((request, response) => {
+  newUser.findOne({ email: request.body.email })
+    .then((user) => {
+      bcrypt
+        .compare(request.body.password, user.password)
+        .then((passwordCheck) => {
+          if(!passwordCheck) {
+            return response.status(400).send({
+              message: "Passwords does not match",
+              error,
+            });
+          }
+          const token = jwt.sign(
+            {
+              userId: user._id,
+              userEmail: user.email,
+            },
+            "RANDOM-TOKEN",
+            { expiresIn: registrationTokenExpiration }
+          );
+          response.status(200).send({
+            message: "Login Successful",
+            email: user.email,
+            token,
+          });
+        })
+        .catch((error) => {
+          response.status(400).send({
+            message: "Passwords does not match",
+            error,
+          });
+        });
+    })
+    .catch((e) => {
+      response.status(404).send({
+        message: "Email not found",
+        e,
+      });
+    });
+});
+
+// Logout endpoint
+userRoutes.route("/logout").get((request, response) => {
+  response.clearCookie("TOKEN");
+  response.status(200).send({ message: "Logout successful" });
+});
+
+
+// Verification of the token of the logged-in user
+function verifyToken(req, res, next) {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) {
+    return res.status(401).send({ message: 'Unauthorized' });
+  }
+  jwt.verify(token, 'RANDOM-TOKEN', function(err, payload) {
+    if (err) {
+      return res.status(401).send({ message: 'Unauthorized' });
+    }
+    req.user = payload;
+    next();
+  });
+}
+
 userRoutes.route('/update_user/:id').post(verifyToken, function(req, res) {
   const user = req.body;
   const id = req.params.id;

@@ -42,7 +42,7 @@ let decoded;
 
 if (token) {
   decoded = jwtDecode(token);
-  const userId = decoded._id;
+  const userId = decoded.userId;
   return userId
 }
 }
@@ -51,10 +51,10 @@ export function returnUserName() {
   const cookies = new Cookies();
   const token = cookies.get("TOKEN");
   let decoded;
-  
+
   if (token) {
     decoded = jwtDecode(token);
-    const userId = decoded._id;
+    const userId = decoded.userId;
     const username = decoded.userName;
     return username
     }

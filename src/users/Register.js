@@ -1,6 +1,6 @@
 import React from 'react'
 import { Form, Button } from "react-bootstrap";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -80,11 +80,12 @@ export default function Register() {
 
   };  
 
+  console.log(newUser)
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post('https://e-commerce-model.onrender.com/users/register', newUser)
+        axios.post(`https://e-commerce-model.onrender.com/users/register`, newUser)
         .then(res => {
-          console.log(res.data)
           setRegister(true);
           const userId = res.data.result._id; // get the user's ID from the response
           navigate(`/login`); // redirect to the profile page with the ID
