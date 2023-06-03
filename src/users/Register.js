@@ -61,7 +61,7 @@ export default function Register() {
     verified,
     created_at,
     last_login,
-    user_role, 
+    user_role,  
   };  
 
     const handleSubmit = (e) => {
