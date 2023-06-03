@@ -61,15 +61,17 @@ export default function Register() {
     verified,
     created_at,
     last_login,
-    user_role,  
+    user_role, 
   };  
 
+  console.log(newUser)
     const handleSubmit = (e) => {
         e.preventDefault();
         axios.post(`https://e-commerce-model.onrender.com/users/register`, newUser)
         .then(res => {
+          console.log(newUser)
           setRegister(true);
-         const userId = res.data.result._id; // get the user's ID from the response
+   //       const userId = res.data.result._id; // get the user's ID from the response
           navigate(`/login`); // redirect to the profile page with the ID
             })
         .catch(error => console.log(error));   
@@ -123,6 +125,9 @@ if (register === false) {
         </>
     )}
 } 
+
+
+ /*  */
 
 
  /*  */
