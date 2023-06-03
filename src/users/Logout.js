@@ -24,8 +24,6 @@ export default function Logout() {
         .catch(error => console.log(error));   
     }
 
-
-
     if (logout === false) {
         return (
             <>

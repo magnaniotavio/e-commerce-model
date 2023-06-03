@@ -48,6 +48,20 @@ const { defer } = require('react-router-dom');
 //const orderModel = require('./order.model');
 //const auth = require("./auth");
 
+
+app.use('/purchases', orderRoutes);
+app.use('/products', productRoutes);
+app.use('/posts', postRoutes);
+app.use('/users', userRoutes);
+app.use('/login', loginRoutes);
+app.use('/logout', logoutRoutes);
+app.listen(PORT, function() {
+  console.log("Server is running on Port: " + PORT);
+  console.log(app._router.stack);
+}
+);
+
+
 productRoutes.post('/create-payment-intent', (req, res) => {
   const { price } = req.body;
   stripe.paymentIntents.create({
@@ -86,75 +100,6 @@ DefineEndpoints(productRoutes.route.bind(productRoutes), '/', newProduct);
 DefineEndpoints(userRoutes.route.bind(userRoutes), '/', newUser);
 DefineEndpoints(orderRoutes.route.bind(orderRoutes), '/', newOrder);
 
-// CRUD FUNCTIONS
-
-// Find by ID
-function FindObjectById(expressRoute, url, mongoose_model, name_of_object) {
-  expressRoute(url).get(function(req, res) {
-    mongoose_model.findById(req.params.id)
-      .then(function(object) {
-        res.json(object);
-      })
-      .catch(function(err) {
-        console.log(err);
-        res.status(404).send(`${name_of_object} not found`);
-      });
-  });
-  }
-// Create
-function Create(expressRoute, url, mongoose_model, name_of_object) {
-  return expressRoute(url).post(function(req, res) {
-    let object = new mongoose_model(req.body);
-    object.save()
-        .then(object => {
-          res.status(200).json({ [name_of_object]: `${name_of_object} added successfully` });
-        })
-        .catch(err => {
-            res.status(400).send(`adding new ${name_of_object} failed`);
-        });
-  }) 
-}
-
-// Update
-function Update(expressRoute, url, mongoose_model, name_of_object) {
-  expressRoute(url).post(function(req, res) {
-    const object = req.body;
-    const id = req.params.id;
-    mongoose_model.findByIdAndUpdate(id, object)
-      .then(() => {
-        const updatedObject = { ...req.object, ...object };
-        res.status(200).send(updatedObject);
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status(500).send({ message: `Error updating ${name_of_object}` });
-      });
-    });
-}
-// Delete
-function Delete(expressRoute, url, mongoose_model, name_of_object) {
- expressRoute(url).delete(function(req, res) {
-  mongoose_model.findByIdAndDelete(req.params.id)
-    .then(function(object) {
-      if (!object) {
-        res.status(404).send("data is not found");
-      } else {
-        res.json(`${name_of_object} deleted!`);
-      }
-    })
-    .catch(function(err) {
-      console.log(err);
-      res.status(400).send("Delete not possible");
-    });
-});
-}
-
-//SPECIFIC CRUD (CREATE-READ-UPDATE-DELETE) ENDPOINTS FOR USERS, POSTS, PRODUCTS, ORDERS
-
-// Read, update, delete users
-// User creation has beend dealt with in the registration function
-FindObjectById(userRoutes.route.bind(userRoutes), '/:id', newUser, 'user');
-// Updating the user rquires updating the token, hence the function will be different than it is for posts, products, orders
 // Registration endpoint
 
 userRoutes.route("/register").post((req, response) => {
@@ -272,6 +217,75 @@ function verifyToken(req, res, next) {
   });
 }
 
+// CRUD FUNCTIONS
+
+// Find by ID
+function FindObjectById(expressRoute, url, mongoose_model, name_of_object) {
+  expressRoute(url).get(function(req, res) {
+    mongoose_model.findById(req.params.id)
+      .then(function(object) {
+        res.json(object);
+      })
+      .catch(function(err) {
+        console.log(err);
+        res.status(404).send(`${name_of_object} not found`);
+      });
+  });
+  }
+// Create
+function Create(expressRoute, url, mongoose_model, name_of_object) {
+  return expressRoute(url).post(function(req, res) {
+    let object = new mongoose_model(req.body);
+    object.save()
+        .then(object => {
+          res.status(200).json({ [name_of_object]: `${name_of_object} added successfully` });
+        })
+        .catch(err => {
+            res.status(400).send(`adding new ${name_of_object} failed`);
+        });
+  }) 
+}
+
+// Update
+function Update(expressRoute, url, mongoose_model, name_of_object) {
+  expressRoute(url).post(function(req, res) {
+    const object = req.body;
+    const id = req.params.id;
+    mongoose_model.findByIdAndUpdate(id, object)
+      .then(() => {
+        const updatedObject = { ...req.object, ...object };
+        res.status(200).send(updatedObject);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).send({ message: `Error updating ${name_of_object}` });
+      });
+    });
+}
+// Delete
+function Delete(expressRoute, url, mongoose_model, name_of_object) {
+ expressRoute(url).delete(function(req, res) {
+  mongoose_model.findByIdAndDelete(req.params.id)
+    .then(function(object) {
+      if (!object) {
+        res.status(404).send("data is not found");
+      } else {
+        res.json(`${name_of_object} deleted!`);
+      }
+    })
+    .catch(function(err) {
+      console.log(err);
+      res.status(400).send("Delete not possible");
+    });
+});
+}
+
+//SPECIFIC CRUD (CREATE-READ-UPDATE-DELETE) ENDPOINTS FOR USERS, POSTS, PRODUCTS, ORDERS
+
+// Read, update, delete users
+// User creation has beend dealt with in the registration function
+FindObjectById(userRoutes.route.bind(userRoutes), '/:id', newUser, 'user');
+// Updating the user rquires updating the token, hence the function will be different than it is for posts, products, orders
 userRoutes.route('/update_user/:id').post(verifyToken, function(req, res) {
   const user = req.body;
   const id = req.params.id;
@@ -332,15 +346,3 @@ const corsOptions = {
   origin: 'https://e-commerce-model.onrender.com',
   optionsSuccessStatus: 200 // Some legacy browsers (e.g., IE11) choke on 204
 };
-
-app.use('/purchases', orderRoutes);
-app.use('/products', productRoutes);
-app.use('/posts', postRoutes);
-app.use('/users', userRoutes);
-app.use('/login', loginRoutes);
-app.use('/logout', logoutRoutes);
-app.listen(PORT, function() {
-  console.log("Server is running on Port: " + PORT);
-  console.log(app._router.stack);
-
-});
