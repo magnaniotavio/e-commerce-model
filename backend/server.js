@@ -156,10 +156,61 @@ function Delete(expressRoute, url, mongoose_model, name_of_object) {
 FindObjectById(userRoutes.route.bind(userRoutes), '/:id', newUser, 'user');
 // Updating the user rquires updating the token, hence the function will be different than it is for posts, products, orders
 // Registration endpoint
+
 userRoutes.route("/register").post((req, response) => {
- // bcrypt
- //   .hash(req.body.password, 10)
- //   .then((hashedPassword)=> {
+  bcrypt
+    .hash(req.body.password, 10)
+    .then((hashedPassword) => {
+      const user = new newUser({
+        username: req.body.username,
+        email: req.body.email,
+        password: hashedPassword,
+        description: req.body.description,
+        profile_picture: req.body.profile_picture,
+        language_preferences: req.body.language_preferences,
+        timezone: req.body.timezone,
+        wishlist: req.body.wishlist,
+        shopping_cart: req.body.shopping_cart,
+        payment_info: req.body.payment_info,
+        newsletter_subscription: req.body.newsletter_subscription,
+        verified: req.body.verified,
+        last_login: req.body.last_login,
+        birth_date: req.body.birth_date,
+        address: req.body.address,
+        first_name: req.body.first_name,
+        last_name:  req.body.last_name,
+        phone_number:  req.body.phone_number,
+        order_history:  req.body.order_history,
+        product_reviews: req.body.product_reviews,
+        user_role: req.body.user_role,
+      });
+      user
+        .save()
+        .then((result) => {
+          response.status(201).send({
+            message: "User Created Successfully",
+            result,
+          });
+        })
+        .catch((error) => {
+          response.status(500).send({
+            message: "Error creating user",
+            error,
+          });
+        });
+    })
+    .catch((e) => {
+      response.status(500).send({
+        message: "Password was not hashed successfully",
+        e,
+      });
+    });
+});
+
+/*userRoutes.route("/register").post((req, response) => {
+  bcrypt
+    .hash(req.body.password, 10)
+    .then((hashedPassword)=> {
       const user = new newUser({
         username: req.body.username,
         email: req.body.email,
@@ -192,8 +243,20 @@ userRoutes.route("/register").post((req, response) => {
             result,
           });
         })
+        .catch((error) => {
+          response.status(500).send({
+            message: "Error creating user",
+            error,
+          });
+        });
+    })
+    .catch((e) => {
+      response.status(500).send({
+        message: "Password was not hashed successfully",
+        e,
+      });
     });
-//});
+}); */
 
 // Login endpoint
 userRoutes.route("/login").post((request, response) => {
