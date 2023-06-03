@@ -1,4 +1,4 @@
-/*const express = require('express');
+const express = require('express');
 require('dotenv').config();
 const app = express();
 const bodyParser = require('body-parser');
@@ -6,9 +6,6 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 app.use(cors());
 app.use(bodyParser.json());
-//mongoose.connect(`mongodb+srv://otaviomagnani:${process.env.MONGODB_PASSWORD}@cluster0.cb2e1su.mongodb.net/?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true })
-//  .then(() => console.log('Connected to MongoDB Atlas'))
-//  .catch((error) => console.error('Error connecting to MongoDB Atlas:', error));
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 
@@ -37,15 +34,11 @@ const newProduct = require("./product.model")
 const baseURL = 'https://my-e-commerce-project.onrender.com/' || 'https://e-commerce-model.onrender.com/' || `http://localhost:10000 || 4000}`;
 const PORT = process.env.PORT || 4000;
 
-//const PORT = process.env.PORT || 4000;
-//const PORT = 4000;
 // Registration constants
 const registrationTokenExpiration = "7d";
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { defer } = require('react-router-dom');
-//const orderModel = require('./order.model');
-//const auth = require("./auth");
 
 productRoutes.post('/create-payment-intent', (req, res) => {
   const { price } = req.body;
@@ -88,56 +81,58 @@ DefineEndpoints(orderRoutes.route.bind(orderRoutes), '/', newOrder);
 // Registration endpoint
 
 userRoutes.route("/register").post((req, response) => {
-  bcrypt
-    .hash(req.body.password, 10)
-    .then((hashedPassword)=> {
-      const user = new newUser({
-        username: req.body.username,
-        email: req.body.email,
-        password: hashedPassword,
-        birth_date: user.birth_date,
-        address: user.address,
-        first_name: user.first_name,
-        last_name:  user.last_name,
-        phone_number:  user.phone_number,
-        order_history:  user.order_history,
-        product_reviews:  user.product_reviews,
-        description: user.description,
-        profile_picture: user.profile_picture,
-        language_preferences: user.language_preferences,
-        timezone: user.timezone,
-        wishlist: user.wishlist,
-        shopping_cart: user.shopping_cart,
-        payment_info: user.payment_info,
-        newsletter_subscription: user.newsletter_subscription,
-        verified: user.verified,
-        created_at: user.created_at,
-        last_login: user.last_login,
-        user_role:  user.user_role,  
-});
-      user
-        .save()
-        .then((result) => {
-          response.status(201).send({
-            message: "User Created Successfully",
-            result,
-          });
-        })
-        .catch((error) => {
-          response.status(500).send({
-            message: "Error creating user",
-            error,
-          });
-        });
-    })
-    .catch((e) => {
-      response.status(500).send({
-        message: "Password was not hashed successfully",
-        e,
-      });
-    });
-}); 
-
+  // bcrypt
+  //   .hash(req.body.password, 10)
+  //   .then((hashedPassword)=> {
+   bcrypt
+     .hash(req.body.password, 10)
+     .then((hashedPassword) => {
+       const user = new newUser({
+         username: req.body.username,
+         email: req.body.email,
+         password: hashedPassword,
+         description: req.body.description,
+         profile_picture: req.body.profile_picture,
+         language_preferences: req.body.language_preferences,
+         timezone: req.body.timezone,
+         wishlist: req.body.wishlist,
+         shopping_cart: req.body.shopping_cart,
+         payment_info: req.body.payment_info,
+         newsletter_subscription: req.body.newsletter_subscription,
+         verified: req.body.verified,
+         last_login: req.body.last_login,
+         birth_date: req.body.birth_date,
+         address: req.body.address,
+         first_name: req.body.first_name,
+         last_name:  req.body.last_name,
+         phone_number:  req.body.phone_number,
+         order_history:  req.body.order_history,
+         product_reviews: req.body.product_reviews,
+         user_role: req.body.user_role,
+       });
+       user
+         .save()
+         .then((result) => {
+           response.status(201).send({
+             message: "User Created Successfully",
+             result,
+           });
+         })
+         .catch((error) => {
+           response.status(500).send({
+             message: "Error creating user",
+             error,
+           });
+         });
+     })
+     .catch((e) => {
+       response.status(500).send({
+         message: "Password was not hashed successfully",
+         e,
+       });
+     });
+ });
+ 
 // Login endpoint
 userRoutes.route("/login").post((request, response) => {
   newUser.findOne({ email: request.body.email })
@@ -186,7 +181,6 @@ userRoutes.route("/logout").get((request, response) => {
   response.status(200).send({ message: "Logout successful" });
 });
 
-
 // Verification of the token of the logged-in user
 function verifyToken(req, res, next) {
   const token = req.headers.authorization?.split(' ')[1];
@@ -201,8 +195,6 @@ function verifyToken(req, res, next) {
     next();
   });
 }
-
-
 
 // CRUD FUNCTIONS
 
@@ -371,8 +363,107 @@ app.listen(PORT, function() {
   console.log("Server is running on Port: " + PORT);
   console.log(app._router.stack);
 }
-);  */
+);  
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+userRoutes.route("/register").post((req, response) => {
+  bcrypt
+    .hash(req.body.password, 10)
+    .then((hashedPassword)=> {
+      const user = new newUser({
+        username: req.body.username,
+        email: req.body.email,
+        password: hashedPassword,
+        birth_date: user.birth_date,
+        address: user.address,
+        first_name: user.first_name,
+        last_name:  user.last_name,
+        phone_number:  user.phone_number,
+        order_history:  user.order_history,
+        product_reviews:  user.product_reviews,
+        description: user.description,
+        profile_picture: user.profile_picture,
+        language_preferences: user.language_preferences,
+        timezone: user.timezone,
+        wishlist: user.wishlist,
+        shopping_cart: user.shopping_cart,
+        payment_info: user.payment_info,
+        newsletter_subscription: user.newsletter_subscription,
+        verified: user.verified,
+        created_at: user.created_at,
+        last_login: user.last_login,
+        user_role:  user.user_role,  
+});
+      user
+        .save()
+        .then((result) => {
+          response.status(201).send({
+            message: "User Created Successfully",
+            result,
+          });
+        })
+        .catch((error) => {
+          response.status(500).send({
+            message: "Error creating user",
+            error,
+          });
+        });
+    })
+    .catch((e) => {
+      response.status(500).send({
+        message: "Password was not hashed successfully",
+        e,
+      });
+    });
+});  */
+
+
+
+
+
+
+
+
+
+
+
+/*
 const express = require('express');
 require('dotenv').config();
 const app = express();
@@ -515,7 +606,6 @@ function Delete(expressRoute, url, mongoose_model, name_of_object) {
 //SPECIFIC CRUD (CREATE-READ-UPDATE-DELETE) ENDPOINTS FOR USERS, POSTS, PRODUCTS, ORDERS
 // Read, update, delete users
 // User creation has beend dealt with in the registration function
-FindObjectById(userRoutes.route.bind(userRoutes), '/:id', newUser, 'user');
 // Updating the user rquires updating the token, hence the function will be different than it is for posts, products, orders
 // Registration endpoint
 
@@ -571,58 +661,6 @@ userRoutes.route("/register").post((req, response) => {
       });
     });
 });
-
-/*userRoutes.route("/register").post((req, response) => {
-  bcrypt
-    .hash(req.body.password, 10)
-    .then((hashedPassword)=> {
-      const user = new newUser({
-        username: req.body.username,
-        email: req.body.email,
-        password: hashedPassword,
-        birth_date: user.birth_date,
-        address: user.address,
-        first_name: user.first_name,
-        last_name:  user.last_name,
-        phone_number:  user.phone_number,
-        order_history:  user.order_history,
-        product_reviews:  user.product_reviews,
-        description: user.description,
-        profile_picture: user.profile_picture,
-        language_preferences: user.language_preferences,
-        timezone: user.timezone,
-        wishlist: user.wishlist,
-        shopping_cart: user.shopping_cart,
-        payment_info: user.payment_info,
-        newsletter_subscription: user.newsletter_subscription,
-        verified: user.verified,
-        created_at: user.created_at,
-        last_login: user.last_login,
-        user_role:  user.user_role,  
-});
-      user
-        .save()
-        .then((result) => {
-          response.status(201).send({
-            message: "User Created Successfully",
-            result,
-          });
-        })
-        .catch((error) => {
-          response.status(500).send({
-            message: "Error creating user",
-            error,
-          });
-        });
-    })
-    .catch((e) => {
-      response.status(500).send({
-        message: "Password was not hashed successfully",
-        e,
-      });
-    });
-//});
-}); */
 
 // Login endpoint
 userRoutes.route("/login").post((request, response) => {
@@ -684,6 +722,13 @@ function verifyToken(req, res, next) {
     next();
   });
 }
+
+
+FindObjectById(userRoutes.route.bind(userRoutes), '/:id', newUser, 'user');
+
+
+
+
 userRoutes.route('/update_user/:id').post(verifyToken, function(req, res) {
   const user = req.body;
   const id = req.params.id;
@@ -746,3 +791,6 @@ app.listen(PORT, function() {
   console.log("Server is running on Port: " + PORT);
   console.log(app._router.stack);
 });
+
+
+*/
