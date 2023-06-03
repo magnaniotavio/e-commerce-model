@@ -22,14 +22,15 @@ export default function Register() {
   const [language_preferences, setLanguagePreferences] = useState("");
   const [timezone, setTimezone] = useState("");
   const [wishlist, setWishlist] = useState([]);
+  const [shopping_cart, setShoppingCart] = useState([]);
   const [payment_info, setPaymentInfo] = useState([]);
   const [newsletter_subscription, setNewsletterSubscription] = useState(false);
   const [verified, setVerified] = useState(false);
   const [created_at, setCreatedAt] = useState('');
   const [last_login, setLastLogin] = useState('');
-  const [userRole, setUserRole] = useState("");
+  const [user_role, setUserRole] = useState("");
 
-  
+
   const [errorMessage, setErrorMessage] = useState({
     notAnEmail: 'The adress you typed does not correspond to an email.',
     takenEmail: 'That email is already taken',
