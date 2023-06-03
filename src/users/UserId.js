@@ -42,7 +42,7 @@ let decoded;
 
 if (token) {
   decoded = jwtDecode(token);
-  const userId = decoded.userId;
+  const userId = decoded._id;
   return userId
 }
 }
@@ -54,7 +54,7 @@ export function returnUserName() {
   
   if (token) {
     decoded = jwtDecode(token);
-    const userId = decoded.userId;
+    const userId = decoded._id;
     const username = decoded.userName;
     return username
     }
