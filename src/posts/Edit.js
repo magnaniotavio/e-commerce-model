@@ -113,7 +113,7 @@ const onChangePostTitle = (e) => {
         .then(res => console.log(res.data));
       navigate('/postlist');
     } else if (e.nativeEvent.submitter.name === 'Delete') {
-      axios.delete(`/api/delete/${id}`)
+      axios.delete(`https://e-commerce-model.onrender.com/posts/update/${id}`)
       .then(res => console.log(res.data));
       navigate('/postlist');
 

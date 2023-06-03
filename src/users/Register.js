@@ -24,6 +24,10 @@ export default function Register() {
   const [first_name, setFirstName] = useState("");
   const [last_name, setLastName] = useState("");
   const [phone_number, setPhoneNumber] = useState("");
+//  const [order_history, setOrderHistory] = useState("");
+ // const [product_reviews, setProductReviews] = useState("");
+//  const [phone_number, setPhoneNumber] = useState("");
+
   const [errorMessage, setErrorMessage] = useState({
     notAnEmail: 'The adress you typed does not correspond to an email.',
     takenEmail: 'That email is already taken',
@@ -51,6 +55,29 @@ export default function Register() {
     first_name,
     last_name,
     phone_number,
+ /*   username,
+    email,
+    password,
+    birth_date,
+    address,
+    first_name,
+    last_name,
+    phone_number,
+    order_history,
+    product_reviews,
+    description,
+    profile_picture,
+    language_preferences,
+    timezone,
+    wishlist,
+    shopping_cart,
+    payment_info,
+    newsletter_subscription,
+    verified,
+    created_at,
+    last_login,
+    user_role, */
+
   };  
 
     const handleSubmit = (e) => {
