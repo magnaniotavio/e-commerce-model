@@ -33,7 +33,6 @@ export default function Wishlist() {
       .catch(error => console.error(error));
   }, [id]);
 
-  console.log(products)
   return (
     <div>
       <Container>
