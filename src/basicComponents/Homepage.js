@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Container, Row, Col, Image, ListGroup, Card, Button, Form, Carousel } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { TypicalButtonPresentation } from '../payment/CartWishlistAndBuyNowButtons';
+
 export default function Homepage() {
   const [product, setProduct] = useState([]);
 
@@ -37,7 +39,7 @@ export default function Homepage() {
               <h3><Link  to={`/product/${p._id}`}>{p.name}</Link></h3>
                 <ReactMarkdown>{p.description}</ReactMarkdown>
                 <p className="mt-3">{`$${p.price}`}</p>
-                <Button variant="primary">Add to Cart</Button>
+                <TypicalButtonPresentation productId={p._id} />
               </Col>
             </Row>
           </Carousel.Item>

@@ -8,10 +8,13 @@ import {returnUserData, returnUserId, returnUserName, ReturnUserProperties } fro
 import { BsChevronCompactDown, BsChevronCompactUp } from 'react-icons/bs';
 import Cookies from 'universal-cookie';
 import jwtDecode from 'jwt-decode';
-import { AddToCartButton } from '../payment/CartWishlistAndBuyNowButtons';
+import { TypicalButtonPresentation } from '../payment/CartWishlistAndBuyNowButtons';
  
 function ProductPage() {
+ // const cookies = new Cookies();
+ // const token = cookies.get("TOKEN"); 
   const userId = returnUserId()
+ // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const {id} = useParams();
   const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -40,6 +43,14 @@ function ProductPage() {
     creationDate: '',
     lastEdited: '',
   });
+
+ /* useEffect(() => {
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, [token]); */
 
   useEffect(() => {
     let isMounted = true;
@@ -173,13 +184,19 @@ function ProductPage() {
                     <option>5</option>
                   </Form.Control>
                 </Form.Group>
-                {typeof userId !== 'undefined' ? (
+                     <TypicalButtonPresentation productId={product._id} />
+            {/*     {isLoggedIn ? (
                         <>
                       <AddToCartButton button="cart" productId={product._id}/>
                       <AddToCartButton button="wishlist" productId={product._id}/>
                       <AddToCartButton button="buy_now" productId={product._id}/>
                       </>
-                      ) : ''}
+                      ) :
+                     (<>
+                      <LogInToBuy />
+                     </>)
+                   }
+                   */}
                </Form>
              </Card.Body>
            </Card>
@@ -223,7 +240,7 @@ function ProductPage() {
                     onChange={onChangeUserReview}
                     />
         </div>
-        <Button variant="primary" onClick={onSubmitUserReview}>Post Review</Button>
+        <Button variant="outline-dark" style={{backgroundColor: "black", color: "white"}} onClick={onSubmitUserReview}>Post Review</Button>
     </Form>
     </div>
   );

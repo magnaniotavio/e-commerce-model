@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import CreatePost from '../posts/Create';
-import { Container, Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap';
+import { Container, Row, Col, Image, ListGroup, Card, Button, Form, ButtonGroup } from 'react-bootstrap';
 import {returnUserData, returnUserId, returnUserName } from '../users/UserId';
 import { BsChevronCompactDown, BsChevronCompactUp } from 'react-icons/bs';
 import Cookies from 'universal-cookie';
@@ -57,7 +57,7 @@ export function AddToCartButton({button, productId}) {
         else {
           axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         }
-      }, [navigate, token]);
+      }, [navigate, token]); 
 
       
     useEffect(() => {
@@ -100,7 +100,6 @@ export function AddToCartButton({button, productId}) {
         })
         .catch(error => console.error(error));
     }, [userId]);
-   // }, []);
 
     const onSubmitShoppingCart = (e, productId) => {
         e.preventDefault();
@@ -111,7 +110,6 @@ export function AddToCartButton({button, productId}) {
           .then(navigate(`/users/shopping_cart/${userId}`)      )
           .catch(error => console.error(error));
     };
-
 
     const onSubmitWishList = (e, productId) => {
         e.preventDefault();
@@ -174,30 +172,80 @@ export function AddToCartButton({button, productId}) {
       return (
         <div>
             {button === 'cart' && (
-              <Button variant="primary" onClick={(e) => onSubmitShoppingCart(e, productId)}>
+              <Button variant="outline-dark" style={{backgroundColor: "black", color: "white"}} onClick={(e) => onSubmitShoppingCart(e, productId)}>
                 Add to Cart
               </Button>
             )}
             {button === 'wishlist' && (
-              <Button variant="primary" onClick={(e) => onSubmitWishList(e, productId)}>
+              <Button variant="outline-dark" style={{backgroundColor: "black", color: "white"}} onClick={(e) => onSubmitWishList(e, productId)}>
                 Add to Wishlist
               </Button>
             )}
             {button === 'buy_now' && (
-              <Button variant="primary" onClick={onSubmitBuyNow}>
+              <Button variant="outline-dark" style={{backgroundColor: "black", color: "white"}} onClick={onSubmitBuyNow}>
                 Buy Now
               </Button>
             )}
             {button === 'remove_from_wishlist' && (
-              <Button variant="primary" onClick={(e) => removeFromWishlist(e, productId)}>
+              <Button variant="outline-dark" style={{backgroundColor: "black", color: "white"}} onClick={(e) => removeFromWishlist(e, productId)}>
                 Remove From Wishlist
               </Button>
             )}
             {button === 'remove_from_cart' && (
-              <Button variant="primary" onClick={(e) => removeFromCart(e, productId)}>
+              <Button variant="outline-dark" style={{backgroundColor: "black", color: "white"}} onClick={(e) => removeFromCart(e, productId)}>
                 Remove From Cart
               </Button>
             )}
         </div>
         )       
 }
+
+export function LogInToBuy() {
+    const navigate = useNavigate();  
+    const onSubmitLoginToBuy = (event) => {
+      event.preventDefault();
+      navigate('/login');
+    };
+
+    return (
+      <div>
+        <Button variant="outline-dark" style={{backgroundColor: "black", color: "white"}} onClick={onSubmitLoginToBuy}>
+          Log in to buy
+        </Button>
+     </div>
+    )
+}
+
+
+export function TypicalButtonPresentation({prop}) {
+  const cookies = new Cookies();
+  const token = cookies.get("TOKEN"); 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, [token]);
+
+  return (
+    <div>
+    {isLoggedIn ? (
+    <ButtonGroup>
+    <AddToCartButton button="cart" size="sm" productId={prop} />
+    <AddToCartButton button="wishlist" size="sm" productId={prop} />
+    <AddToCartButton button="buy_now" size="sm" productId={prop} />
+  </ButtonGroup>
+  ) :
+   (<>
+    <LogInToBuy />
+   </>)
+ }
+ </div>
+  )
+}
+
+
+//<Button type="submit" variant="outline-dark" style={{backgroundColor: "black", color: "white"}} >Search</Button>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Row, Col, Container, Button, Pagination } from 'react-bootstrap';
 import { NavbarFilter } from '../searchComponents/FiltersNavBar';
-import { AddToCartButton } from '../payment/CartWishlistAndBuyNowButtons';
+import { TypicalButtonPresentation } from '../payment/CartWishlistAndBuyNowButtons';
 import { Link } from 'react-router-dom';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -51,9 +51,7 @@ const SearchResults = ({ results, searchTerm, classification }) => {
         <div>
         {typeof userIsLoggedIn !== 'undefined' ? (
           <>
-        <AddToCartButton button="cart" productId={product._id}/>
-        <AddToCartButton button="wishlist" productId={product._id}/>
-        <AddToCartButton button="buy_now" productId={product._id}/>
+          <TypicalButtonPresentation productId={product._id} />
         </>
         ) : ''}
         </div>
