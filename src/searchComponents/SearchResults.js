@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Row, Col, Container, Button, Pagination } from 'react-bootstrap';
+import { Card, Row, Col, Container, Button, Pagination, Image } from 'react-bootstrap';
 import { NavbarFilter } from '../searchComponents/FiltersNavBar';
 import { TypicalButtonPresentation } from '../payment/CartWishlistAndBuyNowButtons';
 import { Link } from 'react-router-dom';
@@ -7,33 +7,48 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import { returnUserId } from '../users/UserId';
+import productPic from '../images/productPic.png';
+import { ProductPresentation } from '../products/ProductMappingCard';
 
 const SearchResults = ({ results, searchTerm, classification }) => {
-  const userIsLoggedIn = returnUserId()
+
+  return (
+  < ProductPresentation productsToShow={results}  classification={classification}
+                        TypicalButtonPresentation={TypicalButtonPresentation}
+                        selectedFilters={results} isMainRoute='false' targetPublic='false'
+                        searchType='default_category_search' searchTerm={searchTerm}
+  /> 
+  )
+};
+
+export default SearchResults;
+
+
+ // const userIsLoggedIn = returnUserId()
   
-  const navigate = useNavigate();
-  const { pageNumber } = useParams();
-  const [totalResults, setTotalResults] = useState([])
-  const totalItems = results.length;
-  const [currentPage, setCurrentPage] = useState(parseInt(pageNumber, 10) || 1);
-  const [postsPerPage, setPostsPerPage] = useState(2);
-  useEffect(() => {
+ // const navigate = useNavigate();
+//  const { pageNumber } = useParams();
+ // const [totalResults, setTotalResults] = useState([])
+ // const totalItems = results.length;
+ // const [currentPage, setCurrentPage] = useState(parseInt(pageNumber, 10) || 1);
+ // const [postsPerPage, setPostsPerPage] = useState(2);
+ /* useEffect(() => {
     setTotalResults(results);
   }, [results]);
   useEffect(() => {
     setCurrentPage(parseInt(pageNumber, 10) || 1);
-  }, [pageNumber]);
-  const startIndex = (currentPage - 1) * postsPerPage;
-  const endIndex = startIndex + postsPerPage;
-  const itemsToDisplay = totalResults.slice(startIndex, endIndex);
-  const totalPages = Math.ceil(totalItems / postsPerPage);
-  const handlePageChange = (pageNumber) => {
+  }, [pageNumber]); */
+ // const startIndex = (currentPage - 1) * postsPerPage;
+ // const endIndex = startIndex + postsPerPage;
+ // const itemsToDisplay = totalResults.slice(startIndex, endIndex);
+ // const totalPages = Math.ceil(totalItems / postsPerPage);
+
+   /* const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
     navigate(`/search/${classification}/${searchTerm}/page/${pageNumber}`);
-  };
+  }; */
 
-
-  return (
+  /*return (
     <div>
       <Container>
     </Container>
@@ -42,6 +57,7 @@ const SearchResults = ({ results, searchTerm, classification }) => {
       <Container className="mt-4">
     <Row>
       <Col md={6}>
+        <Image src={productPic} alt={product.name} fluid />
       </Col>
       <Col md={6}>
         <h3><Link  to={`/product/${product._id}`}>{product.name}</Link></h3>
@@ -73,8 +89,4 @@ const SearchResults = ({ results, searchTerm, classification }) => {
       <Pagination.Last disabled={currentPage === totalPages} onClick={() => handlePageChange(totalPages)} />
     </Pagination>
   </div>
-  );
-};
-
-export default SearchResults;
-
+  ); */

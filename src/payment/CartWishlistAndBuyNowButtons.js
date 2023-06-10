@@ -22,8 +22,8 @@ export function AddToCartButton({button, productId}) {
   const handleToggleExpand = () => {
       setIsExpanded(!isExpanded);
     };
-  const [currentWishlist, setCurrentWishlist] = useState('')
-  const [currentShoppingCart, setCurrentShoppingCart] = useState('')
+  const [currentWishlist, setCurrentWishlist] = useState([])
+  const [currentShoppingCart, setCurrentShoppingCart] = useState([])
   const [userReview, setUserReview] = useState({
       id: userId,
       name: username,
@@ -59,12 +59,41 @@ export function AddToCartButton({button, productId}) {
         }
       }, [navigate, token]); 
 
-      
+  useEffect(() => {
+  let isMounted = true;
+  axios.get(`https://e-commerce-model.onrender.com/products/${productId}`)
+    .then(response => {
+      if (isMounted) {
+        setPost({
+          name: response.data.name,
+          color: response.data.color,
+          brand: response.data.brand,
+          price: response.data.price,
+          classification: response.data.classification,
+          sizeSML: response.data.sizeSML,
+          sizeNumber: response.data.sizeNumber,
+          customerReview: response.data.customerReview,
+          popularity: response.data.popularity,
+          condition: response.data.condition,
+          availability: response.data.availability,
+          description: response.data.description,
+          creationDate: response.data.creationDate,
+          lastEdited: response.data.lastEdited
+        });
+      }
+    })
+    .catch(error => {
+      console.log('error:', error);
+    });
+  return () => {
+    isMounted = false;
+  };
+}, [id]);
+
     useEffect(() => {
       let isMounted = true;
-      axios.get(`https://e-commerce-model.onrender.com/products/${id}`)
+      axios.get(`https://e-commerce-model.onrender.com/products/${productId}`)
         .then(response => {
-          console.log('response:', response);
           if (isMounted) {
             setPost({
               name: response.data.name,
@@ -88,19 +117,20 @@ export function AddToCartButton({button, productId}) {
           console.log('error:', error);
         });
       return () => { isMounted = false };
-    }, [])
-   // }, [id]);
+  //  }, [])
+    }, [userId]);
   
     useEffect(() => {
-      axios.get(`https://e-commerce-model.onrender.com/users/${userId}`)
+      axios
+        .get(`https://e-commerce-model.onrender.com/users/${userId}`)
         .then(response => {
-          console.log(response.data.wishlist);
-          setCurrentWishlist(response.data.wishlist);
-          setCurrentShoppingCart(response.data.shopping_cart)
+          console.log('THIS IS RESPONSE', response.data.wishlist);
+          setCurrentWishlist(prevWishlist => response.data.wishlist);
+          setCurrentShoppingCart(prevShoppingCart => response.data.shopping_cart);
         })
         .catch(error => console.error(error));
     }, [userId]);
-
+    
     const onSubmitShoppingCart = (e, productId) => {
         e.preventDefault();
         const newShoppingCart = [...currentShoppingCart, productId];
@@ -113,8 +143,9 @@ export function AddToCartButton({button, productId}) {
 
     const onSubmitWishList = (e, productId) => {
         e.preventDefault();
+        console.log('THIS IS CURRENT' + currentWishlist)
         const newWishList = [...currentWishlist, productId];
-        console.log('hahhhahha', newWishList)
+        console.log('THIS IS NEW' + newWishList)
         axios.post(`https://e-commerce-model.onrender.com/users/update_user/${userId}`, {
           wishlist: newWishList
         })
@@ -122,24 +153,28 @@ export function AddToCartButton({button, productId}) {
           .catch(error => console.error(error));
       }; 
 
-      const removeFromWishlist = (e, productId) => {
+      const removeFromWishlist = (e) => {
         e.preventDefault();
         const updatedList = currentWishlist.filter((product) => product !== productId);
         axios.post(`https://e-commerce-model.onrender.com/users/update_user/${userId}`, {
           wishlist: updatedList
         })
-          .then(window.location.reload()    )
-          .catch(error => console.error(error));
+        .then(() => {
+          window.location.reload();
+        })
+              .catch(error => console.error(error));
       }; 
 
-      const removeFromCart = (e, productId) => {
+      const removeFromCart = (e) => {
         e.preventDefault();
         const updatedCart = currentShoppingCart.filter((product) => product !== productId);
         axios.post(`https://e-commerce-model.onrender.com/users/update_user/${userId}`, {
           shopping_cart: updatedCart
         })
-          .then(window.location.reload()    )
-          .catch(error => console.error(error));
+          .catch(error => console.error(error))
+          .then(() => {
+            window.location.reload();
+          })  
       }; 
 
 
@@ -181,18 +216,20 @@ export function AddToCartButton({button, productId}) {
                 Add to Wishlist
               </Button>
             )}
+
+
             {button === 'buy_now' && (
               <Button variant="outline-dark" style={{backgroundColor: "black", color: "white"}} onClick={onSubmitBuyNow}>
                 Buy Now
               </Button>
             )}
             {button === 'remove_from_wishlist' && (
-              <Button variant="outline-dark" style={{backgroundColor: "black", color: "white"}} onClick={(e) => removeFromWishlist(e, productId)}>
+              <Button variant="outline-dark" style={{backgroundColor: "black", color: "white"}} onClick={(e) => removeFromWishlist(e)}>
                 Remove From Wishlist
               </Button>
             )}
             {button === 'remove_from_cart' && (
-              <Button variant="outline-dark" style={{backgroundColor: "black", color: "white"}} onClick={(e) => removeFromCart(e, productId)}>
+              <Button variant="outline-dark" style={{backgroundColor: "black", color: "white"}} onClick={(e) => removeFromCart(e)}>
                 Remove From Cart
               </Button>
             )}
@@ -234,9 +271,9 @@ export function TypicalButtonPresentation({prop}) {
     <div>
     {isLoggedIn ? (
     <ButtonGroup>
-    <AddToCartButton button="cart" size="sm" productId={prop} />
-    <AddToCartButton button="wishlist" size="sm" productId={prop} />
-    <AddToCartButton button="buy_now" size="sm" productId={prop} />
+    <AddToCartButton button="cart" productId={prop} />
+    <AddToCartButton button="wishlist"  productId={prop} />
+    <AddToCartButton button="buy_now"  productId={prop} />
   </ButtonGroup>
   ) :
    (<>

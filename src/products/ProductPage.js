@@ -9,7 +9,8 @@ import { BsChevronCompactDown, BsChevronCompactUp } from 'react-icons/bs';
 import Cookies from 'universal-cookie';
 import jwtDecode from 'jwt-decode';
 import { TypicalButtonPresentation } from '../payment/CartWishlistAndBuyNowButtons';
- 
+import productPic from '../images/productPic.png';
+
 function ProductPage() {
  // const cookies = new Cookies();
  // const token = cookies.get("TOKEN"); 
@@ -143,6 +144,7 @@ function ProductPage() {
         <Col>
         <Row>
         <Col md={6}>
+        <Image src={productPic} />
         </Col>
         <Col md={6}>
           <h3><Link  to={`/product/${product._id}`}>{product.name}</Link></h3>
@@ -158,19 +160,13 @@ function ProductPage() {
         <Col md={8}>
           <h3>Description</h3>
           <p>{product.description}</p>
-          <ListGroup>
-            <ListGroup.Item><strong>Height:</strong> 20 inches</ListGroup.Item>
-            <ListGroup.Item><strong>Width:</strong> 10 inches</ListGroup.Item>
-            <ListGroup.Item><strong>Depth:</strong> 5 inches</ListGroup.Item>
-          </ListGroup>
         </Col>
         <Col md={4}>
-
           <Card>
             <ListGroup variant="flush">
-              <ListGroup.Item><strong>Price:</strong> $99.99</ListGroup.Item>
-              <ListGroup.Item><strong>Availability:</strong> In Stock</ListGroup.Item>
-              <ListGroup.Item><strong>Condition:</strong> New</ListGroup.Item>
+              <ListGroup.Item><strong>Price:</strong>{product.price}</ListGroup.Item>
+              <ListGroup.Item><strong>Availability:</strong> {product.availability}</ListGroup.Item>
+              <ListGroup.Item><strong>Condition:</strong> {product.condition}</ListGroup.Item>
             </ListGroup>
             <Card.Body>
               <Form>
@@ -184,7 +180,7 @@ function ProductPage() {
                     <option>5</option>
                   </Form.Control>
                 </Form.Group>
-                     <TypicalButtonPresentation productId={product._id} />
+                     <TypicalButtonPresentation prop={product._id} />
             {/*     {isLoggedIn ? (
                         <>
                       <AddToCartButton button="cart" productId={product._id}/>

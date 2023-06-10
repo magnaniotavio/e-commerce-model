@@ -1,16 +1,9 @@
 import React, { useState } from 'react';
-import { Navbar, Nav, Form, Button, Container, Col, Image, Row } from 'react-bootstrap';
-import { useNavigate, useParams } from 'react-router-dom';
-import SetProductRoutes from '../products/SetProductsRoutes';
-import { useEffect } from 'react';
-import axios from 'axios';
-import { MakeFilteredSearch } from './FilteredSearch';
-import { Routes, Route } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export const NavbarFilterFunctions = () => {
     const [selectedFilters, setSelectedFilters] = useState([]);
     const navigate = useNavigate();
-    const { filter } = useParams();
     
 const handleFilterChange = (filter) => {
         const updatedFilters = [...selectedFilters];

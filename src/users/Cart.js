@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
-import CreatePost from '../posts/Create';
-import { Container, Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap';
-import {returnUserData, returnUserId } from '../users/UserId';
-import { AddToCartButton } from '../payment/CartWishlistAndBuyNowButtons';
-// CHECK FOR DELETION BY LOOKING IF THE ID'S STILL MATCH WHAT EXISTS IN THE PRODUCTS DATABASE
-
+import {returnUserId } from '../users/UserId';
+import { ListExhibition } from '../products/ListExhibition';
 
 export default function ShoppingCart() {
   const userId = returnUserId()
@@ -32,9 +27,11 @@ export default function ShoppingCart() {
       .catch(error => console.error(error));
   }, [id]);
 
-  console.log(quantity)
-  console.log(products)
   return (
+    < ListExhibition ItensToShow={products} quantity={quantity} setQuantity={setQuantity} listName='shopping_cart'
+/> 
+  )
+ /* return (
     <div>
       <Container>
         <Row>
@@ -66,5 +63,5 @@ export default function ShoppingCart() {
         </Row>
       </Container>
     </div>
-  );
+  ); */
 }
