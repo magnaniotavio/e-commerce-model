@@ -1,4 +1,4 @@
-# e-commerce-model
+# MERN clothing store mock website
 
 This is a (still in progress) **MERN** e-commerce website (a 'clothes store').
 Besides React, Node, Express and MongoDB, I have also used, so far, the following technnologies: **MongoDB Atlas** for storing the database on the cloud, **Stripe API** for mock payments, the **Mongoose library** for connecting Node and Mongo, **React Bootstrap** for a basic design, and **Render.com** for deployment. 
