@@ -206,7 +206,7 @@ function verifyAdmin(req, res, next) {
     }
     req.user = payload;
     // Check if userRole is 'Administrator'
-    console.log('this is payload' + req.user)
+    console.log('this is payload' + req.user + payload)
     const isAdmin = req.user.userRole === 'Administrator';
     if (!isAdmin) {
       return res.status(403).send({ message: 'Forbidden' });
@@ -266,7 +266,7 @@ function Update(expressRoute, url, mongoose_model, name_of_object) {
 }
 // Delete
 function Delete(expressRoute, url, mongoose_model, name_of_object) {
-  expressRoute(url).delete(verifyAdmin, function(req, res) {
+  expressRoute(url).delete(function(req, res) {
     mongoose_model.findByIdAndDelete(req.params.id)
       .then(function(object) {
         if (!object) {
