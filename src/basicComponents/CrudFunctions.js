@@ -3,7 +3,7 @@ import axios from "axios";
 import { Form } from "react-bootstrap";
 import { useState } from "react";
 
-export function HandleClick({url, ...stateValues}) {
+/*export function HandleClick({url, ...stateValues}) {
   
     return function(e) {
       e.preventDefault();
@@ -26,7 +26,7 @@ export function HandleClick({url, ...stateValues}) {
    });
      // navigate("/list");
     };
-  } 
+  } */
 
 
 export function textInput(label, formValue, formFunction) {
