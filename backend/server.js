@@ -205,8 +205,8 @@ function verifyAdmin(req, res, next) {
       return res.status(401).send({ message: 'Unauthorized' });
     }
     req.user = payload;
-
     // Check if userRole is 'Administrator'
+    console.log('this is payload' + req.user)
     const isAdmin = req.user.userRole === 'Administrator';
     if (!isAdmin) {
       return res.status(403).send({ message: 'Forbidden' });
