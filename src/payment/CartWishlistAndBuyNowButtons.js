@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
-import CreatePost from '../posts/Create';
-import { Container, Row, Col, Image, ListGroup, Card, Button, Form, ButtonGroup } from 'react-bootstrap';
-import {returnUserData, returnUserId, returnUserName } from '../users/UserId';
-import { BsChevronCompactDown, BsChevronCompactUp } from 'react-icons/bs';
+import { Button, ButtonGroup } from 'react-bootstrap';
+import { returnUserName } from '../users/UserId';
 import Cookies from 'universal-cookie';
 import jwtDecode from 'jwt-decode';
 
@@ -283,6 +280,3 @@ export function TypicalButtonPresentation({prop}) {
  </div>
   )
 }
-
-
-//<Button type="submit" variant="outline-dark" style={{backgroundColor: "black", color: "white"}} >Search</Button>

@@ -31,37 +31,4 @@ export default function ShoppingCart() {
     < ListExhibition ItensToShow={products} quantity={quantity} setQuantity={setQuantity} listName='shopping_cart'
 /> 
   )
- /* return (
-    <div>
-      <Container>
-        <Row>
-          {products.map((product) => (
-            <Col key={product._id}>
-              <Card>
-                <Card.Body>
-                  <Card.Title><Link  to={`/product/${product._id}`}>{product.name}</Link></Card.Title>
-                  <Card.Text>{product.brand}</Card.Text>
-                  <Card.Text>Price: ${product.price}</Card.Text>
-                  <Form>
-                    <Form.Group>
-                      <Form.Label>Select Quantity:</Form.Label>
-                      <Form.Control as="select">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                      </Form.Control>
-                    </Form.Group>
-                    <AddToCartButton button="buy_now" productId={product._id}/>
-                    <AddToCartButton button="remove_from_cart" productId={product._id}/>
-                  </Form>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-      </Container>
-    </div>
-  ); */
-}
+  }

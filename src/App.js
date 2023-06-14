@@ -93,6 +93,22 @@ export default function App() {
     });
 };
 
+// Shows a loading message when a component hasn't loaded yet
+function DelayedComponent({ component }) {
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, []);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  return component;
+}
 
 // This function allows us to make a search by simply copying and pasting the search URL onto the browser
 useEffect(() => {
@@ -137,7 +153,7 @@ useEffect(() => {
     <br></br>
     <Container className="d-flex flex-column" style={{ flexGrow: 1, minHeight: '50vh'}}>
     <Routes className="flex-grow-1" style={{ color: 'black', paddingLeft: '1%', paddingRight: '1%'}}>
-       <Route path="/homepage" element={<Homepage />} />
+       <Route path="/homepage" element={<DelayedComponent component={<Homepage />} />} />
        <Route path="/contact" element={<loremIpsum />} />
        <Route path="/users/wishlist/:id" element={<Wishlist />} />
        <Route path="/users/shopping_cart/:id" element={<ShoppingCart />} />
@@ -167,7 +183,7 @@ useEffect(() => {
        <Route path="/masculine/shirts/page/*" element={<ShirtsRoute />} />
        <Route path="/masculine/trousers/page/*" element={<TrousersRoute />} />
        <Route path="/masculine/shoes/page/*" element={<ShoesRoute />} />
-       <Route path="/feminine/shirts/page/*" element={<FeminineShirtsRoute />} />
+       <Route path="/feminine/shirts/page/*" element={<DelayedComponent component={<FeminineShirtsRoute />} />} />
        <Route path="/feminine/trousers/page/*" element={<FeminineTrousersRoute />} />
        <Route path="/feminine/shoes/page/*" element={<FemininineShoesRoute />} />
        <Route path="/kids/shirts/page/*" element={<KidsShirtsRoute />} />

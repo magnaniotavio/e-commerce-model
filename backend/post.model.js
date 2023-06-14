@@ -25,16 +25,15 @@ let PostConfigurations = new Schema({
     language: {
         type: Object
     },
-
     postNumber: {
         type: Number
     },
-    todo_priority: {
-        type: String
-    },
-    todo_completed: {
-        type: Boolean
-    }
+ //   todo_priority: {
+ //       type: String
+//    },
+//    todo_completed: {
+ //       type: Boolean
+ //   }
 });
 
 module.exports = mongoose.model('Todo', PostConfigurations);
