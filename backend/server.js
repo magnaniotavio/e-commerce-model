@@ -156,6 +156,7 @@ userRoutes.route("/login").post((request, response) => {
           response.status(200).send({
             message: "Login Successful",
             email: user.email,
+            userRole: user.user_role,
             token,
           });
         })
@@ -214,7 +215,7 @@ function verifyAdmin(req, res, next) {
     console.log('This is, console logged, verifiyAdmin payload:' + payload)
 
     // Check if userRole is 'Administrator'
-    const isAdmin = req.user.userId === '6463b68073304a605cee1936';
+    const isAdmin = req.user.userRole === 'Administrator';
     if (!isAdmin) {
       console.log(`This is verifyAdmin payload: ${JSON.stringify(payload)}`);
       console.log('This is, console logged, verifiyAdmin payload:' + JSON.stringify(payload))
