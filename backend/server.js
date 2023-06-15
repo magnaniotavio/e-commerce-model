@@ -148,6 +148,7 @@ userRoutes.route("/login").post((request, response) => {
             {
               userId: user._id,
               userEmail: user.email,
+              userRole: user.user_role,
             },
             "RANDOM-TOKEN",
             { expiresIn: registrationTokenExpiration }
@@ -213,13 +214,12 @@ function verifyAdmin(req, res, next) {
     console.log('This is, console logged, verifiyAdmin payload:' + payload)
 
     // Check if userRole is 'Administrator'
-    const isAdmin = req.user.user_role === 'Administrator';
+    const isAdmin = req.user.userRole === 'Administrator';
     if (!isAdmin) {
       console.log(`This is verifyAdmin payload: ${JSON.stringify(payload)}`);
       console.log('This is, console logged, verifiyAdmin payload:' + JSON.stringify(payload))
       return res.status(403).send({ message: `This is verifyAdmin payload: ${JSON.stringify(payload)}` + 'Forbidden' });
     }
-
     next();
   });
 }
