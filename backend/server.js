@@ -200,13 +200,15 @@ function verifyAdmin(req, res, next) {
   if (!token) {
     return res.status(401).send({ message: 'Unauthorized' });
   }
+
   jwt.verify(token, 'RANDOM-TOKEN', function(err, payload) {
     if (err) {
       return res.status(401).send({ message: 'Unauthorized' });
     }
+
     req.user = payload;
+
     // Check if userRole is 'Administrator'
-    console.log('this is payload' + req.user + payload)
     const isAdmin = req.user.userRole === 'Administrator';
     if (!isAdmin) {
       return res.status(403).send({ message: 'Forbidden' });
@@ -214,9 +216,6 @@ function verifyAdmin(req, res, next) {
 
     next();
   });
-
-  // Return true if userRole is 'Administrator'
-  return req.user.userRole === 'Administrator';
 }
 
 // CRUD FUNCTIONS
@@ -266,7 +265,7 @@ function Update(expressRoute, url, mongoose_model, name_of_object) {
 }
 // Delete
 function Delete(expressRoute, url, mongoose_model, name_of_object) {
-  expressRoute(url).delete(function(req, res) {
+  expressRoute(url).delete(verifyAdmin, function(req, res) {
     mongoose_model.findByIdAndDelete(req.params.id)
       .then(function(object) {
         if (!object) {
@@ -282,6 +281,22 @@ function Delete(expressRoute, url, mongoose_model, name_of_object) {
   });
 }
 
+/*function Delete(expressRoute, url, mongoose_model, name_of_object) {
+  expressRoute(url).delete(function(req, res) {
+    mongoose_model.findByIdAndDelete(req.params.id)
+      .then(function(object) {
+        if (!object) {
+          res.status(404).send("Data is not found");
+        } else {
+          res.json(`${name_of_object} deleted!`);
+        }
+      })
+      .catch(function(err) {
+        console.log(err);
+        res.status(400).send("Delete not possible");
+      });
+  });
+} */
 
 //SPECIFIC CRUD (CREATE-READ-UPDATE-DELETE) ENDPOINTS FOR USERS, POSTS, PRODUCTS, ORDERS
 
