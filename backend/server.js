@@ -209,7 +209,7 @@ function verifyAdmin(req, res, next) {
     req.user = payload;
 
     // Check if userRole is 'Administrator'
-    const isAdmin = req.user.userRole === 'Administrator';
+    const isAdmin = req.user.user_role === 'Administrator';
     if (!isAdmin) {
       return res.status(403).send({ message: 'Forbidden' });
     }
