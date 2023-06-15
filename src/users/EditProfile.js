@@ -66,7 +66,6 @@ function EditProfile() {
     axios
       .post(`https://e-commerce-model.onrender.com/users/update_user/${id}`, user)
       .then((res) => {
-        console.log('this is my updaaaaaaaaaaaaaaaaaate' + res.data);
       })
       .catch((error) => {
         console.log(error);

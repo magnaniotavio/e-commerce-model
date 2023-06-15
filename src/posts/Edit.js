@@ -27,6 +27,20 @@ function EditPost() {
       postNumber: '',
     });
 
+    decoded = jwtDecode(token);
+    const userId = decoded.userId;
+    console.log(decoded)
+  
+    useEffect(() => {
+      if (!token) {
+        navigate("/homepage");
+      } 
+      else {
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      }
+    }, [navigate, token]);
+  
+
     useEffect(() => {
       const hello = axios.get(`https://e-commerce-model.onrender.com/posts/${id}`)
       hello.then(response => {
@@ -122,7 +136,6 @@ const onChangePostTitle = (e) => {
         .then(res => console.log(res.data));
       navigate('/postlist');
     } else if (e.nativeEvent.submitter.name === 'Delete') {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
       axios.delete(`https://e-commerce-model.onrender.com/posts/delete/${id}`)
       .then(res => console.log(res.data));
