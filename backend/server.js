@@ -227,6 +227,98 @@ function verifyAdmin(req, res, next) {
 
 // CRUD FUNCTIONS
 
+//FIND BY ID
+function FindObjectById(expressRoute, url, mongoose_model, name_of_object, verifyAdmin) {
+  const findByIdHandler = function(req, res) {
+    mongoose_model.findById(req.params.id)
+      .then(function(object) {
+        if (!object) {
+          res.status(404).send(`${name_of_object} not found`);
+        } else {
+          res.json(object);
+        }
+      })
+      .catch(function(err) {
+        console.log(err);
+        res.status(500).send(`Error finding ${name_of_object}`);
+      });
+  };
+
+  if (verifyAdmin) {
+    expressRoute(url).get(verifyAdmin, findByIdHandler);
+  } else {
+    expressRoute(url).get(findByIdHandler);
+  }
+}
+
+// Create
+function Create(expressRoute, url, mongoose_model, name_of_object, verifyAdmin) {
+  const createHandler = function(req, res) {
+    let object = new mongoose_model(req.body);
+    object.save()
+      .then(() => {
+        res.status(200).json({ [name_of_object]: `${name_of_object} added successfully` });
+      })
+      .catch(() => {
+        res.status(400).send(`Adding new ${name_of_object} failed`);
+      });
+  };
+
+  if (verifyAdmin) {
+    return expressRoute(url).post(verifyAdmin, createHandler);
+  } else {
+    return expressRoute(url).post(createHandler);
+  }
+}
+
+// Update
+function Update(expressRoute, url, mongoose_model, name_of_object, verifyAdmin) {
+  const updateHandler = function(req, res) {
+    const object = req.body;
+    const id = req.params.id;
+    mongoose_model.findByIdAndUpdate(id, object)
+      .then(() => {
+        const updatedObject = { ...req.object, ...object };
+        res.status(200).send(updatedObject);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).send({ message: `Error updating ${name_of_object}` });
+      });
+  };
+
+  if (verifyAdmin) {
+    expressRoute(url).post(verifyAdmin, updateHandler);
+  } else {
+    expressRoute(url).post(updateHandler);
+  }
+}
+
+function Delete(expressRoute, url, mongoose_model, name_of_object, verifyAdmin) {
+  const deleteHandler = function(req, res) {
+    mongoose_model.findByIdAndDelete(req.params.id)
+      .then(function(object) {
+        if (!object) {
+          res.status(404).send("Data is not found");
+        } else {
+          res.json(`${name_of_object} deleted!`);
+        }
+      })
+      .catch(function(err) {
+        console.log(err);
+        res.status(400).send("Delete not possible");
+      });
+  };
+
+  if (verifyAdmin) {
+    expressRoute(url).delete(verifyAdmin, deleteHandler);
+  } else {
+    expressRoute(url).delete(deleteHandler);
+  }
+}
+
+
+/*
 // Find by ID
 function FindObjectById(expressRoute, url, mongoose_model, name_of_object) {
   expressRoute(url).get(function(req, res) {
@@ -286,7 +378,7 @@ function Delete(expressRoute, url, mongoose_model, name_of_object) {
         res.status(400).send("Delete not possible");
       });
   });
-}
+} */
 
 /*function Delete(expressRoute, url, mongoose_model, name_of_object) {
   expressRoute(url).delete(function(req, res) {
@@ -358,7 +450,7 @@ userRoutes.route('/delete_user/:id').delete(function(req, res) {
 FindObjectById(postRoutes.route.bind(postRoutes), '/:id', newPost, 'post');
 Create(postRoutes.route.bind(postRoutes), '/add', newPost, 'post');
 Update(postRoutes.route.bind(postRoutes), '/update/:id', newPost, 'post');
-Delete(postRoutes.route.bind(postRoutes), '/delete/:id', newPost, 'post');
+Delete(postRoutes.route.bind(postRoutes), '/delete/:id', newPost, 'post', verifyAdmin);
 
 // Create, read, update and delete products
 FindObjectById(productRoutes.route.bind(productRoutes), '/:id', newProduct, 'product');
