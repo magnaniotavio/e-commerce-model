@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Cookies from "universal-cookie";
+
+import jwtDecode from 'jwt-decode';
+
+let decoded;
+
+const cookies = new Cookies();   
+
 
 function EditPost() {
+  const token = cookies.get("TOKEN");
 
     const currentDate = new Date()              
     const { id } = useParams();
@@ -113,6 +122,8 @@ const onChangePostTitle = (e) => {
         .then(res => console.log(res.data));
       navigate('/postlist');
     } else if (e.nativeEvent.submitter.name === 'Delete') {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
       axios.delete(`https://e-commerce-model.onrender.com/posts/delete/${id}`)
       .then(res => console.log(res.data));
       navigate('/postlist');
