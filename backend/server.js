@@ -228,7 +228,7 @@ function verifyAdmin(req, res, next) {
 // CRUD FUNCTIONS
 
 //FIND BY ID
-function FindObjectById(expressRoute, url, mongoose_model, name_of_object, verifyAdmin) {
+function FindObjectById(expressRoute, url, mongoose_model, name_of_object, verification) {
   const findByIdHandler = function(req, res) {
     mongoose_model.findById(req.params.id)
       .then(function(object) {
@@ -244,15 +244,15 @@ function FindObjectById(expressRoute, url, mongoose_model, name_of_object, verif
       });
   };
 
-  if (verifyAdmin) {
-    expressRoute(url).get(verifyAdmin, findByIdHandler);
+  if (verification) {
+    expressRoute(url).get(verification, findByIdHandler);
   } else {
     expressRoute(url).get(findByIdHandler);
   }
 }
 
 // Create
-function Create(expressRoute, url, mongoose_model, name_of_object, verifyAdmin) {
+function Create(expressRoute, url, mongoose_model, name_of_object, verification) {
   const createHandler = function(req, res) {
     let object = new mongoose_model(req.body);
     object.save()
@@ -264,15 +264,15 @@ function Create(expressRoute, url, mongoose_model, name_of_object, verifyAdmin) 
       });
   };
 
-  if (verifyAdmin) {
-    return expressRoute(url).post(verifyAdmin, createHandler);
+  if (verification) {
+    return expressRoute(url).post(verification, createHandler);
   } else {
     return expressRoute(url).post(createHandler);
   }
 }
 
 // Update
-function Update(expressRoute, url, mongoose_model, name_of_object, verifyAdmin) {
+function Update(expressRoute, url, mongoose_model, name_of_object, verification) {
   const updateHandler = function(req, res) {
     const object = req.body;
     const id = req.params.id;
@@ -287,8 +287,8 @@ function Update(expressRoute, url, mongoose_model, name_of_object, verifyAdmin) 
       });
   };
 
-  if (verifyAdmin) {
-    expressRoute(url).post(verifyAdmin, updateHandler);
+  if (verification) {
+    expressRoute(url).post(verification, updateHandler);
   } else {
     expressRoute(url).post(updateHandler);
   }
@@ -316,6 +316,113 @@ function Delete(expressRoute, url, mongoose_model, name_of_object, verification)
     expressRoute(url).delete(deleteHandler);
   }
 }
+
+//SPECIFIC CRUD (CREATE-READ-UPDATE-DELETE) ENDPOINTS FOR USERS, POSTS, PRODUCTS, ORDERS
+
+// Read, update, delete users
+// User creation has beend dealt with in the registration function
+userRoutes.route('/:id').get(function(req, res) {
+  newUser.findById(req.params.id)
+    .then(function(user) {
+      res.json(user);
+    })
+    .catch(function(err) {
+      console.log(err);
+      res.status(404).send("Product not found");
+    });
+});
+                                  //FindObjectById(userRoutes.route.bind(userRoutes), '/:id', newUser, 'user');
+// Updating the user rquires updating the token, hence the function will be different than it is for posts, products, orders
+userRoutes.route('/update_user/:id').post(verifyToken, function(req, res) {
+  const user = req.body;
+  const id = req.params.id;
+  newUser.findByIdAndUpdate(id, user)
+    .then(() => {
+      // Update user information in the token payload
+      const updatedPayload = { ...req.user, ...user };
+      // Generate new token with updated payload
+      const updatedToken = jwt.sign(updatedPayload, 'RANDOM-TOKEN');
+      res.status(200).send({ token: updatedToken });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send({ message: 'Error updating user' });
+    });
+});
+
+userRoutes.route('/delete_user/:id').delete(function(req, res) {
+  newUser.findByIdAndDelete(req.params.id)
+    .then(function(user) {
+      if (!user) {
+        res.status(404).send("data is not found");
+      } else {
+        res.json('user deleted!');
+      }
+    })
+    .catch(function(err) {
+      console.log(err);
+      res.status(400).send("Delete not possible");
+    });
+});
+                              //Delete(userRoutes.route.bind(userRoutes), '/delete_user/:id', newUser, 'user');
+
+// Create, read, update and delete posts
+FindObjectById(postRoutes.route.bind(postRoutes), '/:id', newPost, 'post');
+Create(postRoutes.route.bind(postRoutes), '/add', newPost, 'post', verifyAdmin);
+Update(postRoutes.route.bind(postRoutes), '/update/:id', newPost, 'post', verifyAdmin);
+Delete(postRoutes.route.bind(postRoutes), '/delete/:id', newPost, 'post', verifyAdmin);
+
+// Create, read, update and delete products
+FindObjectById(productRoutes.route.bind(productRoutes), '/:id', newProduct, 'product');
+Create(productRoutes.route.bind(productRoutes), '/add_product', newProduct, 'product', verifyAdmin);
+Update(productRoutes.route.bind(productRoutes), '/update_product/:id', newProduct, 'product', verifyAdmin);
+Delete(productRoutes.route.bind(productRoutes), '/delete_product/:id', newProduct, 'product', verifyAdmin);
+
+// Create, read, update and delete orders
+FindObjectById(orderRoutes.route.bind(orderRoutes), '/:id', newOrder, 'order');
+Create(orderRoutes.route.bind(orderRoutes), '/:add_orders', newOrder, 'order');
+Update(orderRoutes.route.bind(orderRoutes), '/:update_order/:id', newOrder, 'order');
+Delete(orderRoutes.route.bind(orderRoutes), '/:delete_order/:id', newOrder, 'order');
+
+
+// Curb Cores Error by adding a header here
+userRoutes.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+  );
+  next();
+});
+
+app.get('/', (req, res) => {
+  res.send('Hello World!'); // Replace with your desired response or logic
+});
+
+
+const corsOptions = {
+  origin: 'https://e-commerce-model.onrender.com',
+  optionsSuccessStatus: 200 // Some legacy browsers (e.g., IE11) choke on 204
+};
+
+
+app.use('/purchases', orderRoutes);
+app.use('/products', productRoutes);
+app.use('/posts', postRoutes);
+app.use('/users', userRoutes);
+app.use('/login', loginRoutes);
+app.use('/logout', logoutRoutes);
+app.listen(PORT, function() {
+  console.log("Server is running on Port: " + PORT);
+  console.log(app._router.stack);
+}
+);  
+
+
 
 
 /*
@@ -396,108 +503,3 @@ function Delete(expressRoute, url, mongoose_model, name_of_object) {
       });
   });
 } */
-
-//SPECIFIC CRUD (CREATE-READ-UPDATE-DELETE) ENDPOINTS FOR USERS, POSTS, PRODUCTS, ORDERS
-
-// Read, update, delete users
-// User creation has beend dealt with in the registration function
-userRoutes.route('/:id').get(function(req, res) {
-  newUser.findById(req.params.id)
-    .then(function(user) {
-      res.json(user);
-    })
-    .catch(function(err) {
-      console.log(err);
-      res.status(404).send("Product not found");
-    });
-});
-                                  //FindObjectById(userRoutes.route.bind(userRoutes), '/:id', newUser, 'user');
-// Updating the user rquires updating the token, hence the function will be different than it is for posts, products, orders
-userRoutes.route('/update_user/:id').post(verifyToken, function(req, res) {
-  const user = req.body;
-  const id = req.params.id;
-  newUser.findByIdAndUpdate(id, user)
-    .then(() => {
-      // Update user information in the token payload
-      const updatedPayload = { ...req.user, ...user };
-      // Generate new token with updated payload
-      const updatedToken = jwt.sign(updatedPayload, 'RANDOM-TOKEN');
-      res.status(200).send({ token: updatedToken });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).send({ message: 'Error updating user' });
-    });
-});
-
-userRoutes.route('/delete_user/:id').delete(function(req, res) {
-  newUser.findByIdAndDelete(req.params.id)
-    .then(function(user) {
-      if (!user) {
-        res.status(404).send("data is not found");
-      } else {
-        res.json('user deleted!');
-      }
-    })
-    .catch(function(err) {
-      console.log(err);
-      res.status(400).send("Delete not possible");
-    });
-});
-                              //Delete(userRoutes.route.bind(userRoutes), '/delete_user/:id', newUser, 'user');
-
-// Create, read, update and delete posts
-FindObjectById(postRoutes.route.bind(postRoutes), '/:id', newPost, 'post');
-Create(postRoutes.route.bind(postRoutes), '/add', newPost, 'post');
-Update(postRoutes.route.bind(postRoutes), '/update/:id', newPost, 'post');
-Delete(postRoutes.route.bind(postRoutes), '/delete/:id', newPost, 'post', verifyAdmin);
-
-// Create, read, update and delete products
-FindObjectById(productRoutes.route.bind(productRoutes), '/:id', newProduct, 'product');
-Create(productRoutes.route.bind(productRoutes), '/add_product', newProduct, 'product');
-Update(productRoutes.route.bind(productRoutes), '/update_product/:id', newProduct, 'product');
-Delete(productRoutes.route.bind(productRoutes), '/delete_product/:id', newProduct, 'product');
-
-// Create, read, update and delete orders
-FindObjectById(orderRoutes.route.bind(orderRoutes), '/:id', newOrder, 'order');
-Create(orderRoutes.route.bind(orderRoutes), '/:add_orders', newOrder, 'order');
-Update(orderRoutes.route.bind(orderRoutes), '/:update_order/:id', newOrder, 'order');
-Delete(orderRoutes.route.bind(orderRoutes), '/:delete_order/:id', newOrder, 'order');
-
-
-// Curb Cores Error by adding a header here
-userRoutes.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, PATCH, OPTIONS"
-  );
-  next();
-});
-
-app.get('/', (req, res) => {
-  res.send('Hello World!'); // Replace with your desired response or logic
-});
-
-
-const corsOptions = {
-  origin: 'https://e-commerce-model.onrender.com',
-  optionsSuccessStatus: 200 // Some legacy browsers (e.g., IE11) choke on 204
-};
-
-
-app.use('/purchases', orderRoutes);
-app.use('/products', productRoutes);
-app.use('/posts', postRoutes);
-app.use('/users', userRoutes);
-app.use('/login', loginRoutes);
-app.use('/logout', logoutRoutes);
-app.listen(PORT, function() {
-  console.log("Server is running on Port: " + PORT);
-  console.log(app._router.stack);
-}
-);  
