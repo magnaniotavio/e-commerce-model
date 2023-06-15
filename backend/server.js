@@ -190,9 +190,11 @@ function verifyToken(req, res, next) {
       return res.status(401).send({ message: 'Unauthorized' });
     }
     req.user = payload;
+    console.log('This is, console logged, the user:', req.user); // Log the user object
     next();
   });
 }
+
 
 // Verification of Admin
 function verifyAdmin(req, res, next) {
@@ -207,6 +209,8 @@ function verifyAdmin(req, res, next) {
     }
 
     req.user = payload;
+
+    console.log('This is, console logged, verifiyAdmin payload:' + payload)
 
     // Check if userRole is 'Administrator'
     const isAdmin = req.user.user_role === 'Administrator';
