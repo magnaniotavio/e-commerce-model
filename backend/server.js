@@ -294,7 +294,7 @@ function Update(expressRoute, url, mongoose_model, name_of_object, verifyAdmin) 
   }
 }
 
-function Delete(expressRoute, url, mongoose_model, name_of_object, verifyAdmin) {
+function Delete(expressRoute, url, mongoose_model, name_of_object, verification) {
   const deleteHandler = function(req, res) {
     mongoose_model.findByIdAndDelete(req.params.id)
       .then(function(object) {
@@ -310,8 +310,8 @@ function Delete(expressRoute, url, mongoose_model, name_of_object, verifyAdmin) 
       });
   };
 
-  if (verifyAdmin) {
-    expressRoute(url).delete(verifyAdmin, deleteHandler);
+  if (verification) {
+    expressRoute(url).delete(verification, deleteHandler);
   } else {
     expressRoute(url).delete(deleteHandler);
   }
