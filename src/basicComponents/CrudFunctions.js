@@ -38,6 +38,20 @@ export function textInput(label, formValue, formFunction) {
        </Form.Group>)
   }
 
+export function textBoxInput(label, formValue, formFunction) {
+    return (
+      <Form.Group>
+        <Form.Label>{label}</Form.Label>
+        <Form.Control
+          as="textarea"
+          rows={4}
+          value={formValue}
+          onChange={(e) => formFunction(e.target.value)}
+        />
+      </Form.Group>
+    );
+  }
+
 export function selectorInput(label, formValue, formFunction, optionsArray, valuesArray) {
     return (
       <Form.Group>

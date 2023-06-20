@@ -1,11 +1,133 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { Form, FormControl, Button, InputGroup } from 'react-bootstrap'
+import { ReturnUserProperties, ReturnUserRole } from '../users/UserId';
+import { HandleClick, textInput, selectorInput, textBoxInput } from '../basicComponents/CrudFunctions';
+import { CheckForToken } from '../basicComponents/CheckForToken';
+export default function CreateProduct() {
+
+  const navigate = useNavigate();
+  const currentDate = new Date()              
+  const [name, setName] = useState("");
+  const [classification, setClassification] = useState("");
+  const [sizeSML, setSizeSML] = useState("");
+  const [sizeNumber, setSizeNumber] = useState("");
+  const [color, setColor] = useState("");
+  const [brand, setBrand] = useState("");
+  const [price, setPrice] = useState("");
+  const [customerReview, setCustomerReview] = useState("");
+  const [popularity, setPopularity] = useState("");
+  const [creationDate, setCreationDate] = useState("");
+  const [number, setNumber] = useState("");
+  const [description, setDescription] = useState("");
+  const [condition, setCondition] = useState("");
+  const [availability, setAvailability] = useState("");
+  const [targetPublic, setTargetPublic] = useState("");
+ 
+  CheckForToken()
+
+     function onSubmit(e) {
+         e.preventDefault();
+ 
+     const newProduct = {
+         name: name,
+         classification: classification,
+         sizeSML: sizeSML,
+         sizeNumber: sizeNumber,
+         color: color,
+         brand: brand,
+         price: price,
+         customerReview: customerReview,
+         popularity: popularity,
+         creationDate: currentDate,
+         number: number,
+         description: description,
+         condition: condition,
+         availability: availability,
+         targetPublic: targetPublic,
+         }; 
+     axios.post('https://e-commerce-model.onrender.com/products/add_product', newProduct)
+       .then(res => {
+       //  navigate(`/${newProduct.newname}`);
+       console.log(res.data)
+       })
+       .catch(error => console.log(error));
+         setName('');
+         setClassification('');
+         setSizeSML('');
+         setSizeNumber('');
+         setColor('');
+         setBrand('');
+         setPrice('');
+         setCustomerReview('');
+         setPopularity('');
+         setCreationDate('');
+         setNumber('');
+         setDescription('');
+         setCondition('');
+         setAvailability('');
+         setTargetPublic('');
+         navigate("/product_list")
+     }
+ 
+ 
+ return (
+ <div style={{ marginTop: 10 }}>
+   <h3 style={{ color: 'black' }}>Make New Product</h3>
+   <Form onSubmit={onSubmit}>
+     {textInput('Name', name, setName)}
+     {textInput('Description', description, setDescription)}
+     {selectorInput('Classification', classification, setClassification, 
+        ['disabled: Masculine', 'Shirts', 'Trousers', 'Shoes', 
+         'disabled: Feminine', 'Shirts', 'Trousers', 'Shoes',
+         'disabled: Kids', 'Shirts', 'Trousers', 'Shoes',],
+        ['', 'ShirtM', 'TrouserM', 'ShoeM', 
+         '', 'ShirtF', 'TrouserF', 'ShoeF',
+         '', 'ShirtK', 'TrouserK', 'ShoeK',],
+      )}
+     {selectorInput('Targeted Public', targetPublic, setTargetPublic, ['Feminine', 'Masculine', 'Kids'] )}
+     {selectorInput('Color', color, setColor, ['White', 'Black', 'Blue'] )}
+     {selectorInput('Condition', condition, setCondition, ['New', 'Used'] )}
+     {selectorInput('Availability', availability, setAvailability, ['In stock', 'Not available', 'Available soon'] )}
+     {selectorInput('Size', sizeSML, setSizeSML, ['Small', 'Medium', 'Large'] )}
+     {selectorInput('Brand', brand, setBrand, ['Adidas', 'Nike', 'Puma'] )}
+     <Button variant="primary" type="submit">
+       Create Product
+     </Button>
+   </Form>
+ </div>
+ )
+ } 
+/*import React, { useState, useEffect} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Form, FormControl, Button, InputGroup } from 'react-bootstrap'
 import { ReturnUserProperties, ReturnUserRole } from '../users/UserId';
 
+import Cookies from 'universal-cookie';
+import jwtDecode from 'jwt-decode';
+let decoded;
+const cookies = new Cookies();   
+
+
 export default function CreateProduct() {
- const navigate = useNavigate();
+  const navigate = useNavigate();
+
+            const token = cookies.get("TOKEN");
+            decoded = jwtDecode(token);
+            const userId = decoded.userId;
+            console.log(decoded)
+            useEffect(() => {
+              if (!token) {
+                navigate("/homepage");
+              } 
+              else {
+                axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+              }
+            }, [navigate, token]);
+          
  const currentDate = new Date()              
  const [name, setName] = useState("");
  const [classification, setClassification] = useState("");
@@ -29,48 +151,13 @@ export default function CreateProduct() {
     function onChangeNumber(e) {                 
         setNumber(e.target.value);
     }
-    function onChangeClassification(e) {   
-        setClassification(e.target.value);
-    }
-    function onChangesizeSML(e) {   
-        setSizeSML(e.target.value);
-    }
-    function onChangeSizeNumber(e) {   
-        setSizeNumber(e.target.value);
-    }    
-    function onChangeColor(e) {   
-        setColor(e.target.value);
-    }
-    function onChangeBrand(e) {   
-        setBrand(e.target.value);
-    }
     function onChangePrice(e) {   
         setPrice(e.target.value);
     }
-    function onChangeCustomerReview(e) {   
-        setCustomerReview(e.target.value);
-    }
-    function onChangePopularity(e) {   
-        setPopularity(e.target.value);
-    }
-    function onChangeDate(e) {   
-        const currentDate = new Date()              
-        setCreationDate(e.target.value);
-    }
+
     function onChangeDescription(e) {   
       setDescription(e.target.value);
   }
-  function onChangeCondition(e) {   
-    setCondition(e.target.value);
-}
-function onChangeAvailability(e) {   
-  setAvailability(e.target.value);
-}
-function onChangeTargetPublic(e) {   
-  setTargetPublic(e.target.value);
-}
-
-
 
     function onSubmit(e) {
         e.preventDefault();
@@ -218,3 +305,4 @@ return (
 </div>
 )
 }
+ */

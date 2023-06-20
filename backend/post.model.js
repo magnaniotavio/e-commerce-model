@@ -2,6 +2,37 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 let PostConfigurations = new Schema({
+    content: {
+        type: String
+    },
+    title: {
+        type: String
+    },
+    classification: {
+        type: String
+    },
+    author: {
+        type: String,
+        unique: [true],
+    },
+    creation_date: {
+        type: Object
+    },
+    last_edited: {
+        type: Object
+    },
+    language: {
+        type: Object
+    },
+}); 
+/*content
+title
+classification
+author
+creation_date
+last_edited
+language */
+/*let PostConfigurations = new Schema({
     newPost: {
         type: String
     },
@@ -34,6 +65,6 @@ let PostConfigurations = new Schema({
 //    todo_completed: {
  //       type: Boolean
  //   }
-});
+}); */
 
 module.exports = mongoose.model('Todo', PostConfigurations);

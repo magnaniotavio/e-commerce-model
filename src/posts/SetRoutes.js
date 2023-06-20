@@ -61,10 +61,10 @@ console.log(fullPosts)
       {itemsToDisplay.map(post => (
         <div key={post.id} className="post">
          <Link to={`/${post.newTitle}/${post._id}`}>
-         <h3 className="post-title">{post.newTitle}</h3>
+         <h3 className="post-title">{post.title}</h3>
         </Link>
           <div className="post-content">
-            <ReactMarkdown>{post.newPost}</ReactMarkdown>
+            <ReactMarkdown>{post.content}</ReactMarkdown>
           </div>
         </div>
       ))}

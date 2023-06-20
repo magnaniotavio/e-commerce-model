@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ReturnUserProperties } from './UserId';
+import { CheckForUserRole } from '../basicComponents/CheckForToken';
 
 export default function UserList() {
 
@@ -11,7 +12,7 @@ export default function UserList() {
   const [users, setUsers] = useState([]);
   const [orderUsersBy, setOrderUsersBy] = useState('creationDate');
   const userRole = ReturnUserProperties('user_role')
-  
+
   const User = ({ user }) => (
     <tr>
       <td><Link  to={`/users/${user._id}`}>{user.email}</Link></td>
@@ -31,6 +32,8 @@ export default function UserList() {
     )}    </tr>
   );
  
+  CheckForUserRole('Administrator')
+
   useEffect(() => {
       axios.get('https://e-commerce-model.onrender.com/users/')
         .then(response => {

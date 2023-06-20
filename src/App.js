@@ -42,6 +42,7 @@ import { NavbarFilterFunctions, NavbarFilter } from './searchComponents/FiltersN
 import { MakeFilteredSearch } from './searchComponents/FilteredSearch';
 import SearchBar from './searchComponents/SearchBar';
 import { WebsiteTitle, NavBarMenu, AdminNavBar, UserNavBar } from './basicComponents/NavbarMenus';
+import { Unauthorized } from './basicComponents/Unauthorized';
 
 // This stripe promise is necessary for the mock payments offereded by Stripe
 const stripePromise = loadStripe('pk_test_51N6tO8EFMUty2Z9O0hadXLSAFUfCFaIWnTNZACAAS1XQTXZBrkGU9bHyHCj3jcMxUbobDet4S0lVtziZWsTQYUge00s53cZ5Eu');
@@ -154,6 +155,7 @@ useEffect(() => {
     <Container className="d-flex flex-column" style={{ flexGrow: 1, minHeight: '50vh'}}>
     <Routes className="flex-grow-1" style={{ color: 'black', paddingLeft: '1%', paddingRight: '1%'}}>
        <Route path="/homepage" element={<DelayedComponent component={<Homepage />} />} />
+       <Route path="/unauthorized" element={<DelayedComponent component={<Unauthorized />} />} />
        <Route path="/contact" element={<loremIpsum />} />
        <Route path="/users/wishlist/:id" element={<Wishlist />} />
        <Route path="/users/shopping_cart/:id" element={<ShoppingCart />} />

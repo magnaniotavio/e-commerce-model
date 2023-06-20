@@ -23,7 +23,7 @@ const loginRoutes = express.Router();
 const logoutRoutes = express.Router();
 const orderRoutes = express.Router();
 // Mongoose models
-const newPost = require('./post.model');
+const newPost = require('./posts.model');
 const newUser = require("./user.model");
 const newOrder = require("./order.model");
 const newProduct = require("./product.model")
@@ -264,6 +264,20 @@ function Create(expressRoute, url, mongoose_model, name_of_object, verification)
       });
   };
 
+  /* function Create(expressRoute, url, mongoose_model, name_of_object) {
+  return expressRoute(url).post(function(req, res) {
+    let object = new mongoose_model(req.body);
+    object.save()
+        .then(object => {
+          res.status(200).json({ [name_of_object]: `${name_of_object} added successfully` });
+        })
+        .catch(err => {
+            res.status(400).send(`adding new ${name_of_object} failed`);
+        });
+  }) 
+}
+
+*/
   if (verification) {
     return expressRoute(url).post(verification, createHandler);
   } else {

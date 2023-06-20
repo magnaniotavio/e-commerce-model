@@ -2,17 +2,32 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import { useParams, useNavigate } from "react-router-dom";
-import jwtDecode from 'jwt-decode';
-import { returnUserId  } from "./UserId";
+//import jwtDecode from 'jwt-decode';
+//import { returnUserId  } from "./UserId";
+import { CheckForToken, CheckForUser } from "../basicComponents/CheckForToken";
 
-let decoded;
-
-const cookies = new Cookies();   
+//const cookies = new Cookies();   
 
 function EditProfile() {
+/*  function CheckForToken() {
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+      try {
+        const token = cookies.get("TOKEN");
+        const decodedToken = jwtDecode(token);
+        // Process the decoded token as needed
+      } catch (error) {
+        // Handle the invalid token error, e.g., redirect the user
+        navigate('/unauthorized');
+      }
+    }, []);
+  
+    return null;
+  } */
   const { id } = useParams();
   const navigate = useNavigate();
-  const token = cookies.get("TOKEN");
+
   const [user, setUser] = useState({
     username: "",
     password: "",
@@ -32,23 +47,31 @@ function EditProfile() {
     last_name: "",
     phone_number: "",
   });
+ // const token = cookies.get("TOKEN");
+ // let decoded;
+//  decoded = null;
+ // if (typeof token === 'string') {
+ //   decoded = jwtDecode(token);
+//  }
+  //const userId = returnUserId()
 
-  decoded = jwtDecode(token);
-  const userId = decoded.userId;
-  console.log(decoded)
-  
-  
-  useEffect(() => {
+  CheckForUser()
+
+ // console.log(decoded)
+
+ /* useEffect(() => {
     if (!token) {
-      navigate("/homepage");
+      navigate("/unauthorized");
     } 
     else if (id != userId) {
-      navigate("/homepage")
+      navigate("/unauthorized")
     }
     else {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     }
-  }, [navigate, token]);
+  }, [navigate, token]); */
+
+
 
   useEffect(() => {
     axios

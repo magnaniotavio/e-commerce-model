@@ -4,28 +4,37 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import PostPage from './PostPage';
 import { Button } from 'react-bootstrap';
-
+import { ReturnUserProperties } from '../users/UserId';
+import { CheckForUserRole } from '../basicComponents/CheckForToken';
 export default function List() {
 
   const { id } = useParams();
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
-  
+  const userRole = ReturnUserProperties('user_role')
+
   const Post = ({ post }) => (
     <tr>
-      <td><Link to={`/${post.newTitle}/${post._id}`}>{post.newTitle}</Link></td>
-      <td>{post.newPost}</td>
-      <td>{post.newClassification}</td>
-      <td>{post.creationDate}</td>
-      <td>{post.lastEdited}</td>
-      <td>{post.country}</td>
+      <td><Link to={`/${post.title}/${post._id}`}>{post.title}</Link></td>
+      <td>{post.content}</td>
+      <td>{post.classification}</td>
+      <td>{post.creation_date}</td>
+      <td>{post.last_edited}</td>
+      <td>{post.author}</td>
       <td>{post.language}</td>
       <td>
         {<Link to={`/edit/${post._id}`}>Edit</Link>}
       </td>
+      {userRole === 'Administrator' && (
+      <td>
+        <button onClick={(event) => onDelete(event, post._id)}>Delete</button>
+      </td>
+    )} 
     </tr>
   );
  
+  CheckForUserRole('Administrator')
+
    const [orderPostsBy, setOrderPostsBy] = useState('creationDate')
 
 
@@ -75,6 +84,20 @@ export default function List() {
   ));
   return postList
   }
+
+  function onDelete(event, parameter) {
+    event.preventDefault()
+    axios
+      .delete(`https://e-commerce-model.onrender.com/posts/delete/${parameter}`)
+      .then((res) => {
+        console.log(res.data);
+        window.location.reload();
+           })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
 
 return (
     <div>

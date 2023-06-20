@@ -2,9 +2,29 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Form, FormControl, Button, InputGroup } from 'react-bootstrap'
+import { CheckForToken, CheckForUser } from '../basicComponents/CheckForToken';
+//import Cookies from 'universal-cookie';
+//import jwtDecode from 'jwt-decode';
+//let decoded;
+//const cookies = new Cookies();   
+
 
 function EditProduct() {
-   const navigate = useNavigate();
+  const navigate = useNavigate();
+
+   /*         const token = cookies.get("TOKEN");
+            decoded = jwtDecode(token);
+            const userId = decoded.userId;
+            console.log(decoded)
+            useEffect(() => {
+              if (!token) {
+                navigate("/homepage");
+              } 
+              else {
+                axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+              }
+            }, [navigate, token]); */
+          
    const currentDate = new Date()              
     const { id } = useParams();
     const [product, setProduct] = useState({
@@ -21,6 +41,8 @@ function EditProduct() {
         lastEdited: '',
         targetPublic: '',
     });
+
+    CheckForToken()
 
     useEffect(() => {
         console.log(id);
