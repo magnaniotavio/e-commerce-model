@@ -25,3 +25,5 @@ let PostConfigurations = new Schema({
         type: Object
     },
 }); 
+
+module.exports = mongoose.model('Post', PostConfigurations);
