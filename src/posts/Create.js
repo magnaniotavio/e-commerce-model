@@ -19,7 +19,7 @@ export default function CreatePost() {
   const [lastEdited, setLastEdited] = useState("");
   const [language, setLanguage] = useState("");
 
-  CheckForUserRole('Administrator')
+  CheckForToken()
 
   function onSubmit(e) {
     e.preventDefault();
@@ -28,8 +28,8 @@ export default function CreatePost() {
     content: content,
     title: title,
     classification: classification,
-    author: userName,
-    creation_date: currentDate,
+    author: 'ssssssssssssss',
+    creation_date: '',
     last_edited: '',
     language: language,
     }; 
