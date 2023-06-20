@@ -3,16 +3,16 @@ const Schema = mongoose.Schema;
 
 let PostConfigurations = new Schema({
     content: {
-        type: String
+        type: mongoose.Schema.Types.Mixed
     },
     title: {
-        type: String
+        type: mongoose.Schema.Types.Mixed
     },
     classification: {
-        type: String
+        type: mongoose.Schema.Types.Mixed
     },
     author: {
-        type: String,
+        type: mongoose.Schema.Types.Mixed,
     },
     creation_date: {
         type: mongoose.Schema.Types.Mixed
