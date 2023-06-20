@@ -20,7 +20,7 @@ export default function List() {
       <td>{post.classification}</td>
       <td>{post.creation_date}</td>
       <td>{post.last_edited}</td>
-      <td>{post.author}</td>
+      <td>{post.content}</td>
       <td>{post.language}</td>
       <td>
         {<Link to={`/edit/${post._id}`}>Edit</Link>}

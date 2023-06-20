@@ -28,8 +28,8 @@ export default function CreatePost() {
     content: content,
     title: title,
     classification: classification,
-    author: 'ssssssssssssss',
-    creation_date: '',
+  //  author: 'ssssssssssssss',
+    creation_date: currentDate,
     last_edited: '',
     language: language,
     }; 

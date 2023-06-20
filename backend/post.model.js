@@ -11,9 +11,9 @@ let PostConfigurations = new Schema({
     classification: {
         type: mongoose.Schema.Types.Mixed
     },
-    author: {
+ /*   author: {
         type: mongoose.Schema.Types.Mixed,
-    },
+    }, */
     creation_date: {
         type: mongoose.Schema.Types.Mixed
     },
@@ -22,7 +22,7 @@ let PostConfigurations = new Schema({
     },
     language: {
         type: mongoose.Schema.Types.Mixed
-    },
+    }, 
 }); 
 
 module.exports = mongoose.model('Post', PostConfigurations);
