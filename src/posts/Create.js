@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Form, FormControl, Button, InputGroup } from 'react-bootstrap'
 import { ReturnUserProperties, ReturnUserRole } from '../users/UserId';
 import { HandleClick, textInput, selectorInput, textBoxInput } from '../basicComponents/CrudFunctions';
-import { CheckForToken } from '../basicComponents/CheckForToken';
+import { CheckForToken, CheckForUserRole } from '../basicComponents/CheckForToken';
 
 export default function CreatePost() {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ export default function CreatePost() {
   const [lastEdited, setLastEdited] = useState("");
   const [language, setLanguage] = useState("");
 
-  CheckForToken()
+  CheckForUserRole('Administrator')
 
   function onSubmit(e) {
     e.preventDefault();

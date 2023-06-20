@@ -13,16 +13,15 @@ let PostConfigurations = new Schema({
     },
     author: {
         type: String,
-        unique: [true],
     },
     creation_date: {
-        type: Object
+        type: mongoose.Schema.Types.Mixed
     },
     last_edited: {
-        type: Object
+        type: mongoose.Schema.Types.Mixed
     },
     language: {
-        type: Object
+        type: mongoose.Schema.Types.Mixed
     },
 }); 
 

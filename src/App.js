@@ -8,7 +8,7 @@ import CreateProduct from './products/CreateProduct';
 import EditPost from "./posts/Edit";
 import List from "./posts/PostList";
 import Homepage from "./basicComponents/Homepage";
-import { Announcements } from './posts/PostRoutes';
+import { Announcements, Blogposts } from './posts/PostRoutes';
 import PostPage from './posts/PostPage';
 import ProductPage from './products/ProductPage';
 import ProductsList from './products/ProductList';
@@ -162,6 +162,7 @@ useEffect(() => {
        <Route path="/shopping_cart/:id" element={<ShoppingCart />} />
        <Route path="/blog" element={<loremIpsum />} />
        <Route path="/announcements/page/:pageNumber" element={<Announcements />} />
+       <Route path="/blogposts/page/:pageNumber" element={<Blogposts />} />
        <Route path="/edit" element={<EditPost />} />
        <Route path="/create" element={<CreatePost />} />    
        <Route path="/create_product" element={<CreateProduct />} />
@@ -172,7 +173,7 @@ useEffect(() => {
        <Route path="/postlist" element={<List />} />
        <Route path="/userlist" element={<UserList />} />
        <Route path="/edit/:id" element={<EditPost />} />
-       <Route path="/:newClassification/:newTitle/:id" element={<PostPage />} />       
+       <Route path="/:classification/:title/:id" element={<PostPage />} />       
        <Route path="/profile/:id" element={<Profile />} />
        <Route path="/your_orders/:id" element={<UserOrders />} />
        <Route path="/login" element={<Login />} />

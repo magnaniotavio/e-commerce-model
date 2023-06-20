@@ -15,7 +15,7 @@ export default function List() {
 
   const Post = ({ post }) => (
     <tr>
-      <td><Link to={`/${post.title}/${post._id}`}>{post.title}</Link></td>
+      <td><Link to={`/${post.classification}/${post.title}/${post._id}`}>{post.title}</Link></td>
       <td>{post.content}</td>
       <td>{post.classification}</td>
       <td>{post.creation_date}</td>

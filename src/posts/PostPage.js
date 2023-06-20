@@ -6,23 +6,23 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 function PostPage() {
 
-  const { newTitle } = useParams();
+  const { title } = useParams();
   const {id} = useParams();
-  const {newClassification} = useParams();
+  const {classification} = useParams();
 
   const [post, setPost] = useState({
-    postTitle: '',
-    postBody: '',
+    title: '',
+    content: '',
   });
 
   useEffect(() => {
     let isMounted = true;
-    axios.get(`/https://e-commerce-model.onrender.com/posts/${newClassification}/${newTitle}/${id}`)
+    axios.get(`https://e-commerce-model.onrender.com/posts/${id}`)
       .then(response => {
         if (isMounted) {
           setPost({
-            postTitle: response.data.newTitle,
-            postBody: response.data.newPost,
+            title: response.data.title,
+            content: response.data.content,
           });
         }
       })
@@ -30,15 +30,15 @@ function PostPage() {
         console.log('error:', error);
       });
     return () => { isMounted = false };
-  }, [newTitle, newClassification]);
+  }, [title, classification]);
   
   return (
     <div>
         <Container>
       <Row>
         <Col>
-          <h1 className="text-center">{post.postTitle}</h1>
-          <ReactMarkdown>{post.postBody}</ReactMarkdown>
+          <h1 className="text-center">{post.title}</h1>
+          <ReactMarkdown>{post.content}</ReactMarkdown>
         </Col>
       </Row>
     </Container>

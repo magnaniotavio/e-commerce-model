@@ -90,7 +90,6 @@ export function NavBarMenu({routeChange, handleFilterChange, handleArrayFilterCh
                          Masculine
                        </Dropdown.Toggle>
                        <Dropdown.Menu>
-                         <Dropdown.Item value="announcements/page/1" onClick={() => routeChange("announcements/page/1")}>Route 1</Dropdown.Item>
                          <Dropdown.Item value="Shirt" onClick={() => routeChange("masculine/shirts/page/1")} >Shirts</Dropdown.Item>
                          <Dropdown.Item value="Trouser" onClick={() => routeChange("masculine/trousers/page/1")} >Trousers</Dropdown.Item>
                          <Dropdown.Item value="Shoe" onClick={() => routeChange("masculine/shoes/page/1")} >Shoes</Dropdown.Item>
@@ -118,6 +117,17 @@ export function NavBarMenu({routeChange, handleFilterChange, handleArrayFilterCh
                        <Dropdown.Item value="Shirt (Kids)" onClick={() => routeChange("kids/shirts/page/1")} >Shirts</Dropdown.Item>
                          <Dropdown.Item value="Trouser (Kids)" onClick={() => routeChange("kids/trousers/page/1")} >Trousers</Dropdown.Item>
                          <Dropdown.Item value="Shoe (Kids)" onClick={() => routeChange("kids/shoes/page/1")} >Shoes</Dropdown.Item>
+                       </Dropdown.Menu>
+                     </Dropdown>
+                   </Col>
+                   <Col>
+                     <Dropdown>
+                       <Dropdown.Toggle variant="dark" id="dropdown-basic">
+                         Our blog and news
+                       </Dropdown.Toggle>
+                       <Dropdown.Menu>
+                       <Dropdown.Item value="announcements/page/1" onClick={() => routeChange("announcements/page/1")}>Announcements</Dropdown.Item>
+                       <Dropdown.Item value="blogposts/page/1" onClick={() => routeChange("blogposts/page/1")}>Blogposts</Dropdown.Item>
                        </Dropdown.Menu>
                      </Dropdown>
                    </Col>

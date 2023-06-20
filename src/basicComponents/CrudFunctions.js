@@ -1,33 +1,5 @@
 import React from "react";
-import axios from "axios";
 import { Form } from "react-bootstrap";
-import { useState } from "react";
-
-/*export function HandleClick({url, ...stateValues}) {
-  
-    return function(e) {
-      e.preventDefault();
-
-      const newProduct = {};
-      stateValues.forEach((value, index) => {
-        const constName = stateNames[index];
-        newProduct[constName] = value;
-      });
-        axios.post(url, newProduct)
-        .then(res => {
-          console.log(res.data);
-        })
-        .catch(error => console.log(error));
-  
-      // Empty the states
-      stateNames.forEach((name) => {
-        const setState = eval(`set${name.charAt(0).toUpperCase()}${name.slice(1)}`);
-       setState('');
-   });
-     // navigate("/list");
-    };
-  } */
-
 
 export function textInput(label, formValue, formFunction) {
   return (    

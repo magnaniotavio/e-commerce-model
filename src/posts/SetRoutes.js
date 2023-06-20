@@ -7,7 +7,7 @@ import List from './PostList';
 import { Row, Col, Pagination, Table } from 'react-bootstrap';
 
 
-function SetRoute(parameter) {
+function SetRoute(postClassification) {
   let navigate = useNavigate(); 
 
   const [posts, setPosts] = useState([]);
@@ -29,17 +29,19 @@ function SetRoute(parameter) {
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-    navigate(`/announcements/page/${pageNumber}`);
+    navigate(`/${postClassification}/page/${pageNumber}`);
   };
 
   useEffect(() => {
     let isMounted = true;
-    axios.get('/https://e-commerce-model.onrender.com/posts/')
+    axios.get('https://e-commerce-model.onrender.com/posts/')
       .then(response => {
+        console.log('this is response' + response)
         const filteredPosts = response.data.filter(
-          post => post.newClassification === `${parameter}` )
+          post => post.classification === `${postClassification}` )
         if (isMounted) {
-          setFullPosts(response.data)
+          console.log('this is filtered posts' + filteredPosts)
+          setFullPosts(filteredPosts)
           setPosts(filteredPosts);
         }
       })
@@ -59,8 +61,8 @@ console.log(fullPosts)
       </thead>
       <tbody>
       {itemsToDisplay.map(post => (
-        <div key={post.id} className="post">
-         <Link to={`/${post.newTitle}/${post._id}`}>
+        <div key={post._id} className="post">
+         <Link to={`/${post.title}/${post._id}`}>
          <h3 className="post-title">{post.title}</h3>
         </Link>
           <div className="post-content">

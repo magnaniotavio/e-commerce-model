@@ -11,7 +11,7 @@ import { Button } from 'react-bootstrap';
 //let decoded;
 //const cookies = new Cookies();   
 
-function EditPost() {
+export default function EditPost() {
 
   const currentDate = new Date()              
   const { id } = useParams();
@@ -82,17 +82,23 @@ language */
 
 return (
   <div style={{ marginTop: 10 }}>
+    <form onSubmit={onSubmit}>
   <h3 style={{ color: 'black' }}>Make New Post</h3>
-  <Form onSubmit={onSubmit}>
     {textBoxInput('New Post', content, setContent)}
     {textInput('Post Title', title, setTitle)}
     {selectorInput('Classification', classification, setClassification, ['Announcement', 'Blogpost', 'Available soon'] )}
     {textInput('Author', author, setAuthor)}
     {textInput('Language', language, setLanguage)}
-    <Button variant="primary" type="submit">
-      Edit Product
-    </Button>
-  </Form>
+    <div className="form-group">
+        <input type="submit" value="Update Todo" className="btn btn-primary" name="Update" />
+        </div>
+        <br/>
+        <div>
+        <div className="form-group">
+        <input type="submit" value="Delete Todo" className="btn btn-primary" name="Delete" />
+        </div>
+        </div>
+      </form>
 </div>);
 }; 
 
@@ -306,5 +312,3 @@ const onChangePostTitle = (e) => {
     </div>
   );
 }; */
-
-export default EditPost;
