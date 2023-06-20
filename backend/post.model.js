@@ -14,15 +14,15 @@ let PostConfigurations = new Schema({
  /*   author: {
         type: mongoose.Schema.Types.Mixed,
     }, */
-    creation_date: {
-        type: mongoose.Schema.Types.Mixed
-    },
-    last_edited: {
-        type: mongoose.Schema.Types.Mixed
-    },
-    language: {
-        type: mongoose.Schema.Types.Mixed
-    }, 
+ //   creation_date: {
+ //       type: mongoose.Schema.Types.Mixed
+ //   },
+ //   last_edited: {
+ //       type: mongoose.Schema.Types.Mixed
+ //   },
+ //   language: {
+ //       type: mongoose.Schema.Types.Mixed
+ //   }, 
 }); 
 
 module.exports = mongoose.model('Post', PostConfigurations);

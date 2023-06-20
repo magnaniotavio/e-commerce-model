@@ -29,9 +29,9 @@ export default function CreatePost() {
     title: title,
     classification: classification,
   //  author: 'ssssssssssssss',
-    creation_date: currentDate,
-    last_edited: '',
-    language: language,
+  //  creation_date: currentDate,
+  //  last_edited: '',
+ //   language: language,
     }; 
     console.log('this is createpost' + JSON.stringify(createdPost))
     axios.post('https://e-commerce-model.onrender.com/posts/add', createdPost)
