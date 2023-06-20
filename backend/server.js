@@ -23,7 +23,7 @@ const loginRoutes = express.Router();
 const logoutRoutes = express.Router();
 const orderRoutes = express.Router();
 // Mongoose models
-const newPost = require('./posts.model');
+const newPost = require('./post.model');
 const newUser = require("./user.model");
 const newOrder = require("./order.model");
 const newProduct = require("./product.model")

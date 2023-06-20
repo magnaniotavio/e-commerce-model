@@ -33,10 +33,10 @@ export default function CreatePost() {
     last_edited: '',
     language: language,
     }; 
+    console.log('this is createpost' + JSON.stringify(createdPost))
     axios.post('https://e-commerce-model.onrender.com/posts/add', createdPost)
     .then(res => {
       console.log(res.data);
-      navigate(`/${createdPost.title}`);
     })
     .catch(error => console.log(error));
     setContent('');
@@ -46,20 +46,19 @@ export default function CreatePost() {
     setCreationDate('');
     setLastEdited('');
     setLanguage('');
+    navigate(`/${createdPost.title}`);
 }
 
   return (
     <div style={{ marginTop: 10 }}>
-      hhahahahahah{userName}
       <h3 style={{ color: 'black' }}>Make New Post</h3>
       <Form onSubmit={onSubmit}>
         {textBoxInput('New Post', content, setContent)}
         {textInput('Post Title', title, setTitle)}
         {selectorInput('Classification', classification, setClassification, ['Announcement', 'Blogpost', 'Available soon'] )}
-        {textInput('Author', author, setAuthor)}
         {textInput('Language', language, setLanguage)}
         <Button variant="primary" type="submit">
-          Create Product
+          Create Post
         </Button>
       </Form>
     </div>

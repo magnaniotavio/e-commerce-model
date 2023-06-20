@@ -3,68 +3,26 @@ const Schema = mongoose.Schema;
 
 let PostConfigurations = new Schema({
     content: {
-        type: String
+        type: mongoose.Schema.Types.Mixed
     },
     title: {
-        type: String
+        type: mongoose.Schema.Types.Mixed
     },
     classification: {
-        type: String
+        type: mongoose.Schema.Types.Mixed
     },
     author: {
-        type: String,
-        unique: [true],
+        type: mongoose.Schema.Types.Mixed,
     },
     creation_date: {
-        type: Object
+        type: mongoose.Schema.Types.Mixed
     },
     last_edited: {
-        type: Object
+        type: mongoose.Schema.Types.Mixed
     },
     language: {
-        type: Object
+        type: mongoose.Schema.Types.Mixed
     },
 }); 
-/*content
-title
-classification
-author
-creation_date
-last_edited
-language */
-/*let PostConfigurations = new Schema({
-    newPost: {
-        type: String
-    },
-    newClassification: {
-        type: String
-    },
-    newTitle: {
-        type: String,
-        unique: [true],
-    },
-    creationDate: {
-        type: Object
-    },
-    lastEdited: {
-        type: Object
-    },
 
-    country: {
-        type: Object
-    },
-    language: {
-        type: Object
-    },
-    postNumber: {
-        type: Number
-    },
- //   todo_priority: {
- //       type: String
-//    },
-//    todo_completed: {
- //       type: Boolean
- //   }
-}); */
-
-module.exports = mongoose.model('Todo', PostConfigurations);
+module.exports = mongoose.model('Post', PostConfigurations);
