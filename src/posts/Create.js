@@ -28,7 +28,7 @@ export default function CreatePost() {
     content: content,
     title: title,
     classification: classification,
-    author: 'ssssssssssssss',
+    author: userName,
     creation_date: currentDate,
     last_edited: '',
     language: language,
