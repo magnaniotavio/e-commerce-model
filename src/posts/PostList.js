@@ -18,10 +18,10 @@ export default function List() {
       <td><Link to={`/${post.classification}/${post.title}/${post._id}`}>{post.title}</Link></td>
       <td>{post.content}</td>
       <td>{post.classification}</td>
-      <td>{post.title}</td>
-      <td>{post.title}</td>
-      <td>{post.title}</td>
-      <td>{post.title}</td>
+      <td>{post.creation_date}</td>
+      <td>{post.last_edited}</td>
+      <td>{post.author}</td>
+      <td>{post.language}</td>
       <td>
         {<Link to={`/edit/${post._id}`}>Edit</Link>}
       </td>
