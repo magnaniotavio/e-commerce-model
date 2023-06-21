@@ -7,10 +7,30 @@ import { ReturnUserProperties, ReturnUserRole } from '../users/UserId';
 import { HandleClick, textInput, selectorInput, textBoxInput } from '../basicComponents/CrudFunctions';
 import { CheckForToken, CheckForUserRole } from '../basicComponents/CheckForToken';
 
+            import Cookies from 'universal-cookie';
+           import jwtDecode from 'jwt-decode';
+             let decoded;
+            const cookies = new Cookies();   
+
 export default function CreatePost() {
   const navigate = useNavigate();
   const userName = ReturnUserProperties('username');
   
+              const token = cookies.get("TOKEN");
+            decoded = jwtDecode(token);
+            const userId = decoded.userId;
+            console.log(decoded)
+            useEffect(() => {
+              if (!token) {
+                navigate("/homepage");
+              } 
+              else {
+                axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+              }
+            }, [navigate, token]);
+
+
+
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
   const [classification, setClassification] = useState("");
@@ -19,7 +39,7 @@ export default function CreatePost() {
   const [lastEdited, setLastEdited] = useState("");
   const [language, setLanguage] = useState("");
 
-  CheckForToken()
+ // CheckForToken()
 
   function onSubmit(e) {
     e.preventDefault();
@@ -34,7 +54,7 @@ export default function CreatePost() {
     language: language,
     }; 
     console.log('this is createpost' + JSON.stringify(createdPost))
-    axios.post('https://e-commerce-model.onrender.com/posts/add', createdPost)
+    axios.post('https://e-commerce-model.onrender.com/posts/add_post', createdPost)
     .then(res => {
       console.log(res.data);
     })

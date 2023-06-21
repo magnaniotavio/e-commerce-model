@@ -382,7 +382,7 @@ userRoutes.route('/delete_user/:id').delete(function(req, res) {
 
 // Create, read, update and delete posts
 FindObjectById(postRoutes.route.bind(postRoutes), '/:id', newPost, 'post');
-Create(postRoutes.route.bind(postRoutes), '/add', newPost, 'post', verifyAdmin);
+Create(postRoutes.route.bind(postRoutes), '/add_post', newPost, 'post', verifyAdmin);
 Update(postRoutes.route.bind(postRoutes), '/update/:id', newPost, 'post', verifyAdmin);
 Delete(postRoutes.route.bind(postRoutes), '/delete/:id', newPost, 'post', verifyAdmin);
 
