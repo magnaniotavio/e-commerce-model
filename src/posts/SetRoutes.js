@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { BrowserRouter as Router, Route, Routes, useNavigate, useParams } from "react-router-dom";
 import List from './PostList';
 import { Row, Col, Pagination, Table } from 'react-bootstrap';
+import { PaginationJSX, PaginationFunction } from '../basicComponents/Pagination';
 
 
 function SetRoute(postClassification) {
@@ -72,17 +73,7 @@ console.log(fullPosts)
       ))}
       </tbody>
     </Table>
-    <Pagination>
-      <Pagination.First disabled={currentPage === 1} onClick={() => handlePageChange(1)} />
-      <Pagination.Prev disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} />
-      {[...Array(totalPages)].map((_, index) => (
-        <Pagination.Item key={index + 1} active={index + 1 === currentPage} onClick={() => handlePageChange(index + 1)}>
-          {index + 1}
-        </Pagination.Item>
-      ))}
-      <Pagination.Next disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)} />
-      <Pagination.Last disabled={currentPage === totalPages} onClick={() => handlePageChange(totalPages)} />
-    </Pagination>
+    <PaginationJSX currentPage = {currentPage} totalPages = {totalPages} handlePageChange = {handlePageChange} />
   </>
   ); 
 }

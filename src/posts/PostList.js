@@ -6,6 +6,7 @@ import PostPage from './PostPage';
 import { Button } from 'react-bootstrap';
 import { ReturnUserProperties } from '../users/UserId';
 import { CheckForUserRole } from '../basicComponents/CheckForToken';
+
 export default function List() {
 
   const { id } = useParams();
@@ -74,9 +75,9 @@ export default function List() {
     setOrderPostsBy(sortingCriterion)
   }
 
-  function thePosts(x) {
+  function presentedPosts(orderingFunction) {
 
-  const sortedPosts = sortByCreationDate(posts, x);
+  const sortedPosts = sortByCreationDate(posts, orderingFunction);
 
   console.log(sortedPosts)
   const postList = sortedPosts.map((currentPost, i) => (
@@ -114,7 +115,7 @@ return (
             <th>Language<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'language')}></button></th>
           </tr>
         </thead>
-        <tbody>{thePosts(orderPostsBy)}</tbody>
+        <tbody>{presentedPosts(orderPostsBy)}</tbody>
       </table>
       <div>
     </div>

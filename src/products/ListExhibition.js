@@ -1,11 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
-import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
-import CreatePost from '../posts/Create';
-import { Container, Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap';
-import {returnUserData, returnUserId } from '../users/UserId';
+import { Link } from 'react-router-dom';
+import { Container, Row, Col, Card, Form } from 'react-bootstrap';
 import { AddToCartButton } from '../payment/CartWishlistAndBuyNowButtons';
+import { selectorInput } from '../basicComponents/JSXFunctions';
 
 export function ListExhibition({ItensToShow, quantity, setQuantity, listName}) {
 return (
@@ -21,17 +17,9 @@ return (
                   <Card.Text>Price: ${product.price}</Card.Text>
                   <Form>
                 {quantity && setQuantity &&
-                    <Form.Group>
-                    <Form.Control as="select" value={quantity} onChange={(e) => setQuantity(e.target.value)}>
-                    <Form.Label>Select Quantity:</Form.Label>
-                      <Form.Label>Select Quantity:</Form.Label>
-                        <option value='1'>1</option>
-                        <option value='2'>2</option>
-                        <option value='3'>3</option>
-                        <option value='4'>4</option>
-                        <option value='5'>5</option>
-                      </Form.Control>
-                    </Form.Group> }
+                <Form.Group>
+                    {selectorInput('Select Quantity', quantity, setQuantity, ['1', '2', '3', '4', '5'] )}                    
+                </Form.Group> } 
                 {listName === 'wishlist' && 
                 <>
                     <AddToCartButton button="cart" productId={product._id}/>
@@ -53,6 +41,5 @@ return (
         </Row>
       </Container>
     </div>
-
   );
 }

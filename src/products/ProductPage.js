@@ -2,20 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
-import CreatePost from '../posts/Create';
 import { Container, Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap';
 import {returnUserData, returnUserId, returnUserName, ReturnUserProperties } from '../users/UserId';
 import { BsChevronCompactDown, BsChevronCompactUp } from 'react-icons/bs';
-import Cookies from 'universal-cookie';
-import jwtDecode from 'jwt-decode';
 import { TypicalButtonPresentation } from '../payment/CartWishlistAndBuyNowButtons';
 import productPic from '../images/productPic.png';
 
 function ProductPage() {
- // const cookies = new Cookies();
- // const token = cookies.get("TOKEN"); 
   const userId = returnUserId()
- // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const {id} = useParams();
   const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -27,31 +21,22 @@ function ProductPage() {
     name: '',
     content: '',
   })
-  const [product, setPost] = useState({
-    id: '',
-    name: '',
-    color: '',
-    brand: '',
-    price: '',
-    classification: '',
-    sizeSML: '',
-    sizeNumber: '',
-    customerReview: [],
-    popularity: '',
-    condition: '',
-    availability: '',
-    description: '',
-    creationDate: '',
-    lastEdited: '',
-  });
 
- /* useEffect(() => {
-    if (token) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-  }, [token]); */
+  const [productId, setProductId] = useState("");
+  const [name, setName] = useState("");
+  const [classification, setClassification] = useState("");
+  const [sizeSML, setSizeSML] = useState("");
+  const [sizeNumber, setSizeNumber] = useState("");
+  const [color, setColor] = useState("");
+  const [brand, setBrand] = useState("");
+  const [price, setPrice] = useState("");
+  const [customerReview, setCustomerReview] = useState([]);
+  const [popularity, setPopularity] = useState("");
+  const [creationDate, setCreationDate] = useState("");
+  const [condition, setCondition] = useState("");
+  const [description, setDescription] = useState("");
+  const [availability, setAvailability] = useState("");
+  const [targetPublic, setTargetPublic] = useState("");
 
   useEffect(() => {
     let isMounted = true;
@@ -59,25 +44,22 @@ function ProductPage() {
       .then(response => {
         console.log('response:', response);
         if (isMounted) {
-          setPost({
-            _id: response.data._id,
-            name: response.data.name,
-            color: response.data.color,
-            brand: response.data.brand,
-            price: response.data.price,
-            classification: response.data.classification,
-            sizeSML: response.data.sizeSML,
-            sizeNumber: response.data.sizeNumber,
-            customerReview: response.data.customerReview,
-            popularity: response.data.popularity,
-            condition: response.data.condition,
-            availability: response.data.availability,
-            description: response.data.description,
-            creationDate: response.data.creationDate,
-            lastEdited: response.data.lastEdited
-          });
-        }
-      })
+          setProductId(response.data._id);
+          setName(response.data.name);
+          setColor(response.data.color);
+          setBrand(response.data.brand);
+          setPrice(response.data.price);
+          setClassification(response.data.classification);
+          setSizeSML(response.data.sizeSML);
+          setSizeNumber(response.data.sizeNumber);
+          setCustomerReview(response.data.customerReview);
+          setPopularity(response.data.popularity);
+          setCondition(response.data.condition);
+          setAvailability(response.data.availability);
+          setDescription(response.data.description);
+          setCreationDate(response.data.creationDate);
+          setTargetPublic(response.data.targetPublic);
+      }      })
       .catch(error => {
         console.log('error:', error);
       });
@@ -92,7 +74,6 @@ function ProductPage() {
       content: e.target.value,
     })
   }
-
 
   useEffect(() => {
     if (userId) {
@@ -116,23 +97,29 @@ function ProductPage() {
 
       axios.get(`https://e-commerce-model.onrender.com/users/${userId}`)
       .then((res) => {
-        console.log('this is res' + res)
         const updatedUsername = res.data.username;
         setUserReview((prevReview) => ({
           ...prevReview,
           name: updatedUsername,
         }))
       })
-      const currentReview = [...product.customerReview];
-      currentReview.push(userReview);
+      const currentReview = [...customerReview, userReview];
+      setCustomerReview(currentReview)
       axios.post(`https://e-commerce-model.onrender.com/products/update_product/${id}`, {
-        ...product,
         customerReview: currentReview
-      })  
+    })  
+      .then((response) => {
+        setCustomerReview(response.data.customerReview);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    
       axios.post(`https://e-commerce-model.onrender.com/users/update_user/${userId}`, {
         payment_info: currentReview.filter(review => review.id === userId)
       })  
-      .then(() => window.location.reload())
+      .then(
+        () => window.location.reload())
       .catch(error => console.error(error));
     }
   }
@@ -147,11 +134,10 @@ function ProductPage() {
         <Image src={productPic} />
         </Col>
         <Col md={6}>
-          <h3><Link  to={`/product/${product._id}`}>{product.name}</Link></h3>
-          <p>{product.brand}</p>
+          <h3><Link  to={`/product/${productId}`}>{name}</Link></h3>
+          <p>{brand}</p>
           <hr />
-          <h4>Price: ${product.price}</h4>
-          <button className="btn btn-primary mt-3">Add to Cart</button>
+          <h4>Price: ${price}</h4>
         </Col>
       </Row>
         </Col>
@@ -159,14 +145,14 @@ function ProductPage() {
       <Row className="my-4">
         <Col md={8}>
           <h3>Description</h3>
-          <p>{product.description}</p>
+          <p>{description}</p>
         </Col>
         <Col md={4}>
           <Card>
             <ListGroup variant="flush">
-              <ListGroup.Item><strong>Price:</strong>{product.price}</ListGroup.Item>
-              <ListGroup.Item><strong>Availability:</strong> {product.availability}</ListGroup.Item>
-              <ListGroup.Item><strong>Condition:</strong> {product.condition}</ListGroup.Item>
+              <ListGroup.Item><strong>Price:</strong>{price}</ListGroup.Item>
+              <ListGroup.Item><strong>Availability:</strong> {availability}</ListGroup.Item>
+              <ListGroup.Item><strong>Condition:</strong> {condition}</ListGroup.Item>
             </ListGroup>
             <Card.Body>
               <Form>
@@ -180,19 +166,7 @@ function ProductPage() {
                     <option>5</option>
                   </Form.Control>
                 </Form.Group>
-                     <TypicalButtonPresentation prop={product._id} />
-            {/*     {isLoggedIn ? (
-                        <>
-                      <AddToCartButton button="cart" productId={product._id}/>
-                      <AddToCartButton button="wishlist" productId={product._id}/>
-                      <AddToCartButton button="buy_now" productId={product._id}/>
-                      </>
-                      ) :
-                     (<>
-                      <LogInToBuy />
-                     </>)
-                   }
-                   */}
+                     <TypicalButtonPresentation prop={productId} />
                </Form>
              </Card.Body>
            </Card>
@@ -215,7 +189,7 @@ function ProductPage() {
           id="reviews-collapse"
         >
           <ListGroup>
-            {product.customerReview.map((review, index) => (
+            {customerReview.map((review, index) => (
               <ListGroup.Item key={index}>
                 <h4 className="text-left">Reviewed by: {review.name}</h4>
                 <ReactMarkdown>{review.content}</ReactMarkdown>

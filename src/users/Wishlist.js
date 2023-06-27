@@ -39,44 +39,7 @@ export default function Wishlist() {
     < ListExhibition ItensToShow={products} quantity={quantity} setQuantity={setQuantity} listName='wishlist'
 /> 
   )
-
-/*  return (
-    <div>
-      <Container>
-        <Row>
-          {products.map((product) => (
-            <Col key={product._id}>
-              <Card>
-                <Card.Body>
-                  <Card.Title><Link  to={`/product/${product._id}`}>{product.name}</Link></Card.Title>
-                  <Card.Text>{product.brand}</Card.Text>
-                  <Card.Text>Price: ${product.price}</Card.Text>
-                  <Form>
-                    <Form.Group>
-                    <Form.Control as="select" value={quantity} onChange={(e) => setQuantity(e.target.value)}>
-                    <Form.Label>Select Quantity:</Form.Label>
-                      <Form.Label>Select Quantity:</Form.Label>
-                        <option value='1'>1</option>
-                        <option value='2'>2</option>
-                        <option value='3'>3</option>
-                        <option value='4'>4</option>
-                        <option value='5'>5</option>
-                      </Form.Control>
-                    </Form.Group>
-                    <AddToCartButton button="cart" productId={product._id}/>
-                    <AddToCartButton button="buy_now" productId={product._id}/>
-                    <AddToCartButton button="remove_from_wishlist" productId={product._id}/>
-                  </Form>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-      </Container>
-    </div>
-
-  ); */
-}
+ }
 
 
 

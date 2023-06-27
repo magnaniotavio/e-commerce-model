@@ -3,11 +3,11 @@ import { useState, useEffect } from 'react';
 import ReactMarkdown from "react-markdown";
 import { Link } from 'react-router-dom';
 import { BrowserRouter as Router, Route, Routes, useNavigate, useParams } from "react-router-dom";
-import List from '../components/PostList';
+//import List from '../components/PostList';
 import { Row, Col, Pagination, Table } from 'react-bootstrap';
 
 
-export function Pagination({pageContent}) {
+export function PaginationFunction({pageContent}) {
   let navigate = useNavigate(); 
   const [posts, setPosts] = useState([]);
   const { pageNumber } = useParams();
@@ -29,11 +29,11 @@ export function Pagination({pageContent}) {
     setCurrentPage(pageNumber);
     navigate(`/announcements/page/${pageNumber}`);
   };
-}
+} 
 
-export function PaginationJSX() { 
+export function PaginationJSX({currentPage, totalPages, handlePageChange}) { 
   return (
-           <>
+           <div className="d-flex justify-content-center pt-1">
           <Pagination>
              <Pagination.First disabled={currentPage === 1} onClick={() => handlePageChange(1)} />
              <Pagination.Prev disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} />
@@ -45,6 +45,7 @@ export function PaginationJSX() {
              <Pagination.Next disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)} />
              <Pagination.Last disabled={currentPage === totalPages} onClick={() => handlePageChange(totalPages)} />
            </Pagination>
-         </>
+         </div>
          ); 
 }
+

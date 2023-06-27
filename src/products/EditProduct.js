@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Form, FormControl, Button, InputGroup } from 'react-bootstrap'
+import { Form, FormControl, InputGroup } from 'react-bootstrap';
+import { Button, ButtonGroup } from 'react-bootstrap';
 import { CheckForToken, CheckForUser } from '../basicComponents/CheckForToken';
-//import Cookies from 'universal-cookie';
-//import jwtDecode from 'jwt-decode';
-//let decoded;
-//const cookies = new Cookies();   
+import { selectorInput, textInput, textBoxInput } from '../basicComponents/JSXFunctions';
+
+import Cookies from 'universal-cookie';
+import jwtDecode from 'jwt-decode';
+let decoded;
+const cookies = new Cookies();   
 
 
 function EditProduct() {
   const navigate = useNavigate();
 
-   /*         const token = cookies.get("TOKEN");
+            const token = cookies.get("TOKEN");
             decoded = jwtDecode(token);
             const userId = decoded.userId;
             console.log(decoded)
@@ -23,25 +26,25 @@ function EditProduct() {
               else {
                 axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
               }
-            }, [navigate, token]); */
+            }, [navigate, token]); 
           
    const currentDate = new Date()              
     const { id } = useParams();
-    const [product, setProduct] = useState({
-        name: '',
-        classification: '',
-        sizeSML: '',
-        sizeNumber: '',
-        color: '',
-        brand: '',
-        price: '',
-        customerReview: '',
-        popularity: '',
-        creationDate: '',
-        lastEdited: '',
-        targetPublic: '',
-    });
-
+    const [name, setName] = useState("");
+    const [classification, setClassification] = useState("");
+    const [sizeSML, setSizeSML] = useState("");
+    const [sizeNumber, setSizeNumber] = useState("");
+    const [color, setColor] = useState("");
+    const [brand, setBrand] = useState("");
+    const [price, setPrice] = useState("");
+    const [customerReview, setCustomerReview] = useState("");
+    const [popularity, setPopularity] = useState("");
+    const [creationDate, setCreationDate] = useState("");
+    const [condition, setCondition] = useState("");
+    const [description, setDescription] = useState("");
+    const [availability, setAvailability] = useState("");
+    const [targetPublic, setTargetPublic] = useState("");
+  
     CheckForToken()
 
     useEffect(() => {
@@ -49,48 +52,44 @@ function EditProduct() {
 
       const foundProduct = axios.get(`https://e-commerce-model.onrender.com/products/${id}`)
       foundProduct.then(response => {        
-          setProduct({
-            name: response.data.name,
-            classification: response.data.classification,
-            sizeSML: response.data.sizeSML,
-            sizeNumber: response.data.sizeNumber,
-            color: response.data.color,
-            brand: response.data.brand,
-            price: response.data.price,
-            customerReview: response.data.customerReview,
-            popularity: response.data.popularity,
-            creationDate: response.data.creationDate,
-            lastEdited: response.data.lastEdited,
-            targetPublic: response.data.targetPublic,
-          });
+            setName(response.data.name);
+            setClassification(response.data.classification);
+            setSizeSML(response.data.sizeSML);
+            setSizeNumber(response.data.size);
+            setColor(response.data.color);
+            setBrand(response.data.brand);
+            setPrice(response.data.price);
+            setCustomerReview(response.data.customerReview);
+            setPopularity(response.data.popularity);
+            setDescription(response.data.number);
+            setCondition(response.data.condition);
+            setAvailability(response.data.availability);
+            setDescription(response.data.description);
+            setTargetPublic(response.data.targetPublic);
         })
         .catch(error => {
           console.log(error);
         });
     }, [id]);
 
-
-    useEffect(() => {
-        console.log("Product updated:", product);
-      }, [product]);
-
   const onSubmit = e => {
     e.preventDefault();
   
     if (e.nativeEvent.submitter.name === 'Update') {
       const obj = {
-        name: product.name,
-        classification: product.classification,
-        sizeSML: product.sizeSML,
-        sizeNumber: product.sizeNumber,
-        color: product.color,
-        brand: product.brand,
-        price: product.price,
-        customerReview: product.customerReview,
-        popularity: product.popularity,
-        creationDate: product.creationDate,
-        lastEdited: product.lastEdited,
-        targetPublic: product.targetPublic,
+        name: name,
+        classification: classification,
+        sizeSML: sizeSML,
+        sizeNumber: sizeNumber,
+        color: color,
+        brand: brand,
+        price: price,
+        customerReview: customerReview,
+        popularity: popularity,
+        creationDate: creationDate,
+        lastEdited: currentDate,
+        description: description,
+        targetPublic: targetPublic,
       };  
       axios.post(`https://e-commerce-model.onrender.com/products/update_product/${id}`, obj)
         .then(res => console.log(res.data));
@@ -103,92 +102,38 @@ function EditProduct() {
     }
   };
 
-  function JSXInputForm(label, value, onchange) {
-    return (
-      <Form.Group>
-      <Form.Label>{label}</Form.Label>
-      <FormControl
-        type="text"
-        value={value}
-        onChange={onchange}
-      />
-    </Form.Group>    
-    )
-  }
-  
   return (
-    <div>
     <Form onSubmit={onSubmit}>
-    <div>
-      <div className="form-group">
-           {JSXInputForm('Title', product.name, (e) =>  setProduct({ ...product, name: e.target.value,}))}
-     </div> 
-     <Form.Group>
-     <Form.Label>Classification:</Form.Label>
-     <Form.Control as="select" value={product.classification} onChange={(e) => setProduct({ ...product, classification: e.target.value,})}>
-     <option value="" disabled>Masculine</option>
-          <option value="ShirtM">Shirts</option>
-          <option value="TrouserM">Trousers</option>
-          <option value="ShoeM">Shoes</option>
-          <option value="" disabled>Feminine</option>
-          <option value="ShirtF">Shirts</option>
-          <option value="TrouserF">Trousers</option>
-          <option value="ShoeF">Shoes</option>
-          <option value="" disabled>Kids</option>
-          <option value="ShirtK">Shirts</option>
-          <option value="TrouserK">Trousers</option>
-          <option value="ShoeK">Shoes</option>
-     </Form.Control>
-</Form.Group>
-     <Form.Group>
-     <Form.Label>Targeted Public:</Form.Label>
-     <Form.Control as="select" value={product.targetPublic} onChange={(e) => setProduct({ ...product, targetPublic: e.target.value,})}>
-       <option value="Feminine">Feminine</option>
-       <option value="Masculine">Masculine</option>
-       <option value="Kids">Kids</option>
-     </Form.Control>
-    </Form.Group>
-     <div className="form-group">
-           {JSXInputForm('Price', product.price, (e) =>  setProduct({ ...product, price: e.target.value,}))}
-     </div> 
-     <Form.Group>
-     <Form.Label>Color:</Form.Label>
-     <Form.Control as="select" value={product.color} onChange={(e) => setProduct({ ...product, color: e.target.value,})}>
-       <option value="White">White</option>
-       <option value="Black">Black</option>
-       <option value="Blue">Blue</option>
-     </Form.Control>
-    </Form.Group>
-    <Form.Group>
-     <Form.Label>Brand:</Form.Label>
-     <Form.Control as="select" value={product.brand} onChange={(e) => setProduct({ ...product, brand: e.target.value,})}>
-       <option value="Adidas">Adidas</option>
-       <option value="Nike">Nike</option>
-       <option value="Puma">Puma</option>
-     </Form.Control>
-    </Form.Group>     
-    <Form.Group>
-     <Form.Label>Size (SML):</Form.Label>
-     <Form.Control as="select" value={product.sizeSML} onChange={(e) => setProduct({ ...product, sizeSML: e.target.value,})}>
-       <option value="S">Small</option>
-       <option value="M">Medium</option>
-       <option value="L">Large</option>
-     </Form.Control>
-    </Form.Group>      <div className="form-group">
-           {JSXInputForm('Size (Number)', product.sizeNumber, (e) =>  setProduct({ ...product, sizeNumber: e.target.value,}))}
-     </div> 
-     <div className="form-group">
-        <input type="submit" value="Update Product" className="btn btn-primary" name="Update" />
-        </div>
-        <br/>
-        <div>
-        <div className="form-group">
-        <input type="submit" value="Delete Product" className="btn btn-primary" name="Delete" />
-        </div>
-        </div>
+      <div>
+ <div style={{ marginTop: 10 }}>
+   <h3 style={{ color: 'black' }}>Make New Product</h3>
+     {textInput('Name', name, setName)}
+     {textInput('Description', description, setDescription)}
+     {selectorInput('Classification', classification, setClassification, 
+        ['disabled: Masculine', 'Shirts', 'Trousers', 'Shoes', 
+         'disabled: Feminine', 'Shirts', 'Trousers', 'Shoes',
+         'disabled: Kids', 'Shirts', 'Trousers', 'Shoes',],
+        ['', 'ShirtM', 'TrouserM', 'ShoeM', 
+         '', 'ShirtF', 'TrouserF', 'ShoeF',
+         '', 'ShirtK', 'TrouserK', 'ShoeK',],
+      )}
+     {selectorInput('Targeted Public', targetPublic, setTargetPublic, ['Feminine', 'Masculine', 'Kids'] )}
+     {selectorInput('Color', color, setColor, ['White', 'Black', 'Blue'] )}
+     {selectorInput('Condition', condition, setCondition, ['New', 'Used'] )}
+     {selectorInput('Availability', availability, setAvailability, ['In stock', 'Not available', 'Available soon'] )}
+     {selectorInput('Size', sizeSML, setSizeSML, ['Small', 'Medium', 'Large'] )}
+     {selectorInput('Brand', brand, setBrand, ['Adidas', 'Nike', 'Puma'] )}
+     <ButtonGroup>
+     <Button variant="outline-dark" style={{backgroundColor: "black", color: "white"}} type="submit" name="Update">
+        Update Product
+      </Button>
+      <Button variant="outline-dark" style={{backgroundColor: "black", color: "white"}} type="submit" name="Delete">
+        Delete Product
+      </Button>
+     </ButtonGroup>
+    </div>
     </div>
     </Form>
-   </div>
   );
 };
 

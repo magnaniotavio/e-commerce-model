@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Image } from 'react-bootstrap';
 
 export default function SearchProducts(parameter) {

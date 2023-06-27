@@ -1,16 +1,10 @@
 import React, { useState } from 'react';
-import { Navbar, Nav, Form, Button, Container, Col, Image, Row, Pagination } from 'react-bootstrap';
-import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import axios from 'axios';
-import { AddToCartButton, TypicalButtonPresentation } from '../payment/CartWishlistAndBuyNowButtons';
-import { returnUserId } from '../users/UserId';
-import productPic from '../images/productPic.png';
+import { TypicalButtonPresentation } from '../payment/CartWishlistAndBuyNowButtons';
 import { ProductPresentation } from '../products/ProductMappingCard';
 
 export const MakeFilteredSearch = ({ selectedFilters, isMainRoute }) => {
-  //  const userIsLoggedIn = returnUserId()
-  //  const navigate = useNavigate();
     const [filteredProducts, setFilteredProducts] = useState([]);
     function createFiltersArray(category) {
         return selectedFilters.filter(key => key.startsWith(`${category}`)).map(key => key.split(":")[1]);
@@ -55,100 +49,3 @@ export const MakeFilteredSearch = ({ selectedFilters, isMainRoute }) => {
       /> 
     )
   };
-  
-
-
-      /*  const { pageNumber } = useParams();
-    const [totalResults, setTotalResults] = useState([])
-    const totalItems = filteredProducts.length;
-    const [currentPage, setCurrentPage] = useState(parseInt(pageNumber, 10) || 1);
-    const [postsPerPage, setPostsPerPage] = useState(2);
-    useEffect(() => {
-      setTotalResults(filteredProducts);
-    }, [filteredProducts]);
-    useEffect(() => {
-      setCurrentPage(parseInt(pageNumber, 10) || 1);
-    }, [pageNumber]);
-    const startIndex = (currentPage - 1) * postsPerPage;
-    const endIndex = startIndex + postsPerPage;
-    const itemsToDisplay = totalResults.slice(startIndex, endIndex);
-    const totalPages = Math.ceil(totalItems / postsPerPage);
-    const lowerCaseClassification = String(classification).toLowerCase();
-    const formatttedClassification = lowerCaseClassification.slice(0, lowerCaseClassification.length - 1) + 's';
-    const lowerCaseTargetPublic = String(targetPublic).toLowerCase(); */
-
-/*    const handlePageChange = (pageNumber) => {
-      setCurrentPage(pageNumber);
-      if (selectedFilters && isMainRoute) {
-        navigate(`/${lowerCaseTargetPublic}/${formatttedClassification}/page/${pageNumber}`);
-      } else if (selectedFilters) {
-        navigate(`/products/?classification=${classification}&page=${pageNumber}`);
-      }
-    }; */
-
-    /*  Line 83:24:   'filteredProducts' is not defined           no-undef
-  Line 87:23:   'filteredProducts' is not defined           no-undef
-  Line 88:9:    'filteredProducts' is not defined           no-undef
-  Line 96:44:   'classification' is not defined             no-undef
-  Line 98:42:   'targetPublic' is not defined               no-undef
-  Line 102:11:  'searchType' is not defined                 no-undef
-  Line 103:14:  'selectedFilters' is not defined            no-undef
-  Line 103:33:  'isMainRoute' is not defined                no-undef
-  Line 104:12:  'navigate' is not defined                   no-undef
-  Line 105:21:  'selectedFilters' is not defined            no-undef
-  Line 106:12:  'navigate' is not defined                   no-undef
-  Line 106:50:  'classification' is not defined             no-undef
-  Line 109:11:  'searchType' is not defined                 no-undef
-  Line 110:10:  'navigate' is not defined                   no-undef
-  Line 110:30:  'classification' is not defined             no-undef
-  Line 110:48:  'searchTerm' is not defined                 no-undef
-  Line 132:12:  'TypicalButtonPresentation' is not defined  react/jsx-no-undef
-
-src/searchComponents/FilteredSearch.js
-  Line 70:7:   'setCurrentPage' is not defined            no-undef
-  Line 72:22:  'lowerCaseTargetPublic' is not defined     no-undef
-  Line 72:47:  'formatttedClassification' is not defined  no-undef
-*/
-
-  /*  return ( <div>
-        {itemsToDisplay.map(product => (
-          <div key={product._id} className="product">
-            <Container className="mt-4">
-          <Row>
-            <Col md={6}>
-              <Image src={productPic} alt={product.name} fluid />
-            </Col>
-            <Col md={6}>
-              <h3><Link  to={`/product/${product._id}`}>{product.name}</Link></h3>
-              <p>{product.brand}</p>
-              <hr />
-              <h4>Price: ${product.price}</h4>
-              <div>
-               {typeof userIsLoggedIn !== 'undefined' ? (
-                 <>
-               <AddToCartButton button="cart" productId={product._id}/>
-               <AddToCartButton button="wishlist" productId={product._id}/>
-               <AddToCartButton button="buy_now" productId={product._id}/>
-               </>
-               ) : ''}
-               </div>
-            </Col>
-          </Row>
-        </Container>
-          </div>
-        ))
-        }
-             <Pagination>
-      <Pagination.First disabled={currentPage === 1} onClick={() => handlePageChange(1)} />
-      <Pagination.Prev disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} />
-      {[...Array(totalPages)].map((_, index) => (
-        <Pagination.Item key={index + 1} active={index + 1 === currentPage} onClick={() => handlePageChange(index + 1)}>
-          {index + 1}
-        </Pagination.Item>
-      ))}
-      <Pagination.Next disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)} />
-      <Pagination.Last disabled={currentPage === totalPages} onClick={() => handlePageChange(totalPages)} />
-    </Pagination>
-
-      </div>
-    ) */

@@ -10,6 +10,34 @@ export function textInput(label, formValue, formFunction) {
        </Form.Group>)
   }
 
+export function dateInput(label, formValue, formFunction) {
+    return (    
+           <Form.Group>
+           <Form.Label>{label}</Form.Label>
+           <Form.Control type="date" value={formValue}  onChange={(e) => formFunction(e.target.value)
+          } />
+         </Form.Group>)
+    }
+
+export function numberInput(label, formValue, formFunction) {
+      return (    
+             <Form.Group>
+             <Form.Label>{label}</Form.Label>
+             <Form.Control type="number" value={formValue}  onChange={(e) => formFunction(e.target.value)
+            } />
+           </Form.Group>)
+      }
+
+export function passwordInput(label, formValue, formFunction) {
+        return (    
+               <Form.Group>
+               <Form.Label>{label}</Form.Label>
+               <Form.Control type="password" value={formValue}  onChange={(e) => formFunction(e.target.value)
+              } />
+             </Form.Group>)
+        }
+  
+
 export function textBoxInput(label, formValue, formFunction) {
     return (
       <Form.Group>
