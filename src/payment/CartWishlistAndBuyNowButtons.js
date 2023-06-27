@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button, ButtonGroup } from 'react-bootstrap';
-import { returnUserId, returnUserName } from '../users/UserId';
+import { returnUserId } from '../users/UserId';
 import Cookies from 'universal-cookie';
-import jwtDecode from 'jwt-decode';
-import { CheckForUser } from '../basicComponents/CheckForToken';
 
 /* This function returns different buttons according to the parameters with which we call it.
    With them, and the next two functions below, our user will be allowed to: 
@@ -14,26 +12,10 @@ import { CheckForUser } from '../basicComponents/CheckForToken';
    3) Buy products without having to go to the specific product page, making it quicker. */
 
 export function AddToCartButton({button, productId}) {
- /* let decoded;
-  const cookies = new Cookies();   
-  const token = cookies.get("TOKEN");
-  decoded = jwtDecode(token);
-  const userId = decoded.userId; */
 
   const userId = returnUserId()
   const navigate = useNavigate();  
   const {id} = useParams();
-
-    // const username = returnUserName()
-  /*const [isExpanded, setIsExpanded] = useState(false);
-  const handleToggleExpand = () => {
-      setIsExpanded(!isExpanded);
-    }; */
-      /*const [userReview, setUserReview] = useState({
-      id: userId,
-      name: username,
-      content: '',
-    }) */
 
   const [currentWishlist, setCurrentWishlist] = useState([])
   const [currentShoppingCart, setCurrentShoppingCart] = useState([])
@@ -53,19 +35,6 @@ export function AddToCartButton({button, productId}) {
       creationDate: '',
       lastEdited: '',
     });
-
-
-  /*useEffect(() => {
-        if (!token) {
-          navigate("/homepage");
-        } 
-        else if ( !userId) {
-          navigate("/homepage")
-        }
-        else {
-          axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        } 
-      }, [navigate, token]);  */
 
   // Gets and sets the current product
   useEffect(() => {
@@ -98,35 +67,6 @@ export function AddToCartButton({button, productId}) {
     isMounted = false;
   };
 }, [id]);
-
-  /*  useEffect(() => {
-      let isMounted = true;
-      axios.get(`https://e-commerce-model.onrender.com/products/${productId}`)
-        .then(response => {
-          if (isMounted) {
-            setProduct({
-              name: response.data.name,
-              color: response.data.color,
-              brand: response.data.brand,
-              price: response.data.price,
-              classification: response.data.classification,
-              sizeSML: response.data.sizeSML,
-              sizeNumber: response.data.sizeNumber,
-              customerReview: response.data.customerReview,
-              popularity: response.data.popularity,
-              condition: response.data.condition,
-              availability: response.data.availability,
-              description: response.data.description,
-              creationDate: response.data.creationDate,
-              lastEdited: response.data.lastEdited
-            });
-          }
-        })
-        .catch(error => {
-          console.log('error:', error);
-        });
-      return () => { isMounted = false };
-    }, [userId]); */
 
     // Gets the wishlist and shopping carts of the user
     useEffect(() => {

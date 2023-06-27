@@ -408,26 +408,6 @@ Create(orderRoutes.route.bind(orderRoutes), '/:add_orders', newOrder, 'order');
 Update(orderRoutes.route.bind(orderRoutes), '/:update_order/:id', newOrder, 'order');
 Delete(orderRoutes.route.bind(orderRoutes), '/:delete_order/:id', newOrder, 'order');
 
-/*
-// Curb Cores Error by adding a header here
-userRoutes.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins to access the routes
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization" // Specify allowed headers
-  );
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, PATCH, OPTIONS"  // Specify allowed HTTP methods
-  );
-  next();
-}); 
-
-app.get('/', (req, res) => {
-  res.send('Hello World!'); // Replace with your desired response or logic
-}); */
-
-
 const corsOptions = {
   origin: 'https://e-commerce-model.onrender.com', // Specify the allowed origin for CORS
   optionsSuccessStatus: 200 // Specify the success status for CORS preflight requests
