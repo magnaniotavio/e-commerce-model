@@ -1,6 +1,10 @@
 import React from "react";
 import { Form } from "react-bootstrap";
 
+/* The functions bellow return some common JSX patterns that have been used
+   many times in this app.
+   Using these functions when writing JSX considerably shorterns the code, as well as the effort of writing it. */
+
 export function textInput(label, formValue, formFunction) {
   return (    
          <Form.Group>
@@ -36,7 +40,21 @@ export function passwordInput(label, formValue, formFunction) {
               } />
              </Form.Group>)
         }
-  
+
+export function emailInput(label, formValue, formFunction) {
+  return (
+    <Form.Group controlId="formBasicEmail">
+    <Form.Label>{label}</Form.Label>
+    <Form.Control
+      type="email"
+      name="email"
+      value={formValue}
+      onChange={(e) => formFunction(e.target.value)}
+      placeholder="your_email@email_provider.com"
+    />
+  </Form.Group>
+  )
+}
 
 export function textBoxInput(label, formValue, formFunction) {
     return (

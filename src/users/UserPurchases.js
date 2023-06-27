@@ -1,32 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
-import CreatePost from '../posts/Create';
-import { Container, Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap';
-import {returnUserData, returnUserId } from '../users/UserId';
+import { Container, Row, Col, Card, Form } from 'react-bootstrap';
+import { returnUserId } from '../users/UserId';
 
+// Shows the purchases made by the logged in user
 export default function UserOrders() {
-  const navigate = useNavigate()
   const userId = returnUserId()
   const {id} = useParams();
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    axios.get(`https://e-commerce-model.onrender.com/users/${userId}`)
+    axios.get(`https://e-commerce-model.onrender.com/users/${userId}`) // Gets the user data
       .then(response => {
-        const userOrdersIds = response.data.order_history;
-        console.log(response.data.order_history);
+        const userOrdersIds = response.data.order_history; // Creates a constant with the Ids found in the user object's order_history property
         axios.get(`https://e-commerce-model.onrender.com/products/`)
           .then(response => {
-            setProducts(userOrdersIds);
+            setProducts(userOrdersIds); // Sets the products according to userOrderIds
           })
           .catch(error => console.error(error));
       })
       .catch(error => console.error(error));
   }, [id]);
 
-  console.log(products)
   return (
     <div>
       <Container>

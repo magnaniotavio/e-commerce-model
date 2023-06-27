@@ -1,14 +1,15 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Container, Row, Col, Image, ListGroup, Card, Button, Form, Carousel } from 'react-bootstrap';
+import { Container, Row, Col, Image, Carousel } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { TypicalButtonPresentation } from '../payment/CartWishlistAndBuyNowButtons';
-import productPic from '../images/productPic.png';
+import { TypicalButtonPresentation } from '../payment/CartWishlistAndBuyNowButtons'; // Importing the standardad button presentation of the app
+import productPic from '../images/productPic.png'; //  Imports a mock picture to accompany the products
 
 export default function Homepage() {
   const [product, setProduct] = useState([]);
 
+  // Retrieves five items from the '/products' endpoint
   useEffect(() => {
     let isMounted = true;
     axios
@@ -27,6 +28,7 @@ export default function Homepage() {
     };
   }, []);
 
+  // Maps through the products and shows them in a typical carrousel style
   return (
     <Container>
       <Carousel pause="hover" style={{backgroundColor: 'lightgrey'}}>

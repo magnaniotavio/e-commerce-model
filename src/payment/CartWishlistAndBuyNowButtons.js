@@ -2,31 +2,42 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button, ButtonGroup } from 'react-bootstrap';
-import { returnUserName } from '../users/UserId';
+import { returnUserId, returnUserName } from '../users/UserId';
 import Cookies from 'universal-cookie';
 import jwtDecode from 'jwt-decode';
+import { CheckForUser } from '../basicComponents/CheckForToken';
+
+/* This function returns different buttons according to the parameters with which we call it.
+   With them, and the next two functions below, our user will be allowed to: 
+   1) Add and remove products from his Shopping Cart; 
+   2) Add and remove products from his Wishlist; 
+   3) Buy products without having to go to the specific product page, making it quicker. */
 
 export function AddToCartButton({button, productId}) {
-  let decoded;
+ /* let decoded;
   const cookies = new Cookies();   
   const token = cookies.get("TOKEN");
   decoded = jwtDecode(token);
-  const userId = decoded.userId;
+  const userId = decoded.userId; */
+
+  const userId = returnUserId()
   const navigate = useNavigate();  
-  const username = returnUserName()
   const {id} = useParams();
-  const [isExpanded, setIsExpanded] = useState(false);
+
+    // const username = returnUserName()
+  /*const [isExpanded, setIsExpanded] = useState(false);
   const handleToggleExpand = () => {
       setIsExpanded(!isExpanded);
-    };
-  const [currentWishlist, setCurrentWishlist] = useState([])
-  const [currentShoppingCart, setCurrentShoppingCart] = useState([])
-  const [userReview, setUserReview] = useState({
+    }; */
+      /*const [userReview, setUserReview] = useState({
       id: userId,
       name: username,
       content: '',
-    })
-  const [product, setPost] = useState({
+    }) */
+
+  const [currentWishlist, setCurrentWishlist] = useState([])
+  const [currentShoppingCart, setCurrentShoppingCart] = useState([])
+  const [product, setProduct] = useState({
       name: '',
       color: '',
       brand: '',
@@ -42,9 +53,9 @@ export function AddToCartButton({button, productId}) {
       creationDate: '',
       lastEdited: '',
     });
-  //const [quantity, setQuantity] = useState(1);
 
-  useEffect(() => {
+
+  /*useEffect(() => {
         if (!token) {
           navigate("/homepage");
         } 
@@ -53,15 +64,16 @@ export function AddToCartButton({button, productId}) {
         }
         else {
           axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        }
-      }, [navigate, token]); 
+        } 
+      }, [navigate, token]);  */
 
+  // Gets and sets the current product
   useEffect(() => {
   let isMounted = true;
   axios.get(`https://e-commerce-model.onrender.com/products/${productId}`)
     .then(response => {
       if (isMounted) {
-        setPost({
+        setProduct({
           name: response.data.name,
           color: response.data.color,
           brand: response.data.brand,
@@ -87,12 +99,12 @@ export function AddToCartButton({button, productId}) {
   };
 }, [id]);
 
-    useEffect(() => {
+  /*  useEffect(() => {
       let isMounted = true;
       axios.get(`https://e-commerce-model.onrender.com/products/${productId}`)
         .then(response => {
           if (isMounted) {
-            setPost({
+            setProduct({
               name: response.data.name,
               color: response.data.color,
               brand: response.data.brand,
@@ -114,20 +126,20 @@ export function AddToCartButton({button, productId}) {
           console.log('error:', error);
         });
       return () => { isMounted = false };
-  //  }, [])
-    }, [userId]);
-  
+    }, [userId]); */
+
+    // Gets the wishlist and shopping carts of the user
     useEffect(() => {
       axios
         .get(`https://e-commerce-model.onrender.com/users/${userId}`)
         .then(response => {
-          console.log('THIS IS RESPONSE', response.data.wishlist);
           setCurrentWishlist(prevWishlist => response.data.wishlist);
           setCurrentShoppingCart(prevShoppingCart => response.data.shopping_cart);
         })
         .catch(error => console.error(error));
     }, [userId]);
-    
+  
+    // Updates the shopping cart by adding the productId to it
     const onSubmitShoppingCart = (e, productId) => {
         e.preventDefault();
         const newShoppingCart = [...currentShoppingCart, productId];
@@ -138,11 +150,10 @@ export function AddToCartButton({button, productId}) {
           .catch(error => console.error(error));
     };
 
+    // Updates the wishlist by adding the productId to it
     const onSubmitWishList = (e, productId) => {
         e.preventDefault();
-        console.log('THIS IS CURRENT' + currentWishlist)
         const newWishList = [...currentWishlist, productId];
-        console.log('THIS IS NEW' + newWishList)
         axios.post(`https://e-commerce-model.onrender.com/users/update_user/${userId}`, {
           wishlist: newWishList
         })
@@ -150,6 +161,7 @@ export function AddToCartButton({button, productId}) {
           .catch(error => console.error(error));
       }; 
 
+      // Uses the productId to filter out the product from the wishlist
       const removeFromWishlist = (e) => {
         e.preventDefault();
         const updatedList = currentWishlist.filter((product) => product !== productId);
@@ -162,6 +174,7 @@ export function AddToCartButton({button, productId}) {
               .catch(error => console.error(error));
       }; 
 
+      // Uses the productId to filter out the product from the cart
       const removeFromCart = (e) => {
         e.preventDefault();
         const updatedCart = currentShoppingCart.filter((product) => product !== productId);
@@ -213,8 +226,6 @@ export function AddToCartButton({button, productId}) {
                 Add to Wishlist
               </Button>
             )}
-
-
             {button === 'buy_now' && (
               <Button variant="outline-dark" style={{backgroundColor: "black", color: "white"}} onClick={onSubmitBuyNow}>
                 Buy Now
@@ -234,6 +245,7 @@ export function AddToCartButton({button, productId}) {
         )       
 }
 
+// Shows a 'Login to buy' button which redirects the user to the login page, in case he wants to buy a product and is not logged in
 export function LogInToBuy() {
     const navigate = useNavigate();  
     const onSubmitLoginToBuy = (event) => {
@@ -250,7 +262,7 @@ export function LogInToBuy() {
     )
 }
 
-
+// Shows a button presentation with the options: Add to Cart, Add to WishList, Buy Now, in case the user is already logged-in
 export function TypicalButtonPresentation({prop}) {
   const cookies = new Cookies();
   const token = cookies.get("TOKEN"); 

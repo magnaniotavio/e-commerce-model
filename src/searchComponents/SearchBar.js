@@ -1,18 +1,24 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 
+/* This is a simple search bar with possibilities of filtering through some main search routes,
+   and whose prop onSearch will defined on the App.js file */
+
 const SearchBar = ({ onSearch }) => {
   const [searchText, setSearchText] = useState('');
   const [classification, setClassification] = useState('undefined');
 
+  // Sets the search text according to what the user types
   const handleInputChange = (event) => {
     setSearchText(event.target.value);
   };
 
+  // Sets classification according to what the user has specified
   const handleValueChange = (event) => {
     setClassification(event.target.value);
   };
 
+  // Makes a search using the text and the classification
   const handleSearch = (event) => {
     event.preventDefault();
     onSearch(searchText, classification); // Pass both searchText and classification

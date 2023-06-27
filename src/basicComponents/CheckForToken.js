@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import jwtDecode from 'jwt-decode';
-import { ReturnUserProperties, returnUserId } from '../users/UserId';
+import { returnUserId } from '../users/UserId';
 import { useParams } from 'react-router-dom';
 
 const cookies = new Cookies();
@@ -11,7 +11,6 @@ const cookies = new Cookies();
 // Checks for any logged-in user
 export function CheckForToken() {
   const navigate = useNavigate();
-  
   useEffect(() => {
     try {
       const token = cookies.get("TOKEN");
@@ -22,7 +21,6 @@ export function CheckForToken() {
       navigate('/unauthorized');
     }
   }, []);
-
   return null;
 }
 

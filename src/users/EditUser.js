@@ -1,32 +1,26 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Cookies from "universal-cookie";
 import { useParams, useNavigate } from "react-router-dom";
-import jwtDecode from 'jwt-decode';
-import { returnUserId, ReturnUserProperties } from "./UserId";
+import { CheckForUserRole } from '../basicComponents/CheckForToken';
 
-let decoded;
-
-const cookies = new Cookies();   
-
+// In this component, we allow the Admin to edit the user, by giving it a new userRole
 function EditUser() {
+  // Gets the id of the user that's going to be edited
   const { id } = useParams();
   const navigate = useNavigate();
-  const token = cookies.get("TOKEN");
+  // Creates a state for the updating of the user role
   const [user, setUser] = useState({
     user_role: "",
   }); 
 
-  decoded = jwtDecode(token);
-  const userId = decoded.userId;
-  const userRole = ReturnUserProperties('user_role');
-  console.log(decoded)
+  // Checks whether the user is an Administrator or not, meaning only Admins will be able to perform the operation
+  CheckForUserRole('Administrator')
 
+  // Gets the user and sets user_role as the one the user currently has
   useEffect(() => {
     axios
       .get(`https://e-commerce-model.onrender.com/users/${id}`)
       .then((response) => {
-        console.log('blaaaaaaaaaaaaaaaaaa' + response)
         setUser({
             user_role: response.data.user_role
         });
@@ -36,6 +30,7 @@ function EditUser() {
       });
   }, [id]);  
   
+  // Updates the user role, according to the current state of the user constant
   const onUpdate = () => {
     console.log(user.user_role)
     axios.post(`https://e-commerce-model.onrender.com/users/update_user/${id}`, {
@@ -48,6 +43,8 @@ function EditUser() {
         console.log(error);
       });
   };
+
+  // Deletes the user
   function onDelete(e) {
     e.preventDefault()
     axios
@@ -60,6 +57,8 @@ function EditUser() {
         console.log(error);
       });
   };
+
+  // Submits or deletes according to the button name
   const onSubmit = (e) => {
     e.preventDefault();
     if (e.nativeEvent.submitter.name === "Update") {

@@ -3,6 +3,7 @@ import { Container, Row, Col, Card, Form } from 'react-bootstrap';
 import { AddToCartButton } from '../payment/CartWishlistAndBuyNowButtons';
 import { selectorInput } from '../basicComponents/JSXFunctions';
 
+// This style of product presentation is occupies less space than the other one, and does not use a picture
 export function ListExhibition({ItensToShow, quantity, setQuantity, listName}) {
 return (
     <div>
@@ -42,4 +43,4 @@ return (
       </Container>
     </div>
   );
-}
+} 

@@ -8,20 +8,26 @@ import { BsChevronCompactDown, BsChevronCompactUp } from 'react-icons/bs';
 import { TypicalButtonPresentation } from '../payment/CartWishlistAndBuyNowButtons';
 import productPic from '../images/productPic.png';
 
+/* This component shows the default presentation of a product once you click on it,
+   including a product picture, its name, price, the buttons to buy it or add to wishlist,
+   as well as the customer's reviews and an input form by which you can add your own review. */
 function ProductPage() {
   const userId = returnUserId()
   const {id} = useParams();
   const navigate = useNavigate();
-  const [isExpanded, setIsExpanded] = useState(false);
-  const handleToggleExpand = () => {
-    setIsExpanded(!isExpanded);
-  };
+  // Defining the properties which will be shown in the ' Customer's Reviews ' section of the page
   const [userReview, setUserReview] = useState({
     id: userId,
     name: '',
     content: '',
   })
+  // By default, reviews won't be shown; the user can click to expand if they wish to see them
+  const [isExpanded, setIsExpanded] = useState(false);
+  const handleToggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
 
+ // Defining the properties of the product
   const [productId, setProductId] = useState("");
   const [name, setName] = useState("");
   const [classification, setClassification] = useState("");
@@ -30,7 +36,7 @@ function ProductPage() {
   const [color, setColor] = useState("");
   const [brand, setBrand] = useState("");
   const [price, setPrice] = useState("");
-  const [customerReview, setCustomerReview] = useState([]);
+  const [customerReview, setCustomerReview] = useState([]); // This array will receive a new item if the user posts a review
   const [popularity, setPopularity] = useState("");
   const [creationDate, setCreationDate] = useState("");
   const [condition, setCondition] = useState("");
@@ -38,6 +44,7 @@ function ProductPage() {
   const [availability, setAvailability] = useState("");
   const [targetPublic, setTargetPublic] = useState("");
 
+  // Gets the products by Id, employing useParams(), and sets the constants above according to the response data
   useEffect(() => {
     let isMounted = true;
     axios.get(`https://e-commerce-model.onrender.com/products/${id}`)
@@ -52,7 +59,7 @@ function ProductPage() {
           setClassification(response.data.classification);
           setSizeSML(response.data.sizeSML);
           setSizeNumber(response.data.sizeNumber);
-          setCustomerReview(response.data.customerReview);
+          setCustomerReview(response.data.customerReview); 
           setPopularity(response.data.popularity);
           setCondition(response.data.condition);
           setAvailability(response.data.availability);
@@ -66,60 +73,57 @@ function ProductPage() {
     return () => { isMounted = false };
   }, [id]);
 
+  // The following three  perform the logic for allowing the user to post reviews
+
+  // Sets the content property of userReview according to text input
   const onChangeUserReview = (e) => {
     e.preventDefault()
-    console.log('this is customer review' + userReview)
     setUserReview({
       ...userReview,
       content: e.target.value,
     })
   }
 
+  // Sets the username property of userReview according to retrieved username property, using the userId constant
   useEffect(() => {
     if (userId) {
       axios
         .get(`https://e-commerce-model.onrender.com/users/${userId}`)
         .then((res) => {
-          const updatedUsername = res.data.username;
+          // Retrieves the username
+          const retrievedUsername = res.data.username;
           setUserReview((prevReview) => ({
             ...prevReview,
-            name: updatedUsername,
+            name: retrievedUsername,
           }));
         })
         .catch((error) => console.error(error));
     }
-  }, [userId]);
+  }, [userId]); 
   
-
+  /* Two tasks are perfomed here:
+     First, we update the CustomerReviews property of the product,
+     Secondly, we update the ReviewsMade propety of the user. */
   const onSubmitUserReview = (e) => {
     e.preventDefault()
     if (userId) {
-
-      axios.get(`https://e-commerce-model.onrender.com/users/${userId}`)
-      .then((res) => {
-        const updatedUsername = res.data.username;
-        setUserReview((prevReview) => ({
-          ...prevReview,
-          name: updatedUsername,
-        }))
-      })
-      const currentReview = [...customerReview, userReview];
-      setCustomerReview(currentReview)
+      // Creates a new array consisting of customerReview, plus userReview, and sets it as customerReview
+      const updatedReview = [...customerReview, userReview];  
+     // Updates the CustomerReviews property of the product
       axios.post(`https://e-commerce-model.onrender.com/products/update_product/${id}`, {
-        customerReview: currentReview
+        customerReview: updatedReview
     })  
-      .then((response) => {
-        setCustomerReview(response.data.customerReview);
-      })
       .catch((error) => {
         console.error(error);
       });
-    
+      // Updates the ReviewsMade propety of the user
       axios.post(`https://e-commerce-model.onrender.com/users/update_user/${userId}`, {
-        payment_info: currentReview.filter(review => review.id === userId)
+        payment_info: updatedReview.filter(review => review.id === userId)
       })  
+      // Reloads the page so that the new review is shown
       .then(
-        () => window.location.reload())
+        () => 
+        window.location.reload())
       .catch(error => console.error(error));
     }
   }

@@ -1,13 +1,14 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { Form, FormControl, Button, InputGroup } from 'react-bootstrap'
-import { HandleClick, textInput, selectorInput, textBoxInput } from '../basicComponents/JSXFunctions';
-import { CheckForToken } from '../basicComponents/CheckForToken';
+import { Form, Button } from 'react-bootstrap'
+import { textInput, selectorInput } from '../basicComponents/JSXFunctions';
+import { CheckForUserRole } from '../basicComponents/CheckForToken';
+
+// In this component, we allow for the creation of products
 export default function CreateProduct() {
 
-  const navigate = useNavigate();
+  // Product properties according to the mongoose model
   const currentDate = new Date()              
   const [name, setName] = useState("");
   const [classification, setClassification] = useState("");
@@ -25,11 +26,12 @@ export default function CreateProduct() {
   const [availability, setAvailability] = useState("");
   const [targetPublic, setTargetPublic] = useState("");
  
-  CheckForToken()
+  // Checks whether the user is an Administrator or not, meaning only Admins will be able to add products
+  CheckForUserRole('Administrator')
 
-     function onSubmit(e) {
+  function onSubmit(e) {
          e.preventDefault();
- 
+    // Creates newProduct object
      const newProduct = {
          name: name,
          classification: classification,
@@ -47,12 +49,14 @@ export default function CreateProduct() {
          availability: availability,
          targetPublic: targetPublic,
          }; 
+    // Posts the product 
      axios.post('https://e-commerce-model.onrender.com/products/add_product', newProduct)
        .then(res => {
-       //  navigate(`/${newProduct.newname}`);
        console.log(res.data)
+       window.alert('Your product was created successfully!');
        })
        .catch(error => console.log(error));
+       // Resets the states so we can create a new one
          setName('');
          setClassification('');
          setSizeSML('');
@@ -68,9 +72,7 @@ export default function CreateProduct() {
          setCondition('');
          setAvailability('');
          setTargetPublic('');
-         navigate("/product_list")
      }
- 
  
  return (
  <div style={{ marginTop: 10 }}>

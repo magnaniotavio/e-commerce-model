@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Link } from 'react-router-dom';
 import Cookies from 'universal-cookie';
-
+/*
 const cookies = new Cookies();
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
@@ -10,6 +10,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
       ? <Component {...props} />
       : <Link to='/login' />
   )} />
-);
+); 
 
-export default PrivateRoute;
+export default PrivateRoute; */
+ 

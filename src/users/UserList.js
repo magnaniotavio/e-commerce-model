@@ -1,39 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { ReturnUserProperties } from './UserId';
 import { CheckForUserRole } from '../basicComponents/CheckForToken';
+import { changeSortingCriterion, shownDataList} from '../basicComponents/OrderingListedObjects';
+
+/* This is a very basic presentation of the users, which will be accessible to the Administrator.
+   In this list, the Admin can see the basic properties of each user, as well as delete them.
+*/
 
 export default function UserList() {
 
   const { id } = useParams();
-  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
-  const [orderUsersBy, setOrderUsersBy] = useState('creationDate');
+  const [sortingCriterion, setSortingCriterion] = useState('creationDate');
   const userRole = ReturnUserProperties('user_role')
 
-  const User = ({ user }) => (
+  // JSX table with the returned list of users and their properties
+  const User = ({ data }) => (
     <tr>
-      <td><Link  to={`/users/${user._id}`}>{user.email}</Link></td>
-      <td>{user.username}</td>
-      <td>{user.creationDate}</td>
-      <td>{user.birth_date}</td>
-      <td>{user.address}</td>
-      <td>{user.first_name}</td>
-      <td>{user.last_name}</td>
-      <td>{user.user_role}</td>
-      <td>{<Link to={`/edit_user/${user._id}`}>Edit</Link>}
+      <td><Link  to={`/users/${data._id}`}>{data.email}</Link></td>
+      <td>{data.username}</td>
+      <td>{data.creationDate}</td>
+      <td>{data.birth_date}</td>
+      <td>{data.address}</td>
+      <td>{data.first_name}</td>
+      <td>{data.last_name}</td>
+      <td>{data.user_role}</td>
+      <td>{<Link to={`/edit_user/${data._id}`}>Edit</Link>}
       </td>
       {userRole === 'Administrator' && (
       <td>
-        <button onClick={(event) => onDelete(event, user._id)}>Delete</button>
+        <button onClick={(event) => onDelete(event, data._id)}>Delete</button>
       </td>
     )}    </tr>
   );
  
-  CheckForUserRole('Administrator')
+  CheckForUserRole('Administrator') // Checks if the user is an Admin
 
+  // Gets the users
   useEffect(() => {
       axios.get('https://e-commerce-model.onrender.com/users/')
         .then(response => {
@@ -41,49 +47,8 @@ export default function UserList() {
         })
         .catch(error => console.log(error));
     }, [id]);
-
-  function sortByCreationDate(users, prop) {
-      if (typeof prop == "number") {
-      return users.sort((user1, user2) => {
-        if (user1[prop] > user2[prop]) {
-          return -1;
-        } else if (user1[prop] < user2[prop]) {
-          return 1;
-        } else {
-          return 0;
-        }
-      });}
-      if (typeof prop == "string") {
-        return users.sort((user1, user2) => {
-          if (user1[prop] < user2[prop]) {
-            return -1;
-          } else if (user1[prop] > user2[prop]) {
-            return 1;
-          } else {
-            return 0;
-          }
-        });}
-    }
- 
-function changeSortingCriterion(event, sortingCriterion) {
-    event.preventDefault();
-    setOrderUsersBy(sortingCriterion)
-  }
-
-  function ShowUsers(x) {
-    const sortedUsers = sortByCreationDate(users, x);
   
-    if (!sortedUsers || sortedUsers.length === 0) {
-      return null; // or display a loading spinner, error message, etc.
-    }
-  
-    const userList = sortedUsers.map((currentUser, i) => (
-      <User user={currentUser} key={i} />
-    ));
-  
-    return userList;
-  }
-  
+// Deletes posts
 function onDelete(event, parameter) {
     event.preventDefault()
     axios
@@ -97,23 +62,22 @@ function onDelete(event, parameter) {
       });
   };
 
-
 return (
     <div>
       <h3>User List</h3>
       <table className="table table-striped" style={{ marginTop: 20 }}>
         <thead>
           <tr>
-            <th>Email<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'email')}></button></th>
-            <th>Username<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'username')}></button></th>
-            <th>Registration Date<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'creation_date')}></button></th>
-            <th>Birth Date<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'birth_date')}></button></th>
-            <th>Address<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'address')}></button></th>
-            <th>First Name<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'first_name')}></button></th>
-            <th>Last Name<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'last_name')}></button></th>
+            <th>Email<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'email', setSortingCriterion)}></button></th>
+            <th>Username<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'username', setSortingCriterion)}></button></th>
+            <th>Registration Date<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'creation_date', setSortingCriterion)}></button></th>
+            <th>Birth Date<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'birth_date',setSortingCriterion)}></button></th>
+            <th>Address<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'address',setSortingCriterion)}></button></th>
+            <th>First Name<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'first_name',setSortingCriterion)}></button></th>
+            <th>Last Name<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'last_name',setSortingCriterion)}></button></th>
           </tr>
         </thead>
-        <tbody>{ShowUsers(orderUsersBy)}</tbody>
+        <tbody>{shownDataList(sortingCriterion, users, User)}</tbody>
       </table>
     </div>
   );

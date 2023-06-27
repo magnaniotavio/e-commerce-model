@@ -1,13 +1,14 @@
 import React from 'react'
 import { Form, Button } from "react-bootstrap";
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { textInput } from '../basicComponents/JSXFunctions';
+import { emailInput, passwordInput, textInput } from '../basicComponents/JSXFunctions';
 
 export default function Register() {
+  // Registration is set to false by default; once it's set to true, the user will be asked to make his log-in
   const [register, setRegister] = useState(false);
+  // Below are the user properties, following the Mongoose model
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,19 +26,10 @@ export default function Register() {
   const [first_name, setFirstName] = useState("");
   const [last_name, setLastName] = useState("");
   const [phone_number, setPhoneNumber] = useState("");
-//  const [order_history, setOrderHistory] = useState("");
- // const [product_reviews, setProductReviews] = useState("");
-//  const [phone_number, setPhoneNumber] = useState("");
-
-  const [errorMessage, setErrorMessage] = useState({
-    notAnEmail: 'The adress you typed does not correspond to an email.',
-    takenEmail: 'That email is already taken',
-    notAnUsername: 'Your username should include only words',
-    takenUsername: 'That username has already being taken',
-  });
   
   const navigate = useNavigate()
   
+  // Creates newUser object, containing the constants above
   const newUser = {
     username,
     email,
@@ -58,58 +50,26 @@ export default function Register() {
     phone_number, 
   };  
 
-  console.log(newUser)
-
     const handleSubmit = (e) => {
         e.preventDefault();
+        // Posts the newUser object
         axios.post(`https://e-commerce-model.onrender.com/users/register`, newUser)
         .then(res => {
+          // Sets Register to true
           setRegister(true);
-          const userId = res.data.result._id; // get the user's ID from the response
-          navigate(`/login`); // redirect to the profile page with the ID
             })
         .catch(error => console.log(error));   
           };   
- 
-          {textInput('Username address', username, setUsername)}
-          {textInput('Email address', email, setEmail)}
-          {textInput('Password', password, setPassword)}
 
+// Shows registration formulary when register is false
 if (register === false) {
     return (
         <>
-                  <h2>Register</h2>
-                  <Form onSubmit={(e)=>handleSubmit(e)}>
-        <Form.Group controlId="formBasicEmail">
-          <Form.Label>Username address</Form.Label>
-          <Form.Control
-            type="username"
-            name="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Enter username"
-          />
-        </Form.Group>
-        <Form.Group controlId="formBasicEmail">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control
-            type="email"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="your_email@email_provider.com"
-          />
-        </Form.Group>
-        <Form.Group controlId="formBasicPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-          />
-        </Form.Group> 
+        <h2>Register</h2>
+        <Form onSubmit={(e)=>handleSubmit(e)}>
+          {textInput('Username address', username, setUsername)}
+          {emailInput('Email address', email, setEmail)}
+          {passwordInput('Password', password, setPassword)}
         <Button
           variant="primary"
           type="submit"
@@ -120,4 +80,8 @@ if (register === false) {
       </Form>
         </>
     )}
+// Asks the user to make log in once registration is set to true
+else if (register === true) {
+  navigate(`/login`); // redirect to the profile page with the ID
+}
 } 

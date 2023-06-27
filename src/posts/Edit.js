@@ -1,22 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { CheckForToken } from '../basicComponents/CheckForToken';
+import { CheckForToken, CheckForUserRole } from '../basicComponents/CheckForToken';
 import { textInput, selectorInput, textBoxInput } from '../basicComponents/JSXFunctions';
 import { Form } from 'react-router-dom';
 import { Button, ButtonGroup } from 'react-bootstrap';
-//import Cookies from "universal-cookie"
 
-//import jwtDecode from 'jwt-decode';
-//let decoded;
-//const cookies = new Cookies();   
-
+// In this component, we allow for the editing of posts
 export default function EditPost() {
 
   const currentDate = new Date()              
   const { id } = useParams();
   const navigate = useNavigate();
 
+  // Properties according to the mongoose model
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
   const [classification, setClassification] = useState("");
@@ -25,12 +22,15 @@ export default function EditPost() {
   const [lastEdited, setLastEdited] = useState("");
   const [language, setLanguage] = useState("");
 
+  // Checks whether the user is an Administrator or not, meaning only Admins will be able to perform the operation
+  CheckForUserRole('Administrator')  
 
-  CheckForToken()
-  
+  // Here we retrieve the data to be edited
   useEffect(() => {
-    const hello = axios.get(`https://e-commerce-model.onrender.com/posts/${id}`)
-    hello.then(response => {
+    // Gets the post according to the id found by useParams()
+    const foundPosts = axios.get(`https://e-commerce-model.onrender.com/posts/${id}`)
+    // Sets the states according to the data received, so that the user will see it in the editing fields
+    foundPosts.then(response => {
           setContent(response.data.content)
           setTitle(response.data.title)
           setClassification(response.data.classification)
@@ -44,42 +44,33 @@ export default function EditPost() {
       });
   }, [id]);
 
-const onSubmit = e => {
-  e.preventDefault();
-
-  /*content
-title
-classification
-author
-creation_date
-last_edited
-language */
-
-  if (e.nativeEvent.submitter.name === 'Update') {
-    const obj = {
-      content: content,
-      title: title,
-      classification: classification,
-      author: author,
-      creation_date: creationDate,
-      last_edited: currentDate,
-      language: language,
-    };  
-    axios.post(`https://e-commerce-model.onrender.com/posts/update/${id}`, obj)
-      .then(res => console.log(res.data));
-    navigate('/postlist');
-  } else if (e.nativeEvent.submitter.name === 'Delete') {
-
-    axios.delete(`https://e-commerce-model.onrender.com/posts/delete/${id}`)
-    .then(res => console.log(res.data));
-    navigate('/postlist');
-  }
-};
-
-//{textInput('Title', post.postTitle, setName)}
-//{textInput('Language', description, setDescription)}
-//{textBoxInput('New Post', content, setContent)}
-
+  // Here we post the edited data, or delete it if that's what we wish, according to the button name
+     const onSubmit = e => {
+     e.preventDefault();
+     if (e.nativeEvent.submitter.name === 'Update') {
+        // Creates new object with the updated data
+       const obj = {
+         content: content,
+         title: title,
+         classification: classification,
+         author: author,
+         creation_date: creationDate,
+         last_edited: currentDate,
+         language: language,
+       };  
+       // Posts updated data
+       axios.post(`https://e-commerce-model.onrender.com/posts/update/${id}`, obj)
+         .then(res => console.log(res.data));
+       navigate('/postlist');
+     } 
+     // Deletes data
+     else if (e.nativeEvent.submitter.name === 'Delete') {
+       axios.delete(`https://e-commerce-model.onrender.com/posts/delete/${id}`)
+       .then(res => console.log(res.data));
+       navigate('/postlist');
+     }
+   };
+   
 return (
   <div style={{ marginTop: 10 }}>
     <form onSubmit={onSubmit}>

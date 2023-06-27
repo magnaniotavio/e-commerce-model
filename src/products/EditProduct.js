@@ -5,13 +5,15 @@ import { Form, FormControl, InputGroup } from 'react-bootstrap';
 import { Button, ButtonGroup } from 'react-bootstrap';
 import { CheckForToken, CheckForUser } from '../basicComponents/CheckForToken';
 import { selectorInput, textInput, textBoxInput } from '../basicComponents/JSXFunctions';
+import { CheckForUserRole } from '../basicComponents/CheckForToken';
+
 
 import Cookies from 'universal-cookie';
 import jwtDecode from 'jwt-decode';
 let decoded;
 const cookies = new Cookies();   
 
-
+// In this component, we allow for the editing of products
 function EditProduct() {
   const navigate = useNavigate();
 
@@ -28,8 +30,10 @@ function EditProduct() {
               }
             }, [navigate, token]); 
           
-   const currentDate = new Date()              
+    const currentDate = new Date()              
     const { id } = useParams();
+
+    // Properties according to the mongoose model
     const [name, setName] = useState("");
     const [classification, setClassification] = useState("");
     const [sizeSML, setSizeSML] = useState("");
@@ -45,14 +49,17 @@ function EditProduct() {
     const [availability, setAvailability] = useState("");
     const [targetPublic, setTargetPublic] = useState("");
   
-    CheckForToken()
+    // Checks whether the user is an Administrator or not, meaning only Admins will be able to perform the operation
+    CheckForUserRole('Administrator')  
 
+    // Here we retrieve the data to be edited
     useEffect(() => {
         console.log(id);
-
+      // Gets the post according to the id found by useParams()
       const foundProduct = axios.get(`https://e-commerce-model.onrender.com/products/${id}`)
+      // Sets the states according to the data received, so that the user will see it in the editing fields
       foundProduct.then(response => {        
-            setName(response.data.name);
+              setName(response.data.name);
             setClassification(response.data.classification);
             setSizeSML(response.data.sizeSML);
             setSizeNumber(response.data.size);
@@ -72,35 +79,39 @@ function EditProduct() {
         });
     }, [id]);
 
-  const onSubmit = e => {
-    e.preventDefault();
-  
-    if (e.nativeEvent.submitter.name === 'Update') {
-      const obj = {
-        name: name,
-        classification: classification,
-        sizeSML: sizeSML,
-        sizeNumber: sizeNumber,
-        color: color,
-        brand: brand,
-        price: price,
-        customerReview: customerReview,
-        popularity: popularity,
-        creationDate: creationDate,
-        lastEdited: currentDate,
-        description: description,
-        targetPublic: targetPublic,
-      };  
-      axios.post(`https://e-commerce-model.onrender.com/products/update_product/${id}`, obj)
-        .then(res => console.log(res.data));
-      navigate('/product_list');
-    } else if (e.nativeEvent.submitter.name === 'Delete') {
-      axios.delete(`https://e-commerce-model.onrender.com/products/delete_product/${id}`)
-      .then(res => console.log(res.data));
-      navigate('/product_list');
-
-    }
-  };
+     // Here we post the edited data, or delete it if that's what we wish, according to the button name
+     const onSubmit = e => {
+       e.preventDefault();
+       if (e.nativeEvent.submitter.name === 'Update') {
+        // Creates new object with the updated data
+         const obj = {
+           name: name,
+           classification: classification,
+           sizeSML: sizeSML,
+           sizeNumber: sizeNumber,
+           color: color,
+           brand: brand,
+           price: price,
+           customerReview: customerReview,
+           popularity: popularity,
+           creationDate: creationDate,
+           lastEdited: currentDate,
+           description: description,
+           targetPublic: targetPublic,
+         };  
+         // Posts updated data
+         axios.post(`https://e-commerce-model.onrender.com/products/update_product/${id}`, obj)
+           .then(res => console.log(res.data));
+         navigate('/product_list');
+       } 
+       // Deletes data
+       else if (e.nativeEvent.submitter.name === 'Delete') {
+         axios.delete(`https://e-commerce-model.onrender.com/products/delete_product/${id}`)
+         .then(res => console.log(res.data));
+         navigate('/product_list');
+   
+       }
+     };
 
   return (
     <Form onSubmit={onSubmit}>

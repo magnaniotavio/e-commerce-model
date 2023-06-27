@@ -9,6 +9,7 @@ import { returnUserId } from "./UserId";
 
 const cookies = new Cookies();
 
+// This is the user's profile page
 function Profile() {
   const userId = returnUserId()
   const token = cookies.get('TOKEN');
@@ -16,9 +17,11 @@ function Profile() {
   const {id} = useParams()
   
   useEffect(() => {
+    // Only logged-in users can see each other's profiles
     if (!token) {
       return <div>Please log in to view this page.</div>;
     }
+    // Gets the user's data using useParams()
     axios
       .get(`https://e-commerce-model.onrender.com/users/${id}`)
       .then((response) => {
@@ -29,6 +32,7 @@ function Profile() {
       });
   }, [id]);
 
+  // The JSX simply maps through the user's data and shows it in a typical profile design, including space for a default avatar
   return (
     <Container className="py-5">
       <Row>

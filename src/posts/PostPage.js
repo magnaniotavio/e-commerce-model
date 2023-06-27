@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import { Container, Row, Col } from 'react-bootstrap';
 
+// This is a very simple page for showing the posts in a minimalist way
 function PostPage() {
 
   const { title } = useParams();

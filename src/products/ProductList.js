@@ -1,35 +1,48 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { ReturnUserProperties } from '../users/UserId';
+import { CheckForUserRole } from '../basicComponents/CheckForToken';
+import { changeSortingCriterion, shownDataList} from '../basicComponents/OrderingListedObjects';
+
+/* This is a very basic presentation of the products, which will be accessible to the Administrator.
+   In this list, the Admin can see the basic properties of each product, as well as delete them.
+*/
 
 export default function ProductsList() {
 
-  const { id } = useParams();
-  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
-  const [orderProductsBy, setOrderProductsBy] = useState('creationDate');
+  const [sortingCriterion, setSortingCriterion] = useState('creationDate');
+  const userRole = ReturnUserProperties('user_role')
 
-  
-  const Product = ({ product }) => (
+  // JSX table with the returned list of products and their properties
+  const Product = ({ data }) => (
     <tr>
-      <td><Link  to={`/product/${product._id}`}>{product.name}</Link></td>
-      <td>{product.brand}</td>
-      <td>{product.price}</td>
-      <td>{product.creationDate}</td>
-      <td>{product.color}</td>
-      <td>{product.sizeSML}</td>
-      <td>{product.sizeNumber}</td>
-      <td>{product.classification}</td>
-      <td>{product.customerReview.content}</td>
-      <td>{product.popularity}</td>
-      <td>{product.targetPublic}</td>
+      <td><Link  to={`/product/${data._id}`}>{data.name}</Link></td>
+      <td>{data.brand}</td>
+      <td>{data.price}</td>
+      <td>{data.creationDate}</td>
+      <td>{data.color}</td>
+      <td>{data.sizeSML}</td>
+      <td>{data.sizeNumber}</td>
+      <td>{data.classification}</td>
+      <td>{data.customerReview.content}</td>
+      <td>{data.popularity}</td>
+      <td>{data.targetPublic}</td>
       <td>
-        {<Link to={`/edit_product/${product._id}`}>Edit</Link>}
+        {<Link to={`/edit_product/${data._id}`}>Edit</Link>}
+        {userRole === 'Administrator' && (
+      <td>
+        <button onClick={(event) => onDelete(event, data._id)}>Delete</button>
+      </td>
+    )}
       </td>
     </tr>
   );
  
+  CheckForUserRole('Administrator') // Checks if the user is an Admin
+
+  // Gets the products
   useEffect(() => {
       axios.get('https://e-commerce-model.onrender.com/products/')
         .then(response => {
@@ -38,46 +51,19 @@ export default function ProductsList() {
         .catch(error => console.log(error));
     }, []);
   
-    console.log('this is products' + products)
-
-  function sortByCreationDate(products, prop) {
-      if (typeof prop == "number") {
-      return products.sort((product1, product2) => {
-        if (product1[prop] > product2[prop]) {
-          return -1;
-        } else if (product1[prop] < product2[prop]) {
-          return 1;
-        } else {
-          return 0;
-        }
-      });}
-      if (typeof prop == "string") {
-        return products.sort((product1, product2) => {
-          if (product1[prop] < product2[prop]) {
-            return -1;
-          } else if (product1[prop] > product2[prop]) {
-            return 1;
-          } else {
-            return 0;
-          }
-        });}
-    }
- 
-  function changeSortingCriterion(event, sortingCriterion) {
-    event.preventDefault();
-    setOrderProductsBy(sortingCriterion)
-  }
-
-  function theProducts(x) {
-
-  const sortedProducts = sortByCreationDate(products, x);
-
-  console.log(sortedProducts)
-  const productsList = sortedProducts.map((currentProduct, i) => (
-    <Product product={currentProduct} key={i} />
-  ));
-  return productsList
-  }
+  // Deletes posts
+  function onDelete(event, parameter) {
+    event.preventDefault()
+    axios
+      .delete(`https://e-commerce-model.onrender.com/users/delete_product/${parameter}`)
+      .then((res) => {
+        console.log(res.data);
+        window.location.reload();
+           })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
 return (
     <div>
@@ -85,20 +71,22 @@ return (
       <table className="table table-striped" style={{ marginTop: 20 }}>
         <thead>
           <tr>
-            <th>Name<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'name')}></button></th>
-            <th>Brand<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'brand')}></button></th>
-            <th>Price<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'price')}></button></th>
-            <th>Creation<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'creationDate')}></button></th>
-            <th>Color<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'color')}></button></th>
-            <th>SizeSML<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'sizeSML')}></button></th>
-            <th>Size Number<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'sizeNumber')}></button></th>
-            <th>Classification<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'classification')}></button></th>
-            <th>Customer Review<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'customerReview')}></button></th>
-            <th>Popularity<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'popularity')}></button></th>
-            <th>Public<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'targetPublic')}></button></th>
+            <th>Name<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'name', setSortingCriterion)}></button></th>
+            <th>Brand<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'brand', setSortingCriterion)}></button></th>
+            <th>Price<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'price', setSortingCriterion)}></button></th>
+            <th>Creation<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'creationDate', setSortingCriterion)}></button></th>
+            <th>Color<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'color', setSortingCriterion)}></button></th>
+            <th>SizeSML<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'sizeSML', setSortingCriterion)}></button></th>
+            <th>Size Number<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'sizeNumber', setSortingCriterion)}></button></th>
+            <th>Classification<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'classification', setSortingCriterion)}></button></th>
+            <th>Customer Review<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'customerReview', setSortingCriterion)}></button></th>
+            <th>Popularity<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'popularity', setSortingCriterion)}></button></th>
+            <th>Public<button class="sort-by-button" onClick={(e) => changeSortingCriterion(e, 'targetPublic', setSortingCriterion)}></button></th>
           </tr>
         </thead>
-        <tbody>{theProducts(orderProductsBy)}</tbody>
+        <tbody>
+          {shownDataList(sortingCriterion, products, Product)}
+       </tbody>
       </table>
     </div>
   );

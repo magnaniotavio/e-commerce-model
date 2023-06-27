@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Cookies from "universal-cookie";
 import { useParams, useNavigate } from "react-router-dom";
-//import jwtDecode from 'jwt-decode';
-//import { returnUserId  } from "./UserId";
-import { CheckForToken, CheckForUser } from "../basicComponents/CheckForToken";
+import { CheckForUser } from "../basicComponents/CheckForToken";
 import { dateInput, numberInput, selectorInput, textInput } from "../basicComponents/JSXFunctions";
 
+// In this component, we allow the user to edit their profile
 function EditProfile() {
   const { id } = useParams();
   const navigate = useNavigate();
+
+  // Properties according to the mongoose model
 
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -29,34 +29,16 @@ function EditProfile() {
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
       
- // const token = cookies.get("TOKEN");
- // let decoded;
-//  decoded = null;
- // if (typeof token === 'string') {
- //   decoded = jwtDecode(token);
-//  }
-  //const userId = returnUserId()
-
+  /* Checks whether the useParams() id is similar to the user's Id, and also gives an authorizing token
+     meaning only the user themselves will be able to perform the operation */
   CheckForUser()
 
- // console.log(decoded)
-
- /* useEffect(() => {
-    if (!token) {
-      navigate("/unauthorized");
-    } 
-    else if (id != userId) {
-      navigate("/unauthorized")
-    }
-    else {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    }
-  }, [navigate, token]); */
-
-
+    // Here we retrieve the data to be edited
   useEffect(() => {
+    // Gets the post according to the id found by useParams()
     axios
       .get(`https://e-commerce-model.onrender.com/users/${id}`)
+      // Sets the states according to the data received, so that the user will see it in the editing fields
       .then((response) => {
         setUserName(response.data.username);
         setPassword(response.data.password);
@@ -81,8 +63,9 @@ function EditProfile() {
       });
   }, [id]);  
   
-
+  // Here we post the edited data, or delete it if that's what we wish, according to the button name
   const onUpdate = () => {
+    // Creates new object with the updated data
     const obj = {
       username: username,
       password: password,
@@ -102,6 +85,7 @@ function EditProfile() {
       last_name: lastName,
       phone_number: phoneNumber,
     };
+    // Posts updated data
     axios
       .post(`https://e-commerce-model.onrender.com/users/update_user/${id}`, 
       obj
@@ -113,7 +97,7 @@ function EditProfile() {
       });
   };
 
-
+  // Here we allow the user to either update or delete their profile, according to the name of the button
   const onDelete = () => {
     axios
       .delete(`https://e-commerce-model.onrender.com/users/delete_user/${id}`)

@@ -1,13 +1,9 @@
-import axios from 'axios';
 import { useState, useEffect } from 'react';
-import ReactMarkdown from "react-markdown";
-import { Link } from 'react-router-dom';
-import { BrowserRouter as Router, Route, Routes, useNavigate, useParams } from "react-router-dom";
-//import List from '../components/PostList';
-import { Row, Col, Pagination, Table } from 'react-bootstrap';
+import { BrowserRouter as useNavigate, useParams } from "react-router-dom";
+import { Pagination } from 'react-bootstrap';
 
-
-export function PaginationFunction({pageContent}) {
+/*
+export function PaginationFunction({posts, fullPosts, }) {
   let navigate = useNavigate(); 
   const [posts, setPosts] = useState([]);
   const { pageNumber } = useParams();
@@ -29,8 +25,9 @@ export function PaginationFunction({pageContent}) {
     setCurrentPage(pageNumber);
     navigate(`/announcements/page/${pageNumber}`);
   };
-} 
+}  */
 
+// Creates a pagination component upon receiving the specified props
 export function PaginationJSX({currentPage, totalPages, handlePageChange}) { 
   return (
            <div className="d-flex justify-content-center pt-1">

@@ -1,6 +1,6 @@
 import { MakeFilteredSearch } from "../searchComponents/FilteredSearch"
 
-// Show products by classification
+// Here we show products according to their classification. This is why a feature of the Navigation Bar.
 export function ShirtsRoute() {
   return (<MakeFilteredSearch selectedFilters={["targetPublic:Masculine", "classification:ShirtM"]} isMainRoute={'yes'} />)
 }
@@ -12,7 +12,6 @@ export function ShirtsRoute() {
   }
   export function FeminineShirtsRoute() {
     return (<MakeFilteredSearch selectedFilters={["targetPublic:Feminine", "classification:ShirtF"]} isMainRoute={'yes'} />)
-  //  return SetProductRoutes("classification", "Shirt (Feminine)")
   }
   export function FeminineTrousersRoute() {
     return (<MakeFilteredSearch selectedFilters={["targetPublic:Feminine", "classification:TrouserF"]} isMainRoute={'yes'} />)

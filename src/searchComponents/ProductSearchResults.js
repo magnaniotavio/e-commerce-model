@@ -1,7 +1,8 @@
-import axios from 'axios';
+/*import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Container, Row, Col, Image } from 'react-bootstrap';
 
+// Default, simple presentation of search results
 export default function SearchProducts(parameter) {
     
 const [products, setProducts] = useState([]);
@@ -39,3 +40,4 @@ return (
   </div>
   );
 }
+*/
