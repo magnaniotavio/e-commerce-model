@@ -11,7 +11,7 @@ export const NavbarFilterFunctions = () => {
 
 // Changes the filters. This will be called as a prop by the NavBarMenu component
 
-      /* Handles one filter only;
+      /* Add one filter only;
          Example: handleFilterChange('targetPublic:Feminine')} */
       const handleFilterChange = (filter) => {
               const updatedFilters = [...selectedFilters];
@@ -24,8 +24,8 @@ export const NavbarFilterFunctions = () => {
               setSelectedFilters(updatedFilters);
             };
 
-      /* Handles filter changes when we select multiple filters
-         Example: handleArrayFilterChange(['classification:TrouserM', 'classification:TrouserF']) */
+      /* Adds multiple filters together;
+         Example: handleArrayFilterChange(['classification:TrouserM', 'classification:TrouserF', 'classification:ShoeK']);*/
        const handleArrayFilterChange = (filters) => {
               setSelectedFilters(prevFilters => {
                 // Creates array with previous filters
@@ -42,7 +42,8 @@ export const NavbarFilterFunctions = () => {
                 return updatedFilters;
               });
             };
-            
+    
+  // Performs the actual search, by going into the address
   const HandleSearch = (e) => {
         e.preventDefault();
         const query = selectedFilters.join(',');

@@ -204,7 +204,7 @@ export function NavBarMenu({routeChange, handleFilterChange, handleArrayFilterCh
                               id="shoes"
                               label="Shoes"
                               onChange={() =>
-                                handleArrayFilterChange(['classification:ShoeM', 'classification:ShoeF'])
+                                handleArrayFilterChange(['classification:ShoeM', 'classification:ShoeF', 'classification:ShoeK'])
                               }
                             />
                           </Form.Group>
