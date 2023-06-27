@@ -1,6 +1,6 @@
 # MERN clothing store mock website
 
-This is a (still in progress) **MERN** e-commerce website (a 'clothes store').
+This is a (still not entirely finished) **MERN** e-commerce website (a 'clothes store').
 Besides React, Node, Express and MongoDB, I have also used, so far, the following technnologies: **MongoDB Atlas** for storing the database on the cloud, **Stripe API** for mock payments, the **Mongoose library** for connecting Node and Mongo, **React Bootstrap** for a basic design, and **Render.com** for deployment. 
 
 As I've said, it's still a work in progress, but already contains the following features:
@@ -25,8 +25,6 @@ As I've said, it's still a work in progress, but already contains the following 
 
 Among some other minor things (product images, user profile descriptions, etc.).
 
-As of June 13, some **future improvements** I intend do in the following days/weeks include:
-- Adding more comments and changing the names of many variables to make the code easier to understand and fix
-- Adding authentication at the backend so that only the Administrator can do certain things (hidden routes are not enough)
+As of June 27, some **future improvements** I intend do in the following days/weeks include:
+- Adding more comments 
 - Improving the design by making it more responsive, as well as more visually pleasing (as of now, it's rather ugly, for I have been focusing on other things)
-Currently I am focusing on simplifying the code, mostly by adding some layers of abstraction to allow me to reuse certain functions that I have been repeating more than I should.
