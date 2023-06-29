@@ -4,8 +4,9 @@ import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import productPic from '../images/productPic.png';
 import Cookies from 'universal-cookie';
-import { PaginationJSX } from '../basicComponents/Pagination';
-    
+import { PaginationJSX, PaginationFunction } from '../basicComponents/Pagination';
+import { BrowserRouter as Router } from "react-router-dom";
+
 /* In this component, we create the most common presentation of products, in which each prodcut is shown on top of the other,
    with its name and some of its more important properties clearly presented for the potential buyer, and a pagination section below;
    The visitor to the website will see this presentation whenever he: 1) Makes a search; 2) Makes a filtered search; 3) Clicks one of the
@@ -15,25 +16,19 @@ import { PaginationJSX } from '../basicComponents/Pagination';
   */
 
 export function ProductPresentation({ productsToShow, classification, targetPublic, TypicalButtonPresentation, selectedFilters, isMainRoute, searchTerm, searchType } ) {
-    const navigate = useNavigate()
-
-    // Pagination logic
-    const { pageNumber } = useParams();
-    const [totalResults, setTotalResults] = useState([])
-    const totalItems = productsToShow.length;
-    const [currentPage, setCurrentPage] = useState(parseInt(pageNumber, 10) || 1);
-    const [postsPerPage, setPostsPerPage] = useState(2);
-    useEffect(() => {
-      setTotalResults(productsToShow);
-    }, [productsToShow]);
-    useEffect(() => {
-      setCurrentPage(parseInt(pageNumber, 10) || 1);
-    }, [pageNumber]);
-    const startIndex = (currentPage - 1) * postsPerPage;
-    const endIndex = startIndex + postsPerPage;
-    const itemsToDisplay = totalResults.slice(startIndex, endIndex);
-    const totalPages = Math.ceil(totalItems / postsPerPage);
-
+       const navigate = useNavigate()
+   
+   // Getting the pagination constants, and defining its prop
+   const {
+     setItensPerPage,
+     setCurrentPage,
+     itensPerPage,
+     totalItems,
+     currentPage,
+     itemsToDisplay,
+     totalPages,
+   } = PaginationFunction({ itensArray: productsToShow });
+       
     // Formatting the filtering criteria so that they become more intuitive in the URL
     const lowerCaseClassification = String(classification).toLowerCase();
     const formatttedClassification = lowerCaseClassification.slice(0, lowerCaseClassification.length - 1) + 's';

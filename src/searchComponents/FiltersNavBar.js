@@ -12,30 +12,35 @@ export const NavbarFilterFunctions = () => {
 // Changes the filters. This will be called as a prop by the NavBarMenu component
 
       /* Add one filter only;
-         Example: handleFilterChange('targetPublic:Feminine')} */
+         Example: handleFilterChange('targetPublic:Feminine')} -- a string is used */
       const handleFilterChange = (filter) => {
               const updatedFilters = [...selectedFilters];
               const filterIndex = updatedFilters.indexOf(filter);
+              // checks if the filter already exists in the array, and adds it
               if (filterIndex === -1) {
                 updatedFilters.push(filter);
-              } else {
+              } 
+              // Removes it, if it already exists
+              else {
                 updatedFilters.splice(filterIndex, 1);
               }
               setSelectedFilters(updatedFilters);
             };
 
       /* Adds multiple filters together;
-         Example: handleArrayFilterChange(['classification:TrouserM', 'classification:TrouserF', 'classification:ShoeK']);*/
+         Example: handleArrayFilterChange(['classification:TrouserM', 'classification:TrouserF', 'classification:ShoeK']) -- an array is used*/
        const handleArrayFilterChange = (filters) => {
               setSelectedFilters(prevFilters => {
                 // Creates array with previous filters
                 const updatedFilters = [...prevFilters];
                 filters.forEach(filter => {
                   const filterIndex = updatedFilters.indexOf(filter);
-                  // Pushes new filters
-                  if (filterIndex === -1) {
+              // checks if the filter already exists in the array, and adds it
+              if (filterIndex === -1) {
                     updatedFilters.push(filter);
-                  } else {
+                  } 
+                                // Removes it, if it already exists
+                  else {
                     updatedFilters.splice(filterIndex, 1);
                   }
                 });
@@ -46,7 +51,9 @@ export const NavbarFilterFunctions = () => {
   // Performs the actual search, by going into the address
   const HandleSearch = (e) => {
         e.preventDefault();
+        // joins the selectedFilters array into a string using join(',') 
         const query = selectedFilters.join(',');
+        // navigates to the string
         navigate(`/products/${query}`);
       };
 

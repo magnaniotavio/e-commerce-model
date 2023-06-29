@@ -1,32 +1,43 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter as useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Pagination } from 'react-bootstrap';
+import { BrowserRouter as Router } from "react-router-dom";
 
-/*
-export function PaginationFunction({posts, fullPosts, }) {
-  let navigate = useNavigate(); 
-  const [posts, setPosts] = useState([]);
-  const { pageNumber } = useParams();
-  const [fullPosts, setFullPosts] = useState([]);
-  const [postsPerPage, setPostsPerPage] = useState(2);
-  const totalItems = fullPosts.length;
-  const [currentPage, setCurrentPage] = useState(parseInt(pageNumber, 10) || 1);
-
-  useEffect(() => {
-    setCurrentPage(parseInt(pageNumber, 10) || 1);
-  }, [pageNumber]);
-
-  const startIndex = (currentPage - 1) * postsPerPage;
-  const endIndex = startIndex + postsPerPage;
-  const itemsToDisplay = fullPosts.slice(startIndex, endIndex);
-  const totalPages = Math.ceil(totalItems / postsPerPage);
-  
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-    navigate(`/announcements/page/${pageNumber}`);
-  };
-}  */
-
+/* The following function creates the pagination logic for our paginated components
+   All you need is to give an array of itens as props, plus a 'urlPath' for the URL,
+   and it handles the logic for you. Thus, it easier to create paginated components. */
+       export const PaginationFunction = ({ itensArray, urlPath }) => {
+        const navigate = useNavigate();
+        const { pageNumber } = useParams(); // Retrieves the current page number from the URL parameters
+        const totalItems = itensArray.length;  // Total number of items in the itensArray array
+        const [itensPerPage, setItensPerPage] = useState(2); // State for number of posts to display per page
+        const [currentPage, setCurrentPage] = useState(parseInt(pageNumber, 10) || 1);  // State for the current page number
+      
+        const startIndex = (currentPage - 1) * itensPerPage; // Index of the first item to display on the current page
+        const endIndex = startIndex + itensPerPage; // Index of the last item to display on the current page
+        const itemsToDisplay = itensArray.slice(startIndex, endIndex); // Subset of itensArray for the current page
+        const totalPages = Math.ceil(totalItems / itensPerPage); // Total number of pages based on the number of items per page
+      
+        /* Navigates to new page using the lower case, pluralized urlPath (if urlPath is 'Blogpost',
+           it navigates to /blogposts/page/number */
+        const handlePageChange = (pageNumber) => {
+          setCurrentPage(pageNumber);
+          navigate(`/${String(urlPath).toLowerCase()+'s'}/page/${pageNumber}`);
+        };
+      
+        return {
+          setItensPerPage,
+          setCurrentPage,
+          itensPerPage,
+          totalItems,
+          currentPage,
+          itemsToDisplay,
+          totalPages,
+          handlePageChange,
+        };
+      };
+      
+      
 // Creates a pagination component upon receiving the specified props
 export function PaginationJSX({currentPage, totalPages, handlePageChange}) { 
   return (
