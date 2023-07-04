@@ -79,7 +79,7 @@ export function UserNavBar({isLoggedIn, userName, routeChange, userId}) {
 }
 
 // Sets category routes (masculine, feminine, kids, shirts, trousers, shoes); and advanced search routes (by color, by brand, etc.)
-export function NavBarMenu({routeChange, handleFilterChange, handleArrayFilterChange, handleToggleExpand, isExpanded, HandleSearch }) {
+export function NavBarMenu({routeChange, handleFilterChange, handleToggleExpand, isExpanded, HandleSearch }) {
     return (
         <Nav>
         <Navbar bg="dark" expand="lg" style={{ color: 'white', paddingLeft: '1%', paddingRight: '1%', width:'100%'}}>
@@ -132,160 +132,150 @@ export function NavBarMenu({routeChange, handleFilterChange, handleArrayFilterCh
                      </Dropdown>
                    </Col>
                   <Col className="align-self-end">
-                  <Button
-                    variant="outline-secondary"
-                    onClick={handleToggleExpand}
-                    aria-expanded={isExpanded}
-                    aria-controls="reviews-collapse"
-                    bg="dark"
-                    expand="sm"
-                    style={{ color: 'white', paddingLeft: '0.5rem', paddingRight: '0.5rem', fontSize: '14px', border: 'none' }}
-                  >
-                    <h3 className="m-0 mr-2" style={{ color: 'white', fontSize: '16px' }}>
-                      Advanced Search
-                    </h3>
-                    {isExpanded ? <BsChevronCompactUp /> : <BsChevronCompactDown />}
-                  </Button>
-                  <div className={`collapse${isExpanded ? ' show' : ''}`} id="reviews-collapse">
-                    <Form>
-                      <Row >
-                        {/* Public Filter */}
-                        <Col xs={12} sm={6}>
-                          <Form.Group controlId="colorFilter">
-                            <Form.Label>Category</Form.Label>
-                            <Form.Check
-                              type="checkbox"
-                              id="publicFeminine"
-                              label="Feminine"
-                              onChange={() => handleFilterChange('targetPublic:Feminine')}
-                            />
-                            <Form.Check
-                              type="checkbox"
-                              id="publicMasculine"
-                              label="Masculine"
-                              onChange={() => handleFilterChange('targetPublic:Masculine')}
-                            />
-                            <Form.Check
-                              type="checkbox"
-                              id="publicKids"
-                              label="Kids"
-                              onChange={() => handleFilterChange('targetPublic:Kids')}
-                            />
-                          </Form.Group>
-                          {/* Public Filter */}
-                          <Form.Group controlId="colorFilter">
-                            <Form.Label>Category</Form.Label>
-                            <Form.Check
-                              type="checkbox"
-                              id="shirts"
-                              label="Shirts"
-                              onChange={() =>
-                                handleArrayFilterChange([
-                                  'classification:ShirtM',
-                                  'classification:ShirtF',
-                                  'classification:ShirtK',
-                                ])
-                              }
-                            />
-                            <Form.Check
-                              type="checkbox"
-                              id="trousers"
-                              label="Trousers"
-                              onChange={() =>
-                                handleArrayFilterChange([
-                                  'classification:TrouserM',
-                                  'classification:TrouserF',
-                                  'classification:TrouserK',
-                                ])
-                              }
-                            />
-                            <Form.Check
-                              type="checkbox"
-                              id="shoes"
-                              label="Shoes"
-                              onChange={() =>
-                                handleArrayFilterChange(['classification:ShoeM', 'classification:ShoeF', 'classification:ShoeK'])
-                              }
-                            />
-                          </Form.Group>
-                        </Col>
-                        {/* Color Filter */}
-                        <Col xs={12} sm={6}>
-                          <Form.Group controlId="colorFilter">
-                            <Form.Label>Color</Form.Label>
-                            <Form.Check
-                              type="checkbox"
-                              id="colorRed"
-                              label="White"
-                              onChange={() => handleFilterChange('color:White')}
-                            />
-                            <Form.Check
-                              type="checkbox"
-                              id="colorBlue"
-                              label="Black"
-                              onChange={() => handleFilterChange('color:Black')}
-                            />
-                            <Form.Check
-                              type="checkbox"
-                              id="colorGreen"
-                              label="Blue"
-                              onChange={() => handleFilterChange('color:Blue')}
-                            />
-                          </Form.Group>
-                
-                          {/* Brand Filter */}
-                          <Form.Group controlId="brandFilter">
-                            <Form.Label>Brand</Form.Label>
-                            <Form.Check
-                              type="checkbox"
-                              id="brandNike"
-                              label="Nike"
-                              onChange={() => handleFilterChange('brand:Nike')}
-                            />
-                            <Form.Check
-                              type="checkbox"
-                              id="brandAdidas"
-                              label="Adidas"
-                              onChange={() => handleFilterChange('brand:Adidas')}
-                            />
-                            <Form.Check
-                              type="checkbox"
-                              id="brandPuma"
-                              label="Puma"
-                              onChange={() => handleFilterChange('brand:Puma')}
-                            />
-                          </Form.Group>
-                        </Col>
-                      </Row>
-                      {/* Size Filter */}
-                      <Form.Group controlId="sizeFilter">
-                        <Form.Label>Size</Form.Label>
-                        <Form.Check
-                          type="checkbox"
-                          id="sizeS"
-                          label="S"
-                          onChange={() => handleFilterChange('sizeSML:S')}
-                        />
-                        <Form.Check
-                          type="checkbox"
-                          id="sizeM"
-                          label="M"
-                          onChange={() => handleFilterChange('sizeSML:M')}
-                        />
-                        <Form.Check
-                          type="checkbox"
-                          id="sizeL"
-                          label="L"
-                          onChange={() => handleFilterChange('sizeSML:L')}
-                        />
-                      </Form.Group>
-                
-                      {/* Search Button */}
-                      <Button variant="primary" onClick={HandleSearch}>
-                        Search
-                      </Button>
-                    </Form>
-                  </div>
+                  <Dropdown>
+                      <Dropdown.Toggle variant="dark" id="dropdown-basic">
+                       Advanced Search
+                      </Dropdown.Toggle>
+                       <Dropdown.Menu>
+                          <Form>
+                            <Row >
+                              {/* Public Filter */}
+                              <Col xs={12} sm={6}>
+                                <Form.Group controlId="colorFilter">
+                                  <Form.Label>Category</Form.Label>
+                                  <Form.Check
+                                    type="checkbox"
+                                    id="publicFeminine"
+                                    label="Feminine"
+                                    onChange={() => handleFilterChange(['targetPublic:Feminine'])}
+                                  />
+                                  <Form.Check
+                                    type="checkbox"
+                                    id="publicMasculine"
+                                    label="Masculine"
+                                    onChange={() => handleFilterChange(['targetPublic:Masculine'])}
+                                  />
+                                  <Form.Check
+                                    type="checkbox"
+                                    id="publicKids"
+                                    label="Kids"
+                                    onChange={() => handleFilterChange(['targetPublic:Kids'])}
+                                  />
+                                </Form.Group>
+                                {/* Public Filter */}
+                                <Form.Group controlId="colorFilter">
+                                  <Form.Label>Category</Form.Label>
+                                  <Form.Check
+                                    type="checkbox"
+                                    id="shirts"
+                                    label="Shirts"
+                                    onChange={() =>
+                                      handleFilterChange([
+                                        'classification:ShirtM',
+                                        'classification:ShirtF',
+                                        'classification:ShirtK',
+                                      ])
+                                    }
+                                  />
+                                  <Form.Check
+                                    type="checkbox"
+                                    id="trousers"
+                                    label="Trousers"
+                                    onChange={() =>
+                                      handleFilterChange([
+                                        'classification:TrouserM',
+                                        'classification:TrouserF',
+                                        'classification:TrouserK',
+                                      ])
+                                    }
+                                  />
+                                  <Form.Check
+                                    type="checkbox"
+                                    id="shoes"
+                                    label="Shoes"
+                                    onChange={() =>
+                                      handleFilterChange(['classification:ShoeM', 'classification:ShoeF', 'classification:ShoeK'])
+                                    }
+                                  />
+                                </Form.Group>
+                              </Col>
+                              {/* Color Filter */}
+                              <Col xs={12} sm={6}>
+                                <Form.Group controlId="colorFilter">
+                                  <Form.Label>Color</Form.Label>
+                                  <Form.Check
+                                    type="checkbox"
+                                    id="colorRed"
+                                    label="White"
+                                    onChange={() => handleFilterChange(['color:White'])}
+                                  />
+                                  <Form.Check
+                                    type="checkbox"
+                                    id="colorBlue"
+                                    label="Black"
+                                    onChange={() => handleFilterChange(['color:Black'])}
+                                  />
+                                  <Form.Check
+                                    type="checkbox"
+                                    id="colorGreen"
+                                    label="Blue"
+                                    onChange={() => handleFilterChange(['color:Blue'])}
+                                  />
+                                </Form.Group>
+                      
+                                {/* Brand Filter */}
+                                <Form.Group controlId="brandFilter">
+                                  <Form.Label>Brand</Form.Label>
+                                  <Form.Check
+                                    type="checkbox"
+                                    id="brandNike"
+                                    label="Nike"
+                                    onChange={() => handleFilterChange(['brand:Nike'])}
+                                  />
+                                  <Form.Check
+                                    type="checkbox"
+                                    id="brandAdidas"
+                                    label="Adidas"
+                                    onChange={() => handleFilterChange(['brand:Adidas'])}
+                                  />
+                                  <Form.Check
+                                    type="checkbox"
+                                    id="brandPuma"
+                                    label="Puma"
+                                    onChange={() => handleFilterChange(['brand:Puma'])}
+                                  />
+                                </Form.Group>
+                              </Col>
+                            </Row>
+                            {/* Size Filter */}
+                            <Form.Group controlId="sizeFilter">
+                              <Form.Label>Size</Form.Label>
+                              <Form.Check
+                                type="checkbox"
+                                id="sizeS"
+                                label="S"
+                                onChange={() => handleFilterChange(['sizeSML:S'])}
+                              />
+                              <Form.Check
+                                type="checkbox"
+                                id="sizeM"
+                                label="M"
+                                onChange={() => handleFilterChange(['sizeSML:M'])}
+                              />
+                              <Form.Check
+                                type="checkbox"
+                                id="sizeL"
+                                label="L"
+                                onChange={() => handleFilterChange(['sizeSML:Large'])}
+                              />
+                            </Form.Group>
+                            {/* Search Button */}
+                            <Button variant="primary" onClick={HandleSearch}>
+                              Search
+                            </Button>
+                          </Form>
+                      </Dropdown.Menu>
+                      </Dropdown>
                 </Col>
            </Row>
            </Navbar>

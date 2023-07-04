@@ -6,7 +6,7 @@ import { returnUserId } from '../users/UserId';
 import Cookies from 'universal-cookie';
 
 /* This function returns different buttons according to the parameters with which we call it.
-   With them, and the next two functions below, our user will be allowed to: 
+   With it, and the next two functions below, our user will be allowed to: 
    1) Add and remove products from his Shopping Cart; 
    2) Add and remove products from his Wishlist; 
    3) Buy products without having to go to the specific product page, making it quicker. */

@@ -63,7 +63,7 @@ export default function App() {
  };
  const location = useLocation();
  const pathParams = location.pathname.split('/');
- const { selectedFilters, handleFilterChange, handleArrayFilterChange, HandleSearch} = NavbarFilterFunctions();
+ const { selectedFilters, handleFilterChange, HandleSearch} = NavbarFilterFunctions();
 
  function handleSearch(searchText, classification) {
   // Resets the search results no none, so that they will not show up one on top of each other
@@ -149,7 +149,7 @@ useEffect(() => {
            </Row>
        </Navbar> 
        {/* Menu containing all the different routes and advanced search filters */}
-       <NavBarMenu routeChange={routeChange} handleFilterChange={handleFilterChange} handleArrayFilterChange={handleArrayFilterChange}
+       <NavBarMenu routeChange={routeChange} handleFilterChange={handleFilterChange}
        handleToggleExpand={handleToggleExpand} isExpanded={isExpanded} HandleSearch={HandleSearch} />
     <br></br>
     <Container className="d-flex flex-column" style={{ flexGrow: 1, minHeight: '50vh'}}>

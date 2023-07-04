@@ -9,6 +9,15 @@ import productPic from '../images/productPic.png'; //  Imports a mock picture to
 export default function Homepage() {
   const [product, setProduct] = useState([]);
 
+  function truncateString(str, maxLength) {
+    if (str && str.split(' ').length > maxLength) {
+      const words = str.split(' ');
+      const truncated = words.slice(0, maxLength).join(' ');
+      return `${truncated}...`;
+    }
+    return str;
+  }
+    
   // Retrieves five items from the '/products' endpoint
   useEffect(() => {
     let isMounted = true;
@@ -33,16 +42,16 @@ export default function Homepage() {
     <Container>
       <Carousel pause="hover" style={{backgroundColor: 'lightgrey'}}>
         {product.map((p) => (
-          <Carousel.Item key={p._id}>
-            <Row className="justify-content-center">
+          <Carousel.Item key={p._id} className="justify-content-center">
+            <Row>
               <Col md={6}>
                 <Image src={productPic} alt={p.name} fluid />
               </Col>
-              <Col md={6}>
+              <Col md={5} style={{paddingTop: '15px' }}>
               <h3><Link  to={`/product/${p._id}`}>{p.name}</Link></h3>
-                <ReactMarkdown>{p.description}</ReactMarkdown>
-                <p className="mt-3">{`$${p.price}`}</p>
-                <TypicalButtonPresentation productId={p._id} />
+                <ReactMarkdown>{truncateString(p.description, 30)}</ReactMarkdown>
+                <p>Price: {`$${p.price}`}</p>
+                <TypicalButtonPresentation productId={p._id} style={{paddingBottom: '10px' }}/>
               </Col>
             </Row>
           </Carousel.Item>
