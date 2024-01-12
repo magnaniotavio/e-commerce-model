@@ -92,3 +92,15 @@ export function selectorInput(label, formValue, formFunction, optionsArray, valu
       </Form.Group>
     );
   }
+
+
+// Although not a JSX function per se, the following function 
+// truncates as string, and will be useful when rendering lists of text components
+export function truncateString(str, maxLength) {
+    if (str && str.split(' ').length > maxLength) {
+      const words = str.split(' ');
+      const truncated = words.slice(0, maxLength).join(' ');
+      return `${truncated}...`;
+    }
+    return str;
+  }

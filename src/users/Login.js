@@ -23,7 +23,7 @@ export default function Login() {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     }
   }, [token]);
-  
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -37,7 +37,7 @@ export default function Login() {
         cookies.set('TOKEN', res.data.token, { path: '/' });
         axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
         // Eeload the page 
-        window.location.reload(); 
+        window.location.reload();
       })
       .catch((error) => {
         setLoginError('Login failed. Please check your credentials.');
@@ -60,12 +60,12 @@ export default function Login() {
         </p>
       </Container>
     );
-  } 
+  }
   // Login form for the user to type his data into and make his login
   else {
     return (
       <>
-        <p>Login</p>
+        <h4>Login</h4>
         {loginError && <Alert variant="danger">{loginError}</Alert>}
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="formBasicEmail">

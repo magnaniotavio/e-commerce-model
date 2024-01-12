@@ -6,10 +6,17 @@ import { ProductPresentation } from '../products/ProductPresentation';
 const SearchResults = ({ results, searchTerm, classification }) => {
 
   return (
-  < ProductPresentation productsToShow={results}  classification={classification}
+  < ProductPresentation   
                         TypicalButtonPresentation={TypicalButtonPresentation}
-                        selectedFilters={results} isMainRoute='false' targetPublic='false'
-                        searchType='default_category_search' searchTerm={searchTerm}
+                        selectedFilters={results} 
+                        isMainRoute='false' 
+                        targetPublic='false'
+                        searchType='default_category_search' 
+                        
+                        // The following three properties will be defined in the App.js component
+                        productsToShow={results}
+                        classification={classification} 
+                        searchTerm={searchTerm}
   /> 
   )
 };

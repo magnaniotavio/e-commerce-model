@@ -4,6 +4,7 @@ import axios from 'axios';
 import { ReturnUserProperties } from '../users/UserId';
 import { CheckForUserRole } from '../basicComponents/CheckForToken';
 import { changeSortingCriterion, shownDataList } from '../basicComponents/OrderingListedObjects';
+import { truncateString } from '../basicComponents/JSXFunctions';
 
 /* This is a very basic presentation of the posts, which will be accessible to the Administrator.
    In this list, the Admin can see the basic properties of each posts, as well as delete them.
@@ -19,7 +20,7 @@ export default function List() {
   const Post = ({ data }) => (
     <tr>
       <td><Link to={`/${data.classification}/${data.title}/${data._id}`}>{data.title}</Link></td>
-      <td>{data.content}</td>
+      <td>{truncateString(data.content, 10)}</td>
       <td>{data.classification}</td>
       <td>{data.creation_date}</td>
       <td>{data.last_edited}</td>
@@ -29,23 +30,23 @@ export default function List() {
         {<Link to={`/edit/${data._id}`}>Edit</Link>}
       </td>
       {userRole === 'Administrator' && (
-      <td>
-        <button onClick={(event) => onDelete(event, data._id)}>Delete</button>
-      </td>
-    )} 
+        <td>
+          <button onClick={(event) => onDelete(event, data._id)}>Delete</button>
+        </td>
+      )}
     </tr>
   );
- 
+
   CheckForUserRole('Administrator') // Checks if the user is an Admin
 
   // Gets the posts
   useEffect(() => {
-      axios.get('https://e-commerce-model.onrender.com/posts/')
-        .then(response => {
-          setPosts(response.data);
-        })
-        .catch(error => console.log(error));
-    }, []);
+    axios.get('https://e-commerce-model.onrender.com/posts/')
+      .then(response => {
+        setPosts(response.data);
+      })
+      .catch(error => console.log(error));
+  }, []);
 
   // Deletes posts
   function onDelete(event, parameter) {
@@ -55,13 +56,13 @@ export default function List() {
       .then((res) => {
         console.log(res.data);
         window.location.reload();
-           })
+      })
       .catch((error) => {
         console.log(error);
       });
   };
-  
-return (
+
+  return (
     <div>
       <h3>Post List</h3>
       <table className="table table-striped" style={{ marginTop: 20 }}>
@@ -78,7 +79,7 @@ return (
         <tbody>{shownDataList(sortingCriterion, posts, Post)}</tbody>
       </table>
       <div>
-    </div>
+      </div>
     </div>
   );
 };
